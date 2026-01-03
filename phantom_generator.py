@@ -252,34 +252,89 @@ def voxelize_mesh(mesh: pv.PolyData, spacing: float = 1.0):
     return vox
 
 
+def make_cuboid_with_beads_volume(
+    a_mm: float,
+    b_mm: float,
+    h_mm: float,
+    bead_centers_mm: np.ndarray,
+    bead_radius_mm: float,
+    voxel_size_mm: float = 1.0,
+    cuboid_level: float = 1.0,
+    bead_level: float = 2.0,
+):
+    """
+    Returns a single volume[z, y, x] containing:
+      - full cuboid
+      - embedded bead spheres
+    """
+
+    Nx = int(np.round(a_mm / voxel_size_mm))
+    Ny = int(np.round(b_mm / voxel_size_mm))
+    Nz = int(np.round(h_mm / voxel_size_mm))
+
+    # --- Fill entire cuboid ---
+    volume = np.full((Nz, Ny, Nx), cuboid_level, dtype=np.float32)
+
+    # Voxel center coordinates (mm)
+    xs = (np.arange(Nx) + 0.5) * voxel_size_mm - a_mm / 2
+    ys = (np.arange(Ny) + 0.5) * voxel_size_mm - b_mm / 2
+    zs = (np.arange(Nz) + 0.5) * voxel_size_mm - h_mm / 2
+
+    r2 = bead_radius_mm ** 2
+
+    # --- Overwrite bead regions ---
+    for (cx, cy, cz) in bead_centers_mm:
+        x0 = np.searchsorted(xs, cx - bead_radius_mm)
+        x1 = np.searchsorted(xs, cx + bead_radius_mm)
+        y0 = np.searchsorted(ys, cy - bead_radius_mm)
+        y1 = np.searchsorted(ys, cy + bead_radius_mm)
+        z0 = np.searchsorted(zs, cz - bead_radius_mm)
+        z1 = np.searchsorted(zs, cz + bead_radius_mm)
+
+        x0, x1 = max(0, x0), min(Nx, x1)
+        y0, y1 = max(0, y0), min(Ny, y1)
+        z0, z1 = max(0, z0), min(Nz, z1)
+
+        X = xs[x0:x1][None, None, :]
+        Y = ys[y0:y1][None, :, None]
+        Z = zs[z0:z1][:, None, None]
+
+        mask = (X - cx) ** 2 + (Y - cy) ** 2 + (Z - cz) ** 2 <= r2
+        volume[z0:z1, y0:y1, x0:x1][mask] = bead_level
+
+    return volume
+
+
 # %%
 if __name__ == "__main__":
-    # Example parameters (edit as needed)
     phantom_mesh, cuboid_mesh, beads_mesh, centers = generate_cuboid_spiral_beads(
         a=WIDTH, b=BREADTH, h=HEIGHT, k=NO_OF_BEADS,
         bead_radius=BEAD_RADIUS,
         margin=MARGIN,
         clearance=CLEARANCE,
         turns=TURNS,
-        spiral_mode="rounded-rect",   # try "edge-loop" too
+        spiral_mode="rounded-rect",
         rounded_rect_r=10.0,
-        bead_theta_jitter=0.00,
-        bead_pos_jitter=0.00,
         seed=66
     )
 
-    # Save meshes
+    # Optional mesh saves (debug / visualization)
     phantom_mesh.save("cuboid_spiral_beads.vtk")
-    cuboid_mesh.save("cuboid_only.vtk")
-    beads_mesh.save("beads_only.vtk")
     np.save("bead_centers.npy", centers)
 
-    # Optional: voxelize (useful if you want a binary grid like in your lung/bronchi pipeline)
-    vox = voxelize_mesh(phantom_mesh, spacing=1.0)
-    vox.save("cuboid_spiral_beads_voxels.vtk")
+    # ---- SINGLE NPY PHANTOM ----
+    VOXEL_SIZE = 1.0  # mm
 
-    # Quick visualization
-    p = pv.Plotter()
-    p.add_mesh(cuboid_mesh, opacity=0.15)
-    p.add_mesh(beads_mesh, opacity=1.0)
-    p.show()
+    volume = make_cuboid_with_beads_volume(
+        a_mm=WIDTH,
+        b_mm=BREADTH,
+        h_mm=HEIGHT,
+        bead_centers_mm=centers,
+        bead_radius_mm=BEAD_RADIUS,
+        voxel_size_mm=VOXEL_SIZE,
+        cuboid_level=1.0,
+        bead_level=2.0,
+    )
+
+    np.save("cuboid_phantom.npy", volume)
+    print("Saved cuboid_phantom.npy", volume.shape)
