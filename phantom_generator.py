@@ -7,8 +7,8 @@ import pyvista as pv
 # Measurement in mm
 CLEARANCE = 1.0
 WIDTH, BREADTH, HEIGHT = 80.0, 80.0, 160.0
-NO_OF_BEADS = 3
-BEAD_RADIUS = 2.5
+NO_OF_BEADS = 15
+BEAD_RADIUS = 5
 MARGIN = 6.0
 TURNS = 4.0
 
@@ -259,8 +259,8 @@ def make_cuboid_with_beads_volume(
     bead_centers_mm: np.ndarray,
     bead_radius_mm: float,
     voxel_size_mm: float = 1.0,
-    cuboid_level: float = 1.0,
-    bead_level: float = 2.0,
+    cuboid_level: float = 0.1,
+    bead_level: float = 1.0,
 ):
     """
     Returns a single volume[z, y, x] containing:
@@ -332,9 +332,14 @@ if __name__ == "__main__":
         bead_centers_mm=centers,
         bead_radius_mm=BEAD_RADIUS,
         voxel_size_mm=VOXEL_SIZE,
-        cuboid_level=1.0,
-        bead_level=2.0,
+        cuboid_level=2.0,
+        bead_level=255.0,
     )
+
+    values, counts = np.unique(volume, return_counts=True)
+    print("Value distribution:")
+    for v, c in zip(values, counts):
+        print(f"  value={v:.6f} : voxels={c}")
 
     np.save("cuboid_phantom.npy", volume)
     print("Saved cuboid_phantom.npy", volume.shape)

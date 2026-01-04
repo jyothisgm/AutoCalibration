@@ -73,7 +73,12 @@ class AstraServer:
 
 
 if __name__ == '__main__':
-    rec = np.load('egg_reconstruction.npy')
+    rec = np.load('cuboid_phantom.npy')
+    values, counts = np.unique(rec, return_counts=True)
+    print("Value distribution:")
+    for v, c in zip(values, counts):
+        print(f"  value={v:.6f} : voxels={c}")
+    print("Shape of phantom", values.shape)
 
     server = AstraServer(object=rec, voxel_size=0.1)
     server.run()
