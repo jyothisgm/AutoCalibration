@@ -3,7 +3,6 @@ import time
 
 import astra
 import numpy as np
-# import zmq
 
 
 class AstraServer:
@@ -15,40 +14,35 @@ class AstraServer:
         max_y = n_rows / 2 * voxel_size
         min_z = -n_slices/ 2 * voxel_size
         max_z = n_slices/ 2 * voxel_size
-        self.vol_geom = astra.create_vol_geom(n_cols, n_rows, n_slices,
-                                                min_x, max_x, min_y, max_y, min_z, max_z)
+
+        self.vol_geom = astra.create_vol_geom(n_cols, n_rows, n_slices, min_x, max_x, min_y, max_y, min_z, max_z)
         self.vol_id = astra.data3d.create('-vol', self.vol_geom, object)
         self.image_width = image_width
         self.image_height = image_height
-        dummy_proj_geom = astra.create_proj_geom(
-            'parallel3d', 1, 1, image_width, image_height, [0]
-        )
+
+        dummy_proj_geom = astra.create_proj_geom('parallel3d', 1, 1, image_width, image_height, [0])
         self.proj_id = astra.data3d.create('-sino', dummy_proj_geom)
+
         cfg = astra.astra_dict('FP3D_CUDA')
         cfg['VolumeDataId'] = self.vol_id
         cfg['ProjectionDataId'] = self.proj_id
         self.alg_id = astra.algorithm.create(cfg)
 
     def generate_image(self, geometry_vector):
-        proj_geom = astra.create_proj_geom(
-            'cone_vec', self.image_height, self.image_width, geometry_vector.reshape([1, 12])
-        )
+        proj_geom = astra.create_proj_geom('cone_vec', self.image_height, self.image_width, geometry_vector.reshape([1, 12]))
         astra.data3d.change_geometry(self.proj_id, proj_geom)
         astra.algorithm.run(self.alg_id)
         image = astra.data3d.get(self.proj_id).squeeze()
-        image = np.clip(image, 0, np.percentile(image, 99.5))
+        image = np.clip(image, 0, np.percentile(image, 99.99))
         max_val = image.max()
+        # print(f"Generated image max value: {max_val:.4f}")
         if max_val == 0:
             normalized = np.zeros_like(image, dtype=np.uint8)
         else:
             normalized = (255 * image / max_val).astype(np.uint8)
-        # image = np.rot90(image, -1)  # to match the portarait tablet orientation
         return np.dstack([normalized, normalized, normalized])
 
-
     def run(self, host="127.0.0.1", port=50007):
-        # ctx = zmq.Context()
-        # socket = ctx.socket(zmq.REP)
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.bind((host, port))
             s.listen(1)
@@ -62,15 +56,8 @@ class AstraServer:
                         print("Client disconnected")
                         break
                     geometry_vector = np.frombuffer(geometry_vector_bytes, dtype=np.float32, count=12)
-                    # print(geometry_vector)
-
-                    # start = time.perf_counter()
                     img = self.generate_image(geometry_vector)
-                    # gen_time = (time.perf_counter() - start) * 1000
-                    # print(f"{gen_time:.2f} ms")
-
                     conn.sendall(img.tobytes())
-
 
 if __name__ == '__main__':
     rec = np.load('cuboid_phantom.npy')

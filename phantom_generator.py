@@ -2,20 +2,17 @@
 import numpy as np
 import pyvista as pv
 
-
-#%%
-# Measurement in mm
+# ---- Parameters ----
 CLEARANCE = 1.0
-WIDTH, BREADTH, HEIGHT = 80.0, 80.0, 160.0
-NO_OF_BEADS = 15
+WIDTH, BREADTH, HEIGHT = 120.0, 40.0, 160.0
+NO_OF_BEADS = 5
 BEAD_RADIUS = 5
 MARGIN = 6.0
 TURNS = 4.0
 
-
 #%%
 def generate_cuboid_spiral_beads(
-    a: float,
+    w: float,
     b: float,
     h: float,
     k: int,
@@ -32,11 +29,11 @@ def generate_cuboid_spiral_beads(
     seed: int = 66
 ):
     """
-    Create a cuboid phantom (a x b x h) and place k beads along a spiral path near edges.
+    Create a cuboid phantom (w x b x h) and place k beads along a spiral path near edges.
 
     Coordinate convention:
         - Cuboid centered at `center` with extents:
-            x in [-a/2, a/2], y in [-b/2, b/2], z in [-h/2, h/2]
+            x in [-w/2, w/2], y in [-b/2, b/2], z in [-h/2, h/2]
         - Spiral progresses along z from bottom to top.
 
     spiral_mode:
@@ -47,7 +44,7 @@ def generate_cuboid_spiral_beads(
     rng = np.random.default_rng(seed)
 
     cx, cy, cz = center
-    x_min, x_max = cx - a/2, cx + a/2
+    x_min, x_max = cx - w/2, cx + w/2
     y_min, y_max = cy - b/2, cy + b/2
     z_min, z_max = cz - h/2, cz + h/2
 
@@ -86,7 +83,7 @@ def generate_cuboid_spiral_beads(
         """
         w = ix_max - ix_min
         d = iy_max - iy_min
-        per = 2*(w + d)
+        per = 2 * (w + d)
 
         s = phase01 * per
 
@@ -236,49 +233,24 @@ def generate_cuboid_spiral_beads(
     phantom_mesh = cuboid + beads_mesh
     return phantom_mesh, cuboid, beads_mesh, bead_centers
 
-
-# def voxelize_mesh(mesh: pv.PolyData, spacing: float = 1.0, bounds_pad: float = 2.0):
-#     """
-#     Simple voxelization via pyvista.voxelize (returns an UnstructuredGrid).
-#     You can convert it to a binary volume if needed.
-#     """
-#     b = mesh.bounds
-#     bounds = (b[0]-bounds_pad, b[1]+bounds_pad, b[2]-bounds_pad, b[3]+bounds_pad, b[4]-bounds_pad, b[5]+bounds_pad)
-#     vox = pv.voxelize(mesh, density=spacing)
-#     return vox
-
-def voxelize_mesh(mesh: pv.PolyData, spacing: float = 1.0):
-    vox = mesh.voxelize(spacing=spacing)
-    return vox
-
-
-def make_cuboid_with_beads_volume(
-    a_mm: float,
-    b_mm: float,
-    h_mm: float,
-    bead_centers_mm: np.ndarray,
-    bead_radius_mm: float,
-    voxel_size_mm: float = 1.0,
-    cuboid_level: float = 0.1,
-    bead_level: float = 1.0,
-):
+def make_cuboid_with_beads_volume(width: float, breadth: float, height: float, bead_centers_mm: np.ndarray, bead_radius_mm: float,
+                                  voxel_size_mm: float = 1.0, cuboid_level: float = 0.1, bead_level: float = 1.0):
     """
     Returns a single volume[z, y, x] containing:
       - full cuboid
       - embedded bead spheres
     """
-
-    Nx = int(np.round(a_mm / voxel_size_mm))
-    Ny = int(np.round(b_mm / voxel_size_mm))
-    Nz = int(np.round(h_mm / voxel_size_mm))
+    Nx = int(np.round(width / voxel_size_mm))
+    Ny = int(np.round(breadth / voxel_size_mm))
+    Nz = int(np.round(height / voxel_size_mm))
 
     # --- Fill entire cuboid ---
     volume = np.full((Nz, Ny, Nx), cuboid_level, dtype=np.float32)
 
     # Voxel center coordinates (mm)
-    xs = (np.arange(Nx) + 0.5) * voxel_size_mm - a_mm / 2
-    ys = (np.arange(Ny) + 0.5) * voxel_size_mm - b_mm / 2
-    zs = (np.arange(Nz) + 0.5) * voxel_size_mm - h_mm / 2
+    xs = (np.arange(Nx) + 0.5) * voxel_size_mm - width / 2
+    ys = (np.arange(Ny) + 0.5) * voxel_size_mm - breadth / 2
+    zs = (np.arange(Nz) + 0.5) * voxel_size_mm - height / 2
 
     r2 = bead_radius_mm ** 2
 
@@ -301,22 +273,15 @@ def make_cuboid_with_beads_volume(
 
         mask = (X - cx) ** 2 + (Y - cy) ** 2 + (Z - cz) ** 2 <= r2
         volume[z0:z1, y0:y1, x0:x1][mask] = bead_level
-
     return volume
 
-
-# %%
-if __name__ == "__main__":
-    phantom_mesh, cuboid_mesh, beads_mesh, centers = generate_cuboid_spiral_beads(
-        a=WIDTH, b=BREADTH, h=HEIGHT, k=NO_OF_BEADS,
-        bead_radius=BEAD_RADIUS,
-        margin=MARGIN,
-        clearance=CLEARANCE,
-        turns=TURNS,
-        spiral_mode="rounded-rect",
-        rounded_rect_r=10.0,
-        seed=66
-    )
+def generate_k_bead_phantom(k=NO_OF_BEADS, plot=True):
+    phantom_mesh, cuboid_mesh, beads_mesh, centers = generate_cuboid_spiral_beads(w=WIDTH, b=BREADTH, h=HEIGHT, k=k, bead_radius=BEAD_RADIUS, 
+                                                                                  margin=MARGIN, clearance=CLEARANCE, turns=TURNS, spiral_mode="rounded-rect", 
+                                                                                  rounded_rect_r=10.0, seed=66)
+    print("\nBead center positions (mm):")
+    for i, (x, y, z) in enumerate(centers):
+        print(f"  Bead {i:02d}: x = {x:.3f}, y = {y:.3f}, z = {z:.3f}")
 
     # Optional mesh saves (debug / visualization)
     phantom_mesh.save("cuboid_spiral_beads.vtk")
@@ -325,16 +290,8 @@ if __name__ == "__main__":
     # ---- SINGLE NPY PHANTOM ----
     VOXEL_SIZE = 1.0  # mm
 
-    volume = make_cuboid_with_beads_volume(
-        a_mm=WIDTH,
-        b_mm=BREADTH,
-        h_mm=HEIGHT,
-        bead_centers_mm=centers,
-        bead_radius_mm=BEAD_RADIUS,
-        voxel_size_mm=VOXEL_SIZE,
-        cuboid_level=2.0,
-        bead_level=255.0,
-    )
+    volume = make_cuboid_with_beads_volume(width=WIDTH, breadth=BREADTH, height=HEIGHT, bead_centers_mm=centers, bead_radius_mm=BEAD_RADIUS,
+                                           voxel_size_mm=VOXEL_SIZE, cuboid_level=2.0, bead_level=255.0)
 
     values, counts = np.unique(volume, return_counts=True)
     print("Value distribution:")
@@ -343,3 +300,13 @@ if __name__ == "__main__":
 
     np.save("cuboid_phantom.npy", volume)
     print("Saved cuboid_phantom.npy", volume.shape)
+    if plot:
+        p = pv.Plotter()
+        p.add_mesh(cuboid_mesh, opacity=0.15)
+        p.add_mesh(beads_mesh, opacity=1.0)
+        p.show()
+
+# %%
+if __name__ == "__main__":
+    # Measurement in mm
+    generate_k_bead_phantom(k=NO_OF_BEADS)
