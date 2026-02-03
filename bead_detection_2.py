@@ -73,8 +73,9 @@ def build_wide_df_from_folder(folder: str, K: int = 5, min_area: int = 10, max_a
 
         # print(f"Detected {len(beads)} beads in {p}")
         # Pad if fewer than K
-        while len(beads) != K:
+        if len(beads) != K:
             print(f"FAILED!! Detected {len(beads)} beads in {p}. Needed {K}.")
+            continue
 
         for i in range(K):
             x, y, area = beads[i]

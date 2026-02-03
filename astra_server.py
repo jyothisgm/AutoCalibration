@@ -28,6 +28,23 @@ class AstraServer:
         cfg['ProjectionDataId'] = self.proj_id
         self.alg_id = astra.algorithm.create(cfg)
 
+    def _delete_proj_and_alg(self):
+        if self.alg_id is not None:
+            astra.algorithm.delete(self.alg_id)
+            self.alg_id = None
+        if self.proj_id is not None:
+            astra.data3d.delete(self.proj_id)
+            self.proj_id = None
+
+    def close(self):
+        # call this on shutdown if you want clean exit
+        self._delete_proj_and_alg()
+        if self.vol_id is not None:
+            astra.data3d.delete(self.vol_id)
+            self.vol_id = None
+        # optional final clear
+        astra.clear()
+
     def generate_image(self, geometry_vector):
         proj_geom = astra.create_proj_geom('cone_vec', self.image_height, self.image_width, geometry_vector.reshape([1, 12]))
         astra.data3d.change_geometry(self.proj_id, proj_geom)

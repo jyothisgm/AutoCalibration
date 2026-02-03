@@ -89,7 +89,7 @@ def unity_geom12_from_worldcoords(
 def fetch_and_save_projections(out_dir: str, src_world: np.ndarray, obj_world: np.ndarray,
                                det_world_base: np.ndarray, obj_rot_y_degs: np.ndarray,   # (N,) in degrees
                                image_height: int, image_width: int,
-                               astra_sdd: float, det_spacing: float,
+                               astra_sdd: float, det_spacing: float, voxel_size: float,
                                src_up: np.ndarray, src_right: np.ndarray, filename_prefix: str = "proj", phantom_name: str = "cuboid_phantom.npy"):
     reset_folder(out_dir)
     obj_rot_y_degs = np.asarray(obj_rot_y_degs, dtype=np.float32)
@@ -97,7 +97,7 @@ def fetch_and_save_projections(out_dir: str, src_world: np.ndarray, obj_world: n
 
     rec = np.load(phantom_name)
 
-    server = AstraServer(object=rec, voxel_size=1.0)
+    server = AstraServer(object=rec, image_width=image_width, image_height=image_height, voxel_size=voxel_size)
     # print_unity_geometry(src_world, obj_world, det_world_base, obj_rot_y_degs[0])
 
     for idx, ry in enumerate(obj_rot_y_degs):
@@ -107,40 +107,41 @@ def fetch_and_save_projections(out_dir: str, src_world: np.ndarray, obj_world: n
         # np.set_printoptions(precision=3, suppress=True)
         img = server.generate_image(geom12)
         Image.fromarray(img).save(os.path.join(out_dir, f"{filename_prefix}_{int(ry):03d}_{idx:03d}.png"))
-
+    server.close()
     # print(f"Saved {len(obj_rot_y_degs)} images to: {out_dir}")
 
 
 if __name__ == "__main__":
     # Must match server.py
-    IMAGE_W = 256
-    IMAGE_H = 256
+    IMAGE_W = 2048
+    IMAGE_H = 2048
 
     # Must match Unity settings
     ASTRA_SDD = 1
-    DET_SPACING = 1.5
+    DET_SPACING = 0.075
 
     # ---- Unity world coordinates you mentioned ----
     # source default position
-    SRC_WORLD = np.array([0.0, 45.0, -50.0], dtype=np.float32)
+    SRC_WORLD = np.array([0.0, 45.0, 0.0], dtype=np.float32)
 
     # object position
-    OBJ_WORLD = np.array([0.0, 45.0, 570.0], dtype=np.float32)
+    OBJ_WORLD = np.array([0.0, 30.0, 570.0], dtype=np.float32)
 
     # detector position (world)
     DET_WORLD = np.array([0.0, 0.0, 1004.0], dtype=np.float32)
+    VOXEL_SIZE = 0.1
 
     # xraySource orientation (world). Use your real values if different.
     # If your source GameObject has default rotation, these are usually:
-    SRC_UP = np.array([0.0, 1.0, 0.0], dtype=np.float32)
-    SRC_RIGHT = np.array([1.0, 0.0, 0.0], dtype=np.float32)
+    SRC_RIGHT = np.array([0.0, 1.0, 0.0], dtype=np.float32)
+    SRC_UP = np.array([1.0, 0.0, 0.0], dtype=np.float32)
 
     # Number of angles: we emulate imagedObject.rotation.eulerAngles.y
     N_ANGLES = 36
     obj_rot_y_degs = np.linspace(0.0, 360.0, N_ANGLES, endpoint=False, dtype=np.float32)
 
     fetch_and_save_projections(
-        out_dir="projections_png_real",
+        out_dir="projections_png_real_test",
         src_world=SRC_WORLD,
         obj_world=OBJ_WORLD,
         det_world_base=DET_WORLD,
@@ -149,6 +150,7 @@ if __name__ == "__main__":
         image_width=IMAGE_W,
         astra_sdd=ASTRA_SDD,
         det_spacing=DET_SPACING,
+        voxel_size=VOXEL_SIZE,
         src_up=SRC_UP,
         src_right=SRC_RIGHT,
         filename_prefix="proj",

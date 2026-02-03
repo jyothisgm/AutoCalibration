@@ -1,14 +1,14 @@
-# %%
+﻿# %%
 import numpy as np
 import pyvista as pv
 
 # ---- Parameters ----
-CLEARANCE = 1.0
-WIDTH, BREADTH, HEIGHT = 120.0, 40.0, 160.0
-NO_OF_BEADS = 5
-BEAD_RADIUS = 5
-MARGIN = 6.0
-TURNS = 4.0
+CLEARANCE = 0.0
+WIDTH, BREADTH, HEIGHT = 20.0, 40.0, 60.0
+NO_OF_BEADS = 6
+BEAD_RADIUS = 2.0
+MARGIN = 1.0
+TURNS = 1.0
 
 #%%
 def generate_cuboid_spiral_beads(
@@ -52,6 +52,7 @@ def generate_cuboid_spiral_beads(
     safe = bead_radius + clearance + margin
     ix_min, ix_max = x_min + safe, x_max - safe
     iy_min, iy_max = y_min + safe, y_max - safe
+    print(f"Inner rectangle for bead centers: x[{ix_min}, {ix_max}], y[{iy_min}, {iy_max}]")
 
     if ix_min >= ix_max or iy_min >= iy_max:
         raise ValueError("margin+bead_radius too large for given cuboid dimensions.")
@@ -62,13 +63,18 @@ def generate_cuboid_spiral_beads(
 
     z_low  = z_min + safe
     z_high = z_max - safe
+    print(f"Bead z range: [{z_low}, {z_high}]")
 
     if z_low >= z_high:
         raise ValueError("Cuboid height too small for bead_radius + clearance.")
 
     z = z_low + (i / max(1, (k - 1))) * (z_high - z_low)
+    print(f"Bead z positions (before jitter): {z}")
 
-    theta = 2.0 * np.pi * turns * (i / k)
+    theta = 2 * np.pi * turns * (i / max(1, k - 1))
+
+    print(f"Bead thetas (before jitter): {theta}")
+    print(f"Bead : {bead_theta_jitter}")
 
     # Optional jitter
     if bead_theta_jitter > 0:
@@ -125,12 +131,15 @@ def generate_cuboid_spiral_beads(
 
         w = ix_max - ix_min
         d = iy_max - iy_min
+        print(f"Rounded rect corner radius: {r}")
+        print(f"Rounded rect straight lengths before clamp: w={w}, d={d}")
         # Straight lengths (each reduced by 2r)
-        w_s = max(0.0, w - 2*r)
-        d_s = max(0.0, d - 2*r)
+        w_s = max(0.0, w)
+        d_s = max(0.0, d)
         # Total perimeter: 2*(w_s+d_s) + 2*pi*r
         per = 2*(w_s + d_s) + 2*np.pi*r
         s = phase01 * per
+        print(f"Rounded rect perimeter: {per}, s={s}")
 
         # Define corner centers:
         # bottom-right, bottom-left, top-left, top-right
@@ -138,12 +147,14 @@ def generate_cuboid_spiral_beads(
         bl = (ix_min + r, iy_min + r)
         tl = (ix_min + r, iy_max - r)
         tr = (ix_max - r, iy_max - r)
+        print(f"Corner centers: br={br}, bl={bl}, tl={tl}, tr={tr}")
 
         # Segment order CCW starting at bottom-right straight (towards bottom-left):
         # 1) bottom straight (length w_s)
         if s < w_s:
-            x = (ix_max - r) - s
+            x = (ix_max) - s
             y = iy_min
+            print(f"Bottom straight: x={x}, y={y}")
             return x, y
         s -= w_s
 
@@ -153,13 +164,15 @@ def generate_cuboid_spiral_beads(
             ang = -np.pi/2 - (s / r)
             x = bl[0] + r*np.cos(ang)
             y = bl[1] + r*np.sin(ang)
+            print(f"Bottom-left corner arc: ang={ang}, x={x}, y={y}")
             return x, y
         s -= arc
 
         # 3) left straight (length d_s)
         if s < d_s:
             x = ix_min
-            y = (iy_min + r) + s
+            y = (iy_min) + s
+            print(f"Left straight: x={x}, y={y}")
             return x, y
         s -= d_s
 
@@ -168,13 +181,15 @@ def generate_cuboid_spiral_beads(
             ang = -np.pi - (s / r)
             x = tl[0] + r*np.cos(ang)
             y = tl[1] + r*np.sin(ang)
+            print(f"Top-left corner arc: ang={ang}, x={x}, y={y}")  
             return x, y
         s -= arc
 
         # 5) top straight (length w_s)
         if s < w_s:
-            x = (ix_min + r) + s
+            x = (ix_min) + s
             y = iy_max
+            print(f"Top straight: x={x}, y={y}")
             return x, y
         s -= w_s
 
@@ -183,13 +198,15 @@ def generate_cuboid_spiral_beads(
             ang = -3*np.pi/2 - (s / r)
             x = tr[0] + r*np.cos(ang)
             y = tr[1] + r*np.sin(ang)
+            print(f"Top-right corner arc: ang={ang}, x={x}, y={y}")
             return x, y
         s -= arc
 
         # 7) right straight (length d_s)
         if s < d_s:
             x = ix_max
-            y = (iy_max - r) - s
+            y = (iy_max) - s
+            print(f"Right straight: x={x}, y={y}")
             return x, y
         s -= d_s
 
@@ -198,17 +215,22 @@ def generate_cuboid_spiral_beads(
         ang = 0.0 - (s / r)
         x = br[0] + r*np.cos(ang)
         y = br[1] + r*np.sin(ang)
+        print(f"Final corner arc: ang={ang}, x={x}, y={y}")
         return x, y
 
     # Convert theta to phase in [0,1)
+    print(f"Bead thetas (before jitter): {theta}")
     phase = (theta / (2.0*np.pi)) % 1.0
 
     xy = np.zeros((k, 2), dtype=float)
+    print(spiral_mode)
+    print(f"Bead phases (before jitter): {phase}")
     for idx in range(k):
         if spiral_mode == "rounded-rect":
             xy[idx] = point_on_rounded_rect_loop(phase[idx], rounded_rect_r)
         else:
             xy[idx] = point_on_rect_loop(phase[idx])
+    print(f"Bead x,y positions (before jitter): \n{xy}")
 
     x = xy[:, 0]
     y = xy[:, 1]
@@ -221,6 +243,7 @@ def generate_cuboid_spiral_beads(
     bead_centers = np.column_stack([x, y, z])
 
     # --- Build meshes ---
+    print(f"Generating cuboid with {k} beads:", x_min, x_max, y_min, y_max, z_min, z_max)
     cuboid = pv.Box(bounds=(x_min, x_max, y_min, y_max, z_min, z_max))
 
     beads = []
@@ -275,10 +298,10 @@ def make_cuboid_with_beads_volume(width: float, breadth: float, height: float, b
         volume[z0:z1, y0:y1, x0:x1][mask] = bead_level
     return volume
 
-def generate_k_bead_phantom(k=NO_OF_BEADS, plot=True):
+def generate_k_bead_phantom(k=NO_OF_BEADS, plot=True, mat=False):
     phantom_mesh, cuboid_mesh, beads_mesh, centers = generate_cuboid_spiral_beads(w=WIDTH, b=BREADTH, h=HEIGHT, k=k, bead_radius=BEAD_RADIUS, 
                                                                                   margin=MARGIN, clearance=CLEARANCE, turns=TURNS, spiral_mode="rounded-rect", 
-                                                                                  rounded_rect_r=10.0, seed=66)
+                                                                                  rounded_rect_r=0.0, seed=66)
     print("\nBead center positions (mm):")
     for i, (x, y, z) in enumerate(centers):
         print(f"  Bead {i:02d}: x = {x:.3f}, y = {y:.3f}, z = {z:.3f}")
@@ -288,7 +311,7 @@ def generate_k_bead_phantom(k=NO_OF_BEADS, plot=True):
     np.save("bead_centers.npy", centers)
 
     # ---- SINGLE NPY PHANTOM ----
-    VOXEL_SIZE = 1.0  # mm
+    VOXEL_SIZE = 0.1  # mm
 
     volume = make_cuboid_with_beads_volume(width=WIDTH, breadth=BREADTH, height=HEIGHT, bead_centers_mm=centers, bead_radius_mm=BEAD_RADIUS,
                                            voxel_size_mm=VOXEL_SIZE, cuboid_level=2.0, bead_level=255.0)
@@ -306,7 +329,60 @@ def generate_k_bead_phantom(k=NO_OF_BEADS, plot=True):
         p.add_mesh(beads_mesh, opacity=1.0)
         p.show()
 
+
+        # Create PyVista grid
+        grid = pv.ImageData()
+        grid.dimensions = np.array(volume.shape)[::-1] + 1
+        grid.spacing = (VOXEL_SIZE, VOXEL_SIZE, VOXEL_SIZE)
+
+        p = pv.Plotter()
+        p.add_volume(
+            volume,
+            cmap="gray",
+            opacity=[0.0, 0.1, 1.0],  # cuboid faint, beads opaque
+            shade=True
+        )
+        p.show()
+
+    if mat:
+        import matplotlib.pyplot as plt
+
+        z, y, x = volume.shape
+        print(f"Volume shape: x={x}, y={y}, z={z}")
+        plt.figure(figsize=(12,4))
+
+        plt.subplot(1,3,1)
+        axis_limits = (0, 600)
+
+        plt.imshow(volume[20], cmap="gray")
+        plt.xlim(axis_limits)
+        plt.ylim(axis_limits)
+
+        plt.title("Axial")
+
+        plt.subplot(1,3,2)
+        plt.imshow(volume[:, 20, :], cmap="gray")
+        plt.xlim(axis_limits)
+        plt.ylim(axis_limits)
+        plt.title("Coronal")
+
+        plt.subplot(1,3,3)
+        plt.imshow(volume[:, :, 20], cmap="gray")
+        plt.xlim(axis_limits)
+        plt.ylim(axis_limits)
+        plt.title("Sagittal")
+
+        plt.tight_layout()
+        plt.show()
+
+
+
+
+
+
+
+
 # %%
 if __name__ == "__main__":
     # Measurement in mm
-    generate_k_bead_phantom(k=NO_OF_BEADS)
+    generate_k_bead_phantom(k=NO_OF_BEADS, plot=True, mat=True)
