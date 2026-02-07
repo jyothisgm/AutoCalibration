@@ -1,5 +1,6 @@
 ﻿import os
 import glob
+import argparse
 from re import I
 from bead_detection_2 import build_wide_df_from_folder
 import cv2
@@ -7,6 +8,7 @@ import csv
 import numpy as np
 import pandas as pd
 import itertools
+from pathlib import Path
 
 from phantom_generator import generate_k_bead_phantom
 from phantom_projection import fetch_and_save_projections, print_geometry_vector, print_unity_geometry, unity_geom12_from_worldcoords, unpack_xzy
@@ -39,8 +41,18 @@ BOUNDS = {
     "alpha": (-15, +15),  # degrees
 }
 
-REAL_FOLDER = "projections_png_real"
-PRED_FOLDER = "projections_png_predicted"
+HERE = Path(__file__).resolve().parent
+REAL_FOLDER = HERE / "projections_png_real"
+PRED_FOLDER = HERE / "projections_png_predicted"
+
+
+def parse_int_list(raw: str):
+    if raw is None:
+        return None
+    parts = [p.strip() for p in raw.replace(",", " ").split() if p.strip()]
+    if not parts:
+        return None
+    return [int(p) for p in parts]
 
 def project_theta_to_bounds(theta, bounds, names):
     theta_clipped = theta.copy()
@@ -275,6 +287,7 @@ def generate_predicted_projections(theta, angles_deg, cfg, out_dir):
     # For each angle, rotation changes, but src/obj/det translations come from theta
     alpha_deg = float(theta[8])  # if alpha is degrees in your code
     obj_rot_y_degs = np.asarray(angles_deg, dtype=np.float32) + alpha_deg
+    print(f"Rotation Angles: {obj_rot_y_degs}")
 
     fetch_and_save_projections(
         out_dir=out_dir,
@@ -290,6 +303,7 @@ def generate_predicted_projections(theta, angles_deg, cfg, out_dir):
         src_up=cfg["SRC_UP"],
         src_right=cfg["SRC_RIGHT"],
         filename_prefix="proj",
+        phantom_name = HERE / f"cuboid_phantom_{cfg['K']}.npy"
     )
 
 
@@ -301,9 +315,10 @@ def build_residual_image_based(theta, real_df, angles_deg, cfg, pred_dir):
     pred_df = build_wide_df_from_folder(
         pred_dir,
         K=cfg["K"],
-        min_area=cfg.get("min_area", 10),
+        min_area=cfg.get("min_area", 5),
         max_area=cfg.get("max_area", 2000),
     )
+    print(f"pred_df has {len(pred_df)} rows, real_df has {len(real_df)} rows")
     if len(pred_df) != len(real_df):
         print(f"FAILED!!!!!!!!!! pred_df has {len(pred_df)} rows, real_df has {len(real_df)} rows")
         return np.empty((0,), dtype=np.float64)
@@ -314,7 +329,7 @@ def build_residual_image_based(theta, real_df, angles_deg, cfg, pred_dir):
     return residual_from_two_dfs(real_df, pred_df, cfg["K"])
 
 def numerical_jacobian_image_based(theta, active_mask, real_df, angles_deg, cfg, eps, work_dir):
-    r0 = build_residual_image_based(theta, real_df, angles_deg, cfg, os.path.join(work_dir, "pred_base"))
+    r0 = build_residual_image_based(theta, real_df, angles_deg, cfg, work_dir / "pred_base")
     if len(r0) == 0:
         return None, None
     #print(r0)
@@ -328,8 +343,8 @@ def numerical_jacobian_image_based(theta, active_mask, real_df, angles_deg, cfg,
         t_m = theta.copy()
         t_p[j] += eps[j]; t_m[j] -= eps[j]
 
-        r_p = build_residual_image_based(t_p, real_df, angles_deg, cfg, os.path.join(work_dir, f"pred_p_{j:02d}"))
-        r_m = build_residual_image_based(t_m, real_df, angles_deg, cfg, os.path.join(work_dir, f"pred_m_{j:02d}"))
+        r_p = build_residual_image_based(t_p, real_df, angles_deg, cfg, work_dir / f"pred_p_{j:02d}")
+        r_m = build_residual_image_based(t_m, real_df, angles_deg, cfg, work_dir / f"pred_m_{j:02d}")
         if  len(r_p) == 0 or len(r_m) == 0:
             continue
 
@@ -428,6 +443,25 @@ def lm_solve_image_based(real_df, angles_deg, cfg, n_iters=10, lam=1e-2, fix_sou
 np.set_printoptions(suppress=True, precision=8)
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Gauss-Newton calibration runner")
+    parser.add_argument(
+        "-a"
+        "--angles",
+        "--angle-factors",
+        dest="angles",
+        default=None,
+        help="Comma/space-separated list of N_ANGLE values. Example: '8,12,24'",
+    )
+    parser.add_argument(
+        "-k"
+        "--k",
+        "--bead-list",
+        dest="k",
+        default=None,
+        help="Comma/space-separated list of K values. Example: '3,4'",
+    )
+    args = parser.parse_args()
+
     IMAGE_W = 255
     IMAGE_H = 255
 
@@ -491,18 +525,22 @@ if __name__ == "__main__":
 
 
     ANGLE_FACTORS = [3, 4, 5, 6, 8, 9, 10, 12, 15, 18, 20, 24, 30, 36, 40, 45, 60, 72, 90, 120, 180, 360]
-    #ANGLE_FACTORS = [8]
-    BEAD_LIST = range(1, 8)
+    BEAD_LIST = list(range(1, 8))
+    cli_angles = parse_int_list(args.angles)
+    cli_beads = parse_int_list(args.k)
+    if cli_angles is not None:
+        ANGLE_FACTORS = cli_angles
+    if cli_beads is not None:
+        BEAD_LIST = cli_beads
 
-    MIN_AREA = 10
+    MIN_AREA = 5
     MAX_AREA = 6000
     AREA_WEIGHT = 1e-3
     VOXEL_SIZE = 0.1
 
     # Put outputs in unique places and do not overwrite
-    BASE_REAL_DIR = "projections_png_real"
-    THETA_TXT = "theta_hat.txt"
-    THETA_CSV = "theta_hat.csv"
+    BASE_REAL_DIR = HERE / "projections_png_real"
+    THETA_CSV = HERE / "theta_hat.csv"
 
     # CSV header once (outside loops)THETA_CSV = "theta_hat.csv"
     scenario_names = [sc["name"] for sc in GEOM_SCENARIOS]
@@ -538,8 +576,9 @@ if __name__ == "__main__":
                 # Default position
                 SRC_WORLD = sc["SRC_WORLD"]
                 DET_WORLD = sc["DET_WORLD"]
-                REAL_OUT_DIR = os.path.join(BASE_REAL_DIR, f"{scenario_name}_K{each_k}_N{each_angle}")
-                os.makedirs(REAL_OUT_DIR, exist_ok=True)
+                real_out_dir = BASE_REAL_DIR / f"K{each_k}_N{each_angle}" / f"{scenario_name}"
+                real_out_dir.mkdir(parents=True, exist_ok=True)
+
 
                 REAL_OBJ_WORLD = sc["real_OBJ_WORLD"]
                 start_deg = float(sc["initial_angle_deg"])
@@ -548,7 +587,7 @@ if __name__ == "__main__":
             
                 print("Generating projections with angles (deg):", ANGLE_DEGREES_REAL)
                 fetch_and_save_projections(
-                    out_dir="projections_png_real",
+                    out_dir=real_out_dir,
                     src_world=SRC_WORLD,
                     obj_world=REAL_OBJ_WORLD,
                     det_world_base=DET_WORLD,
@@ -561,9 +600,10 @@ if __name__ == "__main__":
                     src_up=SRC_UP,
                     src_right=SRC_RIGHT,
                     filename_prefix="proj",
+                    phantom_name=HERE/f"cuboid_phantom_{each_k}.npy"
                 )
 
-                real_proj = build_wide_df_from_folder(REAL_FOLDER, K=each_k, min_area=MIN_AREA, max_area=MAX_AREA)
+                real_proj = build_wide_df_from_folder(real_out_dir, K=each_k, min_area=MIN_AREA, max_area=MAX_AREA)
                 print(real_proj)
 
                 # ---- Unity coordinates ----
@@ -590,8 +630,8 @@ if __name__ == "__main__":
                     "min_area": MIN_AREA,
                     "max_area": MAX_AREA,
                 }
-            
-                theta_hat, dtheta, cost, it = lm_solve_image_based(real_proj, ANGLE_DEGREES_UNITY, cfg, n_iters=50, lam=1e-2, fix_source=True, fix_detector=True)
+                os.makedirs(HERE / f"lm_work", exist_ok=True)
+                theta_hat, dtheta, cost, it = lm_solve_image_based(real_proj, ANGLE_DEGREES_UNITY, cfg, n_iters=50, lam=1e-2, fix_source=True, fix_detector=True, work_dir = HERE / f"lm_work/{each_k}_{each_angle}" / f"{scenario_name}")
                 # Diff
                 delta_minus_fake = theta_hat.copy()
                 delta_minus_fake -= fake_delta
@@ -608,6 +648,8 @@ if __name__ == "__main__":
                 # -----------------------------------------
                 # Text log (append)
                 # -----------------------------------------
+                os.makedirs(HERE / f"theta_log", exist_ok=True)
+                THETA_TXT = HERE / f"theta_log/theta_hat_{each_k}_{each_angle}.txt"
                 with open(THETA_TXT, "a") as ftxt:
                     ftxt.write(f"# scenario={scenario_name} N_ANGLES={each_angle}, K={each_k}\n")
                     ftxt.write("# fake_delta\n")
@@ -617,7 +659,6 @@ if __name__ == "__main__":
                     ftxt.write("# Diff from Expected\n")
                     ftxt.write(" ".join(f"{v:.3f}" for v in delta_minus_fake) + "\n")
                     ftxt.write(f"# sum = {diff_sum:.3f}\n\n")
-          
                 print("Fake theta:", fake_delta)
                 print("Final estimated theta:", theta_hat)
                 print("Diff from Expected:", delta_minus_fake)

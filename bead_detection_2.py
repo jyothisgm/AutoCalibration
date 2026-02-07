@@ -62,6 +62,7 @@ def detect_beads_single_image(image_path: str, K: int, min_area: int = 10, max_a
     return cands[:K]
 
 def build_wide_df_from_folder(folder: str, K: int = 5, min_area: int = 10, max_area: int = 2000, exclude_border: int = 0, connectivity: int = 8):
+    print(folder)
     paths = sorted(glob.glob(os.path.join(folder, "*.png")))
     if not paths:
         raise RuntimeError(f"No images found in {folder}")

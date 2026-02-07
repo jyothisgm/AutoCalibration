@@ -1,6 +1,8 @@
 ﻿# %%
 import numpy as np
 import pyvista as pv
+from pathlib import Path
+
 
 # ---- Parameters ----
 CLEARANCE = 0.0
@@ -9,6 +11,7 @@ NO_OF_BEADS = 6
 BEAD_RADIUS = 2.0
 MARGIN = 1.0
 TURNS = 1.0
+HERE = Path(__file__).resolve().parent
 
 #%%
 def generate_cuboid_spiral_beads(
@@ -299,6 +302,10 @@ def make_cuboid_with_beads_volume(width: float, breadth: float, height: float, b
     return volume
 
 def generate_k_bead_phantom(k=NO_OF_BEADS, plot=True, mat=False):
+    phantom_path = HERE / f"cuboid_phantom_{k}.npy"
+    if phantom_path.exists():
+        return  # or just skip saving
+
     phantom_mesh, cuboid_mesh, beads_mesh, centers = generate_cuboid_spiral_beads(w=WIDTH, b=BREADTH, h=HEIGHT, k=k, bead_radius=BEAD_RADIUS, 
                                                                                   margin=MARGIN, clearance=CLEARANCE, turns=TURNS, spiral_mode="rounded-rect", 
                                                                                   rounded_rect_r=0.0, seed=66)
@@ -307,8 +314,8 @@ def generate_k_bead_phantom(k=NO_OF_BEADS, plot=True, mat=False):
         print(f"  Bead {i:02d}: x = {x:.3f}, y = {y:.3f}, z = {z:.3f}")
 
     # Optional mesh saves (debug / visualization)
-    phantom_mesh.save("cuboid_spiral_beads.vtk")
-    np.save("bead_centers.npy", centers)
+    #phantom_mesh.save(HERE / f"cuboid_spiral_beads_{k}.vtk")
+    #np.save(HERE / f"bead_centers_{k}.npy", centers)
 
     # ---- SINGLE NPY PHANTOM ----
     VOXEL_SIZE = 0.1  # mm
@@ -321,8 +328,8 @@ def generate_k_bead_phantom(k=NO_OF_BEADS, plot=True, mat=False):
     for v, c in zip(values, counts):
         print(f"  value={v:.6f} : voxels={c}")
 
-    np.save("cuboid_phantom.npy", volume)
-    print("Saved cuboid_phantom.npy", volume.shape)
+    np.save(phantom_path, volume)
+    print(f"Saved cuboid_phantom_{k}.npy", volume.shape)
     if plot:
         p = pv.Plotter()
         p.add_mesh(cuboid_mesh, opacity=0.15)
@@ -374,12 +381,6 @@ def generate_k_bead_phantom(k=NO_OF_BEADS, plot=True, mat=False):
 
         plt.tight_layout()
         plt.show()
-
-
-
-
-
-
 
 
 # %%
