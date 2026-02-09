@@ -15,6 +15,8 @@ class AstraServer:
         min_z = -n_slices/ 2 * voxel_size
         max_z = n_slices/ 2 * voxel_size
 
+        print(f"Volume geometry: cols={n_cols}, rows={n_rows}, slices={n_slices}")
+
         self.vol_geom = astra.create_vol_geom(n_cols, n_rows, n_slices, min_x, max_x, min_y, max_y, min_z, max_z)
         self.vol_id = astra.data3d.create('-vol', self.vol_geom, object)
         self.image_width = image_width

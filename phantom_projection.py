@@ -86,6 +86,30 @@ def unity_geom12_from_worldcoords(
     return geom12
 
 
+def pad_volume_to_square_xy(volume, pad_value=0.0):
+    Nz, Ny, Nx = volume.shape
+
+    target = max(Nx, Ny)
+
+    pad_x_total = target - Nx
+    pad_y_total = target - Ny
+
+    pad_x0 = pad_x_total // 2
+    pad_x1 = pad_x_total - pad_x0
+
+    pad_y0 = pad_y_total // 2
+    pad_y1 = pad_y_total - pad_y0
+
+    padded = np.pad(
+        volume,
+        pad_width=((0, 0), (pad_y0, pad_y1), (pad_x0, pad_x1)),
+        mode="constant",
+        constant_values=pad_value
+    )
+
+    return padded
+
+
 def fetch_and_save_projections(out_dir: str, src_world: np.ndarray, obj_world: np.ndarray,
                                det_world_base: np.ndarray, obj_rot_y_degs: np.ndarray,   # (N,) in degrees
                                image_height: int, image_width: int,
@@ -96,6 +120,8 @@ def fetch_and_save_projections(out_dir: str, src_world: np.ndarray, obj_world: n
     bytes_per_img = image_height * image_width * 3
 
     rec = np.load(phantom_name)
+    rec = pad_volume_to_square_xy(rec, pad_value=0.0)
+
 
     server = AstraServer(object=rec, image_width=image_width, image_height=image_height, voxel_size=voxel_size)
     # print_unity_geometry(src_world, obj_world, det_world_base, obj_rot_y_degs[0])
