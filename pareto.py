@@ -8,12 +8,8 @@ from matplotlib.colors import BoundaryNorm
 # If from file:
 df = pd.read_csv("theta_hat.csv")
 
-# If from string (paste your CSV into csv_text):
-# from io import StringIO
-# df = pd.read_csv(StringIO(csv_text))
-
 #%%
-# ---- Compute mean(|sum|) across G0..G4 ----
+# ---- Compute mean absolute error across G0..G4 ----
 sum_cols = ["G0_sum", "G1_sum", "G2_sum", "G3_sum", "G4_sum"]
 
 df["mean_abs_sum"] = df[sum_cols].abs().mean(axis=1)
