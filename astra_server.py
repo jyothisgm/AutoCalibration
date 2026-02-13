@@ -7,7 +7,7 @@ import numpy as np
 
 class AstraServer:
     def __init__(self, object: np.ndarray, image_width=256, image_height=256, voxel_size=1.0):
-        n_slices, n_cols, n_rows = object.shape
+        n_slices, n_rows, n_cols = object.shape
         min_x = -n_cols / 2 * voxel_size
         max_x = n_cols / 2 * voxel_size
         min_y = -n_rows/ 2 * voxel_size
@@ -17,7 +17,7 @@ class AstraServer:
 
         print(f"Volume geometry: cols={n_cols}, rows={n_rows}, slices={n_slices}")
 
-        self.vol_geom = astra.create_vol_geom(n_cols, n_rows, n_slices, min_x, max_x, min_y, max_y, min_z, max_z)
+        self.vol_geom = astra.create_vol_geom(n_rows, n_cols, n_slices, min_x, max_x, min_y, max_y, min_z, max_z)
         self.vol_id = astra.data3d.create('-vol', self.vol_geom, object)
         self.image_width = image_width
         self.image_height = image_height

@@ -85,51 +85,24 @@ def unity_geom12_from_worldcoords(
     geom12 = np.concatenate([pack_xzy(srcPos), pack_xzy(detPos), pack_xzy(u), pack_xzy(v)]).astype(np.float32)
     return geom12
 
-
-def pad_volume_to_square_xy(volume, pad_value=0.0):
-    Nz, Ny, Nx = volume.shape
-
-    target = max(Nx, Ny)
-
-    pad_x_total = target - Nx
-    pad_y_total = target - Ny
-
-    pad_x0 = pad_x_total // 2
-    pad_x1 = pad_x_total - pad_x0
-
-    pad_y0 = pad_y_total // 2
-    pad_y1 = pad_y_total - pad_y0
-
-    padded = np.pad(
-        volume,
-        pad_width=((0, 0), (pad_y0, pad_y1), (pad_x0, pad_x1)),
-        mode="constant",
-        constant_values=pad_value
-    )
-
-    return padded
-
-
 def fetch_and_save_projections(out_dir: str, src_world: np.ndarray, obj_world: np.ndarray,
-                               det_world_base: np.ndarray, obj_rot_y_degs: np.ndarray,   # (N,) in degrees
-                               image_height: int, image_width: int,
-                               astra_sdd: float, det_spacing: float, voxel_size: float,
-                               src_up: np.ndarray, src_right: np.ndarray, filename_prefix: str = "proj", phantom_name: str = "cuboid_phantom.npy"):
+                            det_world_base: np.ndarray, obj_rot_y_degs: np.ndarray,   # (N,) in degrees
+                            image_height: int, image_width: int,
+                            astra_sdd: float, det_spacing: float, voxel_size: float,
+                            src_up: np.ndarray, src_right: np.ndarray, filename_prefix: str = "proj", phantom_name: str = "cuboid_phantom_7.npy"):
     reset_folder(out_dir)
     obj_rot_y_degs = np.asarray(obj_rot_y_degs, dtype=np.float32)
     bytes_per_img = image_height * image_width * 3
 
     rec = np.load(phantom_name)
-    rec = pad_volume_to_square_xy(rec, pad_value=0.0)
-
 
     server = AstraServer(object=rec, image_width=image_width, image_height=image_height, voxel_size=voxel_size)
     # print_unity_geometry(src_world, obj_world, det_world_base, obj_rot_y_degs[0])
 
     for idx, ry in enumerate(obj_rot_y_degs):
         geom12 = unity_geom12_from_worldcoords(src_world=src_world, obj_world=obj_world, det_world=det_world_base,
-                                               obj_rot_y_deg=float(ry), astra_sdd=astra_sdd, det_spacing=det_spacing,
-                                               src_up=src_up, src_right=src_right)
+                                            obj_rot_y_deg=float(ry), astra_sdd=astra_sdd, det_spacing=det_spacing,
+                                            src_up=src_up, src_right=src_right)
         # np.set_printoptions(precision=3, suppress=True)
         img = server.generate_image(geom12)
         Image.fromarray(img).save(os.path.join(out_dir, f"{filename_prefix}_{int(ry):03d}_{idx:03d}.png"))

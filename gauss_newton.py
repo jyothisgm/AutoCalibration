@@ -42,8 +42,7 @@ BOUNDS = {
 }
 
 HERE = Path(__file__).resolve().parent
-REAL_FOLDER = HERE / "projections_png_real"
-PRED_FOLDER = HERE / "projections_png_predicted"
+PHANTOM_NAME = HERE / "recon_cropped_scan_1.npy"
 
 
 def parse_int_list(raw: str):
@@ -303,7 +302,7 @@ def generate_predicted_projections(theta, angles_deg, cfg, out_dir):
         src_up=cfg["SRC_UP"],
         src_right=cfg["SRC_RIGHT"],
         filename_prefix="proj",
-        phantom_name = HERE / f"cuboid_phantom_{cfg['K']}.npy"
+        phantom_name = PHANTOM_NAME
     )
 
 
@@ -539,8 +538,10 @@ if __name__ == "__main__":
     VOXEL_SIZE = 0.1
 
     # Put outputs in unique places and do not overwrite
-    BASE_REAL_DIR = HERE / "projections_png_real"
-    THETA_CSV = HERE / "theta_hat.csv"
+    BASE_REAL_DIR = HERE / "projections_png_real_scanned"
+    THETA_CSV = HERE / "theta_hat_scanned.csv"
+    THETA_LOG = HERE / "theta_log_scanned"
+    WORKING_DIR = HERE / "lm_work_scanned"
 
     # CSV header once (outside loops)THETA_CSV = "theta_hat.csv"
     scenario_names = [sc["name"] for sc in GEOM_SCENARIOS]
@@ -564,7 +565,7 @@ if __name__ == "__main__":
     scenario_results = {}
 
     for each_k in BEAD_LIST:
-        generate_k_bead_phantom(each_k, plot=False)
+        # generate_k_bead_phantom(each_k, plot=False)
         for each_angle in ANGLE_FACTORS:
             for sc in GEOM_SCENARIOS:
                 scenario_name = sc["name"]
@@ -600,7 +601,8 @@ if __name__ == "__main__":
                     src_up=SRC_UP,
                     src_right=SRC_RIGHT,
                     filename_prefix="proj",
-                    phantom_name=HERE/f"cuboid_phantom_{each_k}.npy"
+                    # phantom_name=HERE/f"cuboid_phantom_{each_k}.npy"
+                    phantom_name=PHANTOM_NAME
                 )
 
                 real_proj = build_wide_df_from_folder(real_out_dir, K=each_k, min_area=MIN_AREA, max_area=MAX_AREA)
@@ -630,8 +632,8 @@ if __name__ == "__main__":
                     "min_area": MIN_AREA,
                     "max_area": MAX_AREA,
                 }
-                os.makedirs(HERE / f"lm_work", exist_ok=True)
-                theta_hat, dtheta, cost, it = lm_solve_image_based(real_proj, ANGLE_DEGREES_UNITY, cfg, n_iters=50, lam=1e-2, fix_source=True, fix_detector=True, work_dir = HERE / f"lm_work/{each_k}_{each_angle}" / f"{scenario_name}")
+                os.makedirs(WORKING_DIR, exist_ok=True)
+                theta_hat, dtheta, cost, it = lm_solve_image_based(real_proj, ANGLE_DEGREES_UNITY, cfg, n_iters=50, lam=1e-2, fix_source=True, fix_detector=True, work_dir = WORKING_DIR / f"{each_k}_{each_angle}" / f"{scenario_name}")
                 # Diff
                 delta_minus_fake = theta_hat.copy()
                 delta_minus_fake -= fake_delta
@@ -648,8 +650,8 @@ if __name__ == "__main__":
                 # -----------------------------------------
                 # Text log (append)
                 # -----------------------------------------
-                os.makedirs(HERE / f"theta_log", exist_ok=True)
-                THETA_TXT = HERE / f"theta_log/theta_hat_{each_k}_{each_angle}.txt"
+                os.makedirs(THETA_LOG, exist_ok=True)
+                THETA_TXT = THETA_LOG / f"theta_hat_{each_k}_{each_angle}.txt"
                 with open(THETA_TXT, "a") as ftxt:
                     ftxt.write(f"# scenario={scenario_name} N_ANGLES={each_angle}, K={each_k}\n")
                     ftxt.write("# fake_delta\n")
