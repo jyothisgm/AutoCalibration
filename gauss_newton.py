@@ -2,7 +2,7 @@
 import glob
 import argparse
 from re import I
-from bead_detection_2 import build_wide_df_from_folder
+from bead_detection import build_wide_df_from_folder, detect_beads_single_image
 import cv2
 import csv
 import numpy as np
@@ -11,7 +11,7 @@ import itertools
 from pathlib import Path
 
 from phantom_generator import generate_k_bead_phantom
-from phantom_projection import fetch_and_save_projections, print_geometry_vector, print_unity_geometry, unity_geom12_from_worldcoords, unpack_xzy
+from phantom_projector import fetch_and_save_projections, print_geometry_vector, print_unity_geometry, unity_geom12_from_worldcoords, unpack_xzy
 
 pd.set_option("display.max_rows", None)
 pd.set_option("display.max_columns", None)
@@ -129,7 +129,7 @@ def apply_theta_to_geometry(theta, src_world, obj_world, det_world, obj_rot_y_de
     return src_w, obj_w, det_w, rot_y
 
 def geom12_with_theta(theta, base_src_world, base_obj_world, base_det_world, base_rot_y_deg, 
-                      astra_sdd, det_spacing, src_up, src_right):
+                      astra_scaling, det_spacing, src_up, src_right):
     theta = np.asarray(theta, dtype=np.float64).reshape(9)
     dSx, dSy = theta[0], theta[1]
     dOx, dOy, dOz = theta[2], theta[3], theta[4]
@@ -142,7 +142,7 @@ def geom12_with_theta(theta, base_src_world, base_obj_world, base_det_world, bas
     rot_deg = float(base_rot_y_deg + alpha)
 
     return unity_geom12_from_worldcoords(src_world=src_world, obj_world=obj_world, det_world=det_world, obj_rot_y_deg=rot_deg,
-                                         astra_sdd=astra_sdd, det_spacing=det_spacing, src_up=src_up, src_right=src_right)
+                                         astra_scaling=astra_scaling, det_spacing=det_spacing, src_up=src_up, src_right=src_right)
 
 def project_points_cone_vec(geom12: np.ndarray, bead_xyz: np.ndarray, det_h: int, det_w: int):
     g = np.asarray(geom12, dtype=np.float64).reshape(12)
@@ -226,7 +226,7 @@ def build_residual(theta, df_wide, bead_xyz, angles_deg, cfg):
             base_obj_world=cfg["OBJ_WORLD"],
             base_det_world=cfg["DET_WORLD"],
             base_rot_y_deg=float(angles_deg[i]),
-            astra_sdd=cfg["ASTRA_SDD"],
+            astra_scaling=cfg["astra_scaling"],
             det_spacing=cfg["DET_SPACING"],
             src_up=cfg["SRC_UP"],
             src_right=cfg["SRC_RIGHT"],
@@ -287,7 +287,7 @@ def generate_predicted_projections(theta, angles_deg, cfg, out_dir):
     # For each angle, rotation changes, but src/obj/det translations come from theta
     alpha_deg = float(theta[8])  # if alpha is degrees in your code
     obj_rot_y_degs = np.asarray(angles_deg, dtype=np.float32) + alpha_deg
-    print(f"Rotation Angles: {obj_rot_y_degs}")
+    # print(f"Rotation Angles: {obj_rot_y_degs}")
 
     fetch_and_save_projections(
         out_dir=out_dir,
@@ -297,13 +297,14 @@ def generate_predicted_projections(theta, angles_deg, cfg, out_dir):
         obj_rot_y_degs=obj_rot_y_degs,
         image_height=cfg["det_h"],
         image_width=cfg["det_w"],
-        astra_sdd=cfg["ASTRA_SDD"],
+        astra_scaling=cfg["astra_scaling"],
         det_spacing=cfg["DET_SPACING"],
         voxel_size=cfg["VOXEL_SIZE"],
         src_up=cfg["SRC_UP"],
         src_right=cfg["SRC_RIGHT"],
         filename_prefix="proj",
-        phantom_name = HERE / f"cuboid_phantom_{cfg['K']}.npy"
+        #phantom_name=HERE/f"phantoms/cuboid_phantom_{cfg['K']}.npy"
+        phantom_name=HERE/f"phantoms/recon_cropped_scan_1.npy"
     )
 
 
@@ -318,7 +319,6 @@ def build_residual_image_based(theta, real_df, angles_deg, cfg, pred_dir):
         min_area=cfg.get("min_area", 5),
         max_area=cfg.get("max_area", 2000),
     )
-    print(f"pred_df has {len(pred_df)} rows, real_df has {len(real_df)} rows")
     if len(pred_df) != len(real_df):
         print(f"FAILED!!!!!!!!!! pred_df has {len(pred_df)} rows, real_df has {len(real_df)} rows")
         return np.empty((0,), dtype=np.float64)
@@ -382,7 +382,7 @@ def lm_solve_image_based(real_df, angles_deg, cfg, n_iters=10, lam=1e-2, fix_sou
             obj_world=obj_w,
             det_world=det_w,
             obj_rot_y_deg=rot_y,
-            astra_sdd=cfg["ASTRA_SDD"],
+            astra_scaling=cfg["astra_scaling"],
             det_spacing=cfg["DET_SPACING"],
             src_up=cfg["SRC_UP"],
             src_right=cfg["SRC_RIGHT"],
@@ -442,7 +442,8 @@ def lm_solve_image_based(real_df, angles_deg, cfg, n_iters=10, lam=1e-2, fix_sou
 # -----------------------------
 np.set_printoptions(suppress=True, precision=8)
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser(description="Gauss-Newton calibration runner")
     parser.add_argument(
         "-a"
@@ -465,7 +466,7 @@ if __name__ == "__main__":
     IMAGE_W = 255
     IMAGE_H = 255
 
-    ASTRA_SDD = 1
+    astra_scaling = 1
     DET_SPACING = 0.75
 
     # xraySource orientation (world). Use your real values if different.
@@ -484,48 +485,51 @@ if __name__ == "__main__":
             "initial_angle_deg": 10.0,
             "fake_delta": np.array([0.0, 0.0, -10.0, 5.0, -19.0, 0.0, 0.0, 0.0, 10.0], dtype=np.float32),
         },
-        {
-            "name": "G1",
-            "SRC_WORLD": np.array([2.0, 45.0, -50.0], dtype=np.float32),
-            "DET_WORLD": np.array([0.0, 2.0, 1004.0], dtype=np.float32),
-            "real_OBJ_WORLD": np.array([0.0, 30.0, 570.0], dtype=np.float32),
-            "unity_OBJ_WORLD": np.array([6.0, 28.0, 585.0], dtype=np.float32),
-            "initial_angle_deg": 8.0,
-            "fake_delta": np.array([0.0, 0.0, -6.0, 2.0, -15.0, 0.0, 0.0, 0.0, 8.0], dtype=np.float32),
-        },
-        {
-            "name": "G2",
-            "SRC_WORLD": np.array([-2.0, 47.0, -50.0], dtype=np.float32),
-            "DET_WORLD": np.array([1.0, 0.0, 1006.0], dtype=np.float32),
-            "real_OBJ_WORLD": np.array([0.0, 30.0, 570.0], dtype=np.float32),
-            "unity_OBJ_WORLD": np.array([14.0, 22.0, 592.0], dtype=np.float32),
-            "initial_angle_deg": 12.3,
-            "fake_delta": np.array([0.0, 0.0, -14.0,  8.0, -22.0, 0.0, 0.0, 0.0, 12.3], dtype=np.float32),
-        },
-        {
-            "name": "G3",
-            "SRC_WORLD": np.array([0.0, 43.0, -48.0], dtype=np.float32),
-            "DET_WORLD": np.array([-2.0, 0.0, 1004.0], dtype=np.float32),
-            "real_OBJ_WORLD": np.array([0.0, 30.0, 570.0], dtype=np.float32),
-            "unity_OBJ_WORLD": np.array([8.0, 24.0, 595.0], dtype=np.float32),
-            "initial_angle_deg": 14.1,
-            "fake_delta": np.array([0.0, 0.0, -8.0,  6.0, -25.0, 0.0, 0.0, 0.0, 14.1], dtype=np.float32),
+        # {
+        #     "name": "G1",
+        #     "SRC_WORLD": np.array([2.0, 45.0, -50.0], dtype=np.float32),
+        #     "DET_WORLD": np.array([0.0, 2.0, 1004.0], dtype=np.float32),
+        #     "real_OBJ_WORLD": np.array([0.0, 30.0, 570.0], dtype=np.float32),
+        #     "unity_OBJ_WORLD": np.array([6.0, 28.0, 585.0], dtype=np.float32),
+        #     "initial_angle_deg": 8.0,
+        #     "fake_delta": np.array([0.0, 0.0, -6.0, 2.0, -15.0, 0.0, 0.0, 0.0, 8.0], dtype=np.float32),
+        # },
+        # {
+        #     "name": "G2",
+        #     "SRC_WORLD": np.array([-2.0, 47.0, -50.0], dtype=np.float32),
+        #     "DET_WORLD": np.array([1.0, 0.0, 1006.0], dtype=np.float32),
+        #     "real_OBJ_WORLD": np.array([0.0, 30.0, 570.0], dtype=np.float32),
+        #     "unity_OBJ_WORLD": np.array([14.0, 22.0, 592.0], dtype=np.float32),
+        #     "initial_angle_deg": 12.3,
+        #     "fake_delta": np.array([0.0, 0.0, -14.0,  8.0, -22.0, 0.0, 0.0, 0.0, 12.3], dtype=np.float32),
+        # },
+        # {
+        #     "name": "G3",
+        #     "SRC_WORLD": np.array([0.0, 43.0, -48.0], dtype=np.float32),
+        #     "DET_WORLD": np.array([-2.0, 0.0, 1004.0], dtype=np.float32),
+        #     "real_OBJ_WORLD": np.array([0.0, 30.0, 570.0], dtype=np.float32),
+        #     "unity_OBJ_WORLD": np.array([8.0, 24.0, 595.0], dtype=np.float32),
+        #     "initial_angle_deg": 14.1,
+        #     "fake_delta": np.array([0.0, 0.0, -8.0,  6.0, -25.0, 0.0, 0.0, 0.0, 14.1], dtype=np.float32),
 
-        },
-        {
-            "name": "G4",
-            "SRC_WORLD": np.array([1.0, 46.0, -55.0], dtype=np.float32),
-            "DET_WORLD": np.array([0.0, -2.0, 1008.0], dtype=np.float32),
-            "real_OBJ_WORLD": np.array([0.0, 30.0, 570.0], dtype=np.float32),
-            "unity_OBJ_WORLD": np.array([12.0, 27.0, 583.0], dtype=np.float32),
-            "initial_angle_deg": 3.3,
-            "fake_delta": np.array([0.0, 0.0, -12.0,  3.0, -13.0, 0.0, 0.0, 0.0,  3.3], dtype=np.float32),
-        },
+        # },
+        # {
+        #     "name": "G4",
+        #     "SRC_WORLD": np.array([1.0, 46.0, -55.0], dtype=np.float32),
+        #     "DET_WORLD": np.array([0.0, -2.0, 1008.0], dtype=np.float32),
+        #     "real_OBJ_WORLD": np.array([0.0, 30.0, 570.0], dtype=np.float32),
+        #     "unity_OBJ_WORLD": np.array([12.0, 27.0, 583.0], dtype=np.float32),
+        #     "initial_angle_deg": 3.3,
+        #     "fake_delta": np.array([0.0, 0.0, -12.0,  3.0, -13.0, 0.0, 0.0, 0.0,  3.3], dtype=np.float32),
+        # },
     ]
 
 
     ANGLE_FACTORS = [3, 4, 5, 6, 8, 9, 10, 12, 15, 18, 20, 24, 30, 36, 40, 45, 60, 72, 90, 120, 180, 360]
+    ANGLE_FACTORS = [4]
     BEAD_LIST = list(range(1, 8))
+    BEAD_LIST = [5]
+
     cli_angles = parse_int_list(args.angles)
     cli_beads = parse_int_list(args.k)
     if cli_angles is not None:
@@ -585,7 +589,7 @@ if __name__ == "__main__":
                 ANGLE_DEGREES_REAL = np.linspace(start_deg, start_deg + 360.0, each_angle, endpoint=False)
 
             
-                print("Generating projections with angles (deg):", ANGLE_DEGREES_REAL)
+                # print("Generating projections with angles (deg):", ANGLE_DEGREES_REAL)
                 fetch_and_save_projections(
                     out_dir=real_out_dir,
                     src_world=SRC_WORLD,
@@ -594,13 +598,14 @@ if __name__ == "__main__":
                     obj_rot_y_degs=ANGLE_DEGREES_REAL,
                     image_height=IMAGE_H,
                     image_width=IMAGE_W,
-                    astra_sdd=ASTRA_SDD,
+                    astra_scaling=astra_scaling,
                     det_spacing=DET_SPACING,
                     voxel_size=VOXEL_SIZE,
                     src_up=SRC_UP,
                     src_right=SRC_RIGHT,
                     filename_prefix="proj",
-                    phantom_name=HERE/f"cuboid_phantom_{each_k}.npy"
+                    phantom_name=HERE/f"phantoms/cuboid_phantom_{each_k}.npy"
+                    # phantom_name=HERE/f"phantoms/recon_cropped_scan_1.npy"
                 )
 
                 real_proj = build_wide_df_from_folder(real_out_dir, K=each_k, min_area=MIN_AREA, max_area=MAX_AREA)
@@ -619,7 +624,7 @@ if __name__ == "__main__":
                     "K": each_k,
                     "det_h": IMAGE_W,
                     "det_w": IMAGE_H,
-                    "ASTRA_SDD": ASTRA_SDD,
+                    "astra_scaling": astra_scaling,
                     "DET_SPACING": DET_SPACING,
                     "SRC_WORLD": SRC_WORLD,
                     "OBJ_WORLD": UNITY_OBJ_WORLD,
@@ -678,3 +683,13 @@ if __name__ == "__main__":
                     ]
 
                 writer.writerow(row)
+
+
+from line_profiler import LineProfiler
+
+lp = LineProfiler()
+lp.add_function(build_wide_df_from_folder)
+lp.add_function(detect_beads_single_image)
+
+lp.run('main()')
+lp.print_stats()

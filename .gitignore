@@ -5,24 +5,28 @@ build/
 dist/
 wheels/
 *.egg-info
+.git/
 
 # Virtual environments
 .venv
 .python-version
 uv.lock
-*.npy
-*.vtk
+phantoms/
 
 # Visual Studio Code settings
 .vs/
 
 # projections
-lm_work/
-lm_work_ellipse_working
+fake_projections/
 projections_png_real/
-projections_png_real_ellipse_working
+real_scans/
+run_logs/
+theta_logs/
+theta_log_fake_scan/
+
 
 # output and log files
 logs
 logs_ellipse_working
 *.out
+*.err

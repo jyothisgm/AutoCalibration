@@ -3,6 +3,8 @@ import numpy as np
 import pyvista as pv
 from pathlib import Path
 
+import matplotlib.pyplot as plt
+
 
 # ---- Parameters ----
 CLEARANCE = 0.0
@@ -302,9 +304,9 @@ def make_cuboid_with_beads_volume(width: float, breadth: float, height: float, b
     return volume
 
 def generate_k_bead_phantom(k=NO_OF_BEADS, plot=True, mat=False):
-    phantom_path = HERE / f"cuboid_phantom_{k}.npy"
-    if phantom_path.exists():
-        return  # or just skip saving
+    phantom_path = HERE / f"phantoms/cuboid_phantom_{k}.npy"
+    #if phantom_path.exists():
+        #return  # or just skip saving
 
     phantom_mesh, cuboid_mesh, beads_mesh, centers = generate_cuboid_spiral_beads(w=WIDTH, b=BREADTH, h=HEIGHT, k=k, bead_radius=BEAD_RADIUS, 
                                                                                   margin=MARGIN, clearance=CLEARANCE, turns=TURNS, spiral_mode="rounded-rect", 
@@ -315,7 +317,7 @@ def generate_k_bead_phantom(k=NO_OF_BEADS, plot=True, mat=False):
 
     # Optional mesh saves (debug / visualization)
     #phantom_mesh.save(HERE / f"cuboid_spiral_beads_{k}.vtk")
-    #np.save(HERE / f"bead_centers_{k}.npy", centers)
+    #np.save(HERE / f"phantoms/bead_centers_{k}.npy", centers)
 
     # ---- SINGLE NPY PHANTOM ----
     VOXEL_SIZE = 0.1  # mm
@@ -352,8 +354,6 @@ def generate_k_bead_phantom(k=NO_OF_BEADS, plot=True, mat=False):
         p.show()
 
     if mat:
-        import matplotlib.pyplot as plt
-
         z, y, x = volume.shape
         print(f"Volume shape: x={x}, y={y}, z={z}")
         plt.figure(figsize=(12,4))
