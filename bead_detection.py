@@ -207,8 +207,6 @@ def save_debug_rectangles(image_path: str, out_dir: str, K: int,
     cv2.imwrite(out_path, canvas)
     return True
 
-
-
 def build_wide_df_from_folder(folder: str, K: int = 5, min_area: int = 10, max_area: int = 2000, exclude_border: int = 0, connectivity: int = 8, file_type: str =".png", tolerance: int=50, indices: np.ndarray | None = None, box_images: bool=False):
     paths = sorted(entry.path for entry in os.scandir(folder) if entry.is_file() and entry.name.endswith(file_type))
     if not len(paths):

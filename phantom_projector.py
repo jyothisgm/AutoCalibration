@@ -88,6 +88,7 @@ def unity_geom12_from_worldcoords(
     obj_world: np.ndarray,     # imagedObject.position
     det_world: np.ndarray,     # detObject.position
     obj_rot_y_deg: float,      # imagedObject.rotation.eulerAngles.y
+    alpha: float,               # initial angle offset (degrees) to apply to obj_rot_y_deg, if needed to match Astra's angle=0 convention
     astra_scaling: float,      # astra scaling factor to convert from Unity units to mm (e.g. 1.0 if 1 unit = 1 mm)f
     det_spacing: float,        # astraDetectorSpacing
     src_up: np.ndarray,        # xraySource.up
@@ -103,7 +104,7 @@ def unity_geom12_from_worldcoords(
     intial_calibration = np.array([
         np.array([0.0, 0.0, 0], dtype=np.float32),
         np.array([0, 0.0, 0.0], dtype=np.float32),
-        np.array([25.318359, 6.31, 0], dtype=np.float32)
+        np.array([25.318359, 6.31, 40.00000], dtype=np.float32)
     ])
     
     # intial_calibration = np.array([
@@ -112,12 +113,13 @@ def unity_geom12_from_worldcoords(
     #     np.array([0.0, 0.0, 0.0], dtype=np.float32),
     # ])
     
-    angleY = np.deg2rad(float(obj_rot_y_deg))
-    offset_x_alpha = offset_x * np.cos(angleY) - offset_z * np.sin(angleY)
-    offset_z_alpha = offset_x * np.sin(angleY) + offset_z * np.cos(angleY)
+    obj_rot = np.deg2rad(float(obj_rot_y_deg))
+    alpha = np.deg2rad(float(alpha))
+    offset_x_rot = offset_x * np.cos(obj_rot + alpha) - offset_z * np.sin(obj_rot + alpha)
+    offset_z_rot = offset_x * np.sin(obj_rot + alpha) + offset_z * np.cos(obj_rot + alpha)
 
     src_world = np.asarray(src_world, dtype=np.float32) + intial_calibration[0]
-    obj_world = np.asarray(obj_world, dtype=np.float32) + intial_calibration[1] + np.array([offset_x_alpha, 0.0, offset_z_alpha], dtype=np.float32)
+    obj_world = np.asarray(obj_world, dtype=np.float32) + intial_calibration[1] + np.array([offset_x_rot, 0.0, offset_z_rot], dtype=np.float32)
     det_world = np.asarray(det_world, dtype=np.float32) + intial_calibration[2]
     src_up = np.asarray(src_up, dtype=np.float32)
     src_right = np.asarray(src_right, dtype=np.float32)
@@ -131,8 +133,8 @@ def unity_geom12_from_worldcoords(
     v = src_right * det_spacing
 
     # Rotate around Y by object rotation
-    cosY = float(np.cos(angleY))
-    sinY = float(np.sin(angleY))
+    cosY = float(np.cos(obj_rot + alpha))
+    sinY = float(np.sin(obj_rot + alpha))
 
     srcPos = rotate_y_xz(srcPos, cosY, sinY)
     detPos = rotate_y_xz(detPos, cosY, sinY)
@@ -143,14 +145,12 @@ def unity_geom12_from_worldcoords(
     return geom12
 
 
-def fetch_and_save_projections(out_dir: str, src_world: np.ndarray, obj_world: np.ndarray,
-                               det_world_base: np.ndarray, obj_rot_y_degs: np.ndarray, offset_x: float, offset_z: float,
+def fetch_and_save_projections(out_dir: str, src_world: np.ndarray, obj_world: np.ndarray, det_world_base: np.ndarray, 
+                               alpha: float, angles_deg: np.ndarray, offset_x: float, offset_z: float,
                                image_height: int, image_width: int,
                                astra_scaling: float, det_spacing: float, voxel_size: float,
                                src_up: np.ndarray, src_right: np.ndarray, filename_prefix: str = "proj", phantom_name: str = "cuboid_phantom.npy"):
     reset_folder(out_dir)
-    obj_rot_y_degs = np.asarray(obj_rot_y_degs, dtype=np.float32)
-
     rec = np.load(phantom_name)
 
     server = AstraServer(object=rec, image_width=image_width, image_height=image_height, voxel_size=voxel_size)
@@ -162,18 +162,19 @@ def fetch_and_save_projections(out_dir: str, src_world: np.ndarray, obj_world: n
     #     # np.set_printoptions(precision=3, suppress=True)
     #     img = server.generate_image(geom12)
     #     #Image.fromarray(img).save(os.path.join(out_dir, f"{filename_prefix}_{int(ry):03d}_{idx:03d}.png"))
-        
+
     #     img = apply_napari_contrast_and_gamma(img, low_percentile=99.5, high_percentile=100.0, gamma=0.2)
     #     Image.fromarray(img).save(os.path.join(out_dir, f"{filename_prefix}_{idx:03d}.png"))
     geom12_array = []
 
     # 1) Build all geometries first
-    for ry in obj_rot_y_degs:
+    for ry in angles_deg:
         geom12 = unity_geom12_from_worldcoords(
             src_world=src_world,
             obj_world=obj_world,
             det_world=det_world_base,
             obj_rot_y_deg=float(ry),
+            alpha=float(alpha),
             astra_scaling=astra_scaling,
             det_spacing=det_spacing,
             src_up=src_up,
@@ -232,7 +233,6 @@ def main():
     N_ANGLES = 360
     obj_rot_y_degs = np.linspace(0.0, 360.0, N_ANGLES, endpoint=False, dtype=np.float32)
 
-
     fetch_and_save_projections(
         out_dir=OUT_DIR,
         src_world=SRC_WORLD,
@@ -249,7 +249,6 @@ def main():
         filename_prefix="proj",
         phantom_name=PHANTOM_NAME
     )
-
 
 
 # from line_profiler import LineProfiler
