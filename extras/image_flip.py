@@ -2,6 +2,7 @@ import cv2
 import glob, os
 import numpy as np
 import imageio.v2 as imageio
+from pathlib import Path
 
 
 def read_stack(paths):
@@ -89,6 +90,9 @@ def to_astra_line_integrals(scan_dir, out_dir, eps=1e-6, use_median=False):
 
 
 if __name__ == "__main__":
-    DIR = f"C:\\Users\\Flex Ray\\Documents\\JGM\\AutoCalibration\\2026-02-11_Beads_phantom\\Scan2"
-    to_astra_line_integrals(DIR, f"{DIR}\\out_line_integrals")
+    HERE = Path(__file__).resolve().parent.parent
+    DIR = HERE / "real_scans" / "2026-02-19_Beads_phantom"
+    for i in range(3, 12):
+        CUR_DIR = DIR / f"Scan{i}"
+        to_astra_line_integrals(CUR_DIR, CUR_DIR / "out_line_integrals")
 

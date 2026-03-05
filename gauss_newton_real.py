@@ -12,7 +12,7 @@ import itertools
 from pathlib import Path
 
 from phantom_generator import generate_k_bead_phantom
-from phantom_projector import fetch_and_save_projections, print_geometry_vector, print_unity_geometry, unity_geom12_from_worldcoords, unpack_xzy
+from phantom_projector import fetch_and_save_projections, print_geometry_vector, print_unity_geometry, unity_geom12_from_worldcoords, unpack_xzy, print_initial_calibration
 
 pd.set_option("display.max_rows", None)
 pd.set_option("display.max_columns", None)
@@ -204,6 +204,7 @@ def build_residual_image_based(delta, real_df, angles_deg, cfg, pred_dir, debug=
         offset_z=offset_z,
         image_height=cfg["det_h"],
         image_width=cfg["det_w"],
+        initial_calibration=cfg['initial_calibration'],
         astra_scaling=cfg["astra_scaling"],
         det_spacing=cfg["DET_SPACING"],
         voxel_size=cfg["VOXEL_SIZE"],
@@ -282,6 +283,10 @@ def lm_solve_image_based(real_df, angles_deg, cfg, n_iters=10, lam=1e-2, fix_sou
             det_world=cfg["DET_WORLD"],
         )
         print_unity_geometry(src_w, obj_w, det_w, angles_deg[0])
+        calib = cfg['initial_calibration']
+        print_initial_calibration(calib)
+        print("\nAfter Calibration: ")
+        print_unity_geometry(src_w + calib[0], obj_w + calib[1], det_w + calib[2], angles_deg[0])
 
         # ---- RESIDUAL + JACOBIAN (IMAGE-BASED) ----
         r, J, cols = numerical_jacobian_image_based(delta, active_mask, real_df, angles_deg, cfg, eps, work_dir)
@@ -368,10 +373,10 @@ if __name__ == "__main__":
     parser.add_argument(
         "-s"
         "--s",
-        "--scenerio",
-        dest="scenerio",
+        "--scenario",
+        dest="scenario",
         default=None,
-        help="Comma/space-separated list of K values. Example: '3,4'",
+        help="Comma/space-separated list of K values. Example: 'Scan3,Scan4'",
     )
     args = parser.parse_args()
 
@@ -514,6 +519,17 @@ if __name__ == "__main__":
 
     PHANTOM_PATH = HERE / "phantoms/scan2_160x240x498_transposed_rotY180.npy"
     BASE_REAL_DIR = HERE / "real_scans/2026-02-19_Beads_phantom"
+    
+    # initial_calibration = np.array([
+    #     np.array([0.0, 0.0, 0.0], dtype=np.float32),
+    #     np.array([0.0, 0.0, 0.0], dtype=np.float32), 
+    #     np.array([25.318359, 6.31, 25.081600], dtype=np.float32)
+    # ])
+    initial_calibration = np.array([
+        np.array([ 0.0     , 0.00, 00.00000], dtype=np.float32),
+        np.array([-0.540527, 0.00, 14.91920], dtype=np.float32),
+        np.array([25.318359, 6.31, 40.00080], dtype=np.float32)
+    ])
 
     used_projections = [360]
 
@@ -521,10 +537,10 @@ if __name__ == "__main__":
         used_projections = parse_int_list(args.angles)
         if used_projections is None:
             print("Invalid angles argument, using default.")
-            used_projections = 360
+            used_projections = [360]
 
-    if args.scenerio is not None:
-        GEOM_SCENARIOS = [sc for sc in GEOM_SCENARIOS if sc["name"] in parse_int_list(args.scenerio)]
+    if args.scenario is not None:
+        GEOM_SCENARIOS = [sc for sc in GEOM_SCENARIOS if sc["name"] == args.scenario]
 
     for each_no_projections in used_projections:
         for sc in GEOM_SCENARIOS:
@@ -536,6 +552,7 @@ if __name__ == "__main__":
 
             indices = np.linspace(0, projections - 1, each_no_projections, dtype=int)
             real_out_dir = BASE_REAL_DIR / f"{scenario_name}" / f"out_line_integrals"
+            print()
 
             # Get bead positiond for real projections
             real_proj = build_wide_df_from_folder(real_out_dir, K=K, min_area=MIN_AREA, max_area=MAX_AREA, file_type=".tif", tolerance=130, indices=indices, box_images=True)
@@ -559,10 +576,11 @@ if __name__ == "__main__":
                 "DET_ROW": DET_ROW,
                 "min_area": MIN_AREA,
                 "max_area": MAX_AREA,
+                "initial_calibration": initial_calibration,
                 "box_images": True,
             }
             os.makedirs(HERE / f"lm_work_real", exist_ok=True)
-            delta_hat, ddelta, cost, it = lm_solve_image_based(real_proj, projection_angles, cfg, n_iters=50, lam=1e-2, fix_source=True, fix_detector=True, fix_object=False, fix_offset=False, work_dir = HERE / f"fake_projections/lm_work_real/{each_no_projections}" / f"{scenario_name}")
+            delta_hat, ddelta, cost, it = lm_solve_image_based(real_proj, projection_angles, cfg, n_iters=50, lam=1e-2, fix_source=True, fix_detector=True, fix_object=False, fix_offset=False, work_dir = HERE / f"fake_projections/trial4/{each_no_projections}" / f"{scenario_name}")
             # Diff
             # delta_minus_fake = delta_hat.copy()
             # delta_minus_fake -= fake_delta

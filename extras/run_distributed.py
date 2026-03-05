@@ -26,26 +26,26 @@ key_path = home_dir + "/.ssh/id_ed25519"
 
 folder_path = os.path.join(home_dir, "Documents/workspace/Thesis/AutoCalibration/")
 
-remote_script = folder_path + "test.py"
+remote_script = folder_path + "extras/test.py"
 base_log_folder = folder_path + "logs"
 log_folder, trial = create_incremental_folder(base_log_folder)
 
-run_script = folder_path + "gauss_newton.py"
+run_script = folder_path + "gauss_newton_real.py"
 python_interpreter = folder_path + ".venv/bin/python"
 
 get_hname_cmd = "hostname"  # Get Hostname Command
 python_command = f"{python_interpreter} {remote_script}"   # Test Python Command
 kill_python = "pkill -f python"
-check_gn_running = "pgrep -f gauss_newton.py"
+check_gn_running = "pgrep -f gauss_newton_real.py"
 
 gpu_usage_cmd = "nvidia-smi --query-gpu=utilization.gpu --format=csv,nounits,noheader"
 cpu_usage_cmd = "mpstat -P ALL 1 1 | grep \"all\" | awk '{print $NF}'"
 
-ANGLE_FACTORS = [3, 4, 5, 6, 8, 9, 10, 12, 15, 18, 20, 24, 30, 36, 40, 45, 60, 72, 90, 120, 180, 360]
-BEAD_LIST = [5]
+# ANGLE_FACTORS = [3, 4, 5, 6, 8, 9, 10, 12, 15, 18, 20, 24, 30, 36, 40, 45, 60, 72, 90, 120, 180, 360]
+# BEAD_LIST = [5]
 # BEAD_LIST = [2]
-# ANGLE_FACTORS = [90]
-
+ANGLE_FACTORS = [360]
+SCENARIO = [2]
 # Initialize SSH client
 ssh = paramiko.SSHClient()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())  # Auto-accept unknown host keys
@@ -55,26 +55,26 @@ print("Current Host: ", hostname.split(".")[0].upper())
 
 counter = 0
 while True:
-    for i in range(0, 100):
+    for i in range(90, 100):
         try:
             # Connect to the SSH server
             host = f"{host_start}{i:02}"
-            if i in [7]:
+            if i in [7, 29]:
                 print(f"Skipping: {host}")
                 continue
             if hostname.split(".")[0].upper() == host.upper():
                 print(f"Skipping current host: {host}")
                 continue
-            overflow = counter // len(BEAD_LIST) // len(ANGLE_FACTORS)
+            overflow = counter // len(SCENARIO) // len(ANGLE_FACTORS)
             if overflow:
                 print("overflow")
                 print("Total hosts: ", counter)
                 raise SystemExit(0)
 
-            k = BEAD_LIST[counter % len(BEAD_LIST)]
-            a = ANGLE_FACTORS[counter // len(BEAD_LIST) % len(ANGLE_FACTORS)]
+            s = SCENARIO[counter % len(SCENARIO)]
+            a = ANGLE_FACTORS[counter // len(SCENARIO) % len(ANGLE_FACTORS)]
             
-            run_rl =  f"nohup {python_interpreter} -u {run_script} -a {a} -k {k} > {log_folder}/run{counter:02d}_{host}.log 2>&1 &"
+            run_rl =  f"nohup {python_interpreter} -u {run_script} -a {a} -s Scan{s} > {log_folder}/run{counter:02d}_{host}.log 2>&1 &"
             print(f"----\nConnecting to: {host}")
             ssh.connect(host, username=username, key_filename=key_path, timeout=10)
 

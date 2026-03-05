@@ -105,7 +105,7 @@ def detect_beads_single_image(image_path: str, K: int, min_area: int = 10, max_a
                 # pad at bottom-most pixel
                 pad_beads = [(x_bot, float(y_bot + (ys[1]-ys[0])), 0.0, None)] * missing
                 cands = cands + pad_beads
-            print("Padded candidates:", cands)
+            # print("Padded candidates:", cands)
     return cands[:K]
 
 

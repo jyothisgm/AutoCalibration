@@ -97,6 +97,12 @@ def print_unity_geometry(src_w, obj_w, det_w, rot_y_deg):
     print(f"  Detector : x={det_w[0]:8.3f}, y={det_w[1]:8.3f}, z={det_w[2]:8.3f}")
     print(f"  Obj rotY : {rot_y_deg:8.4f} deg")
 
+def print_initial_calibration(calib):
+    print("\nInitial calibration:")
+    print(f"  Source   : x={calib[0][0]:8.3f}, y={calib[0][1]:8.3f}, z={calib[0][2]:8.3f}")
+    print(f"  Detector : x={calib[1][0]:8.3f}, y={calib[1][1]:8.3f}, z={calib[1][2]:8.3f}")
+    print(f"  Object   : x={calib[2][0]:8.3f}, y={calib[2][1]:8.3f}, z={calib[2][2]:8.3f}")
+
 def print_geometry_vector(geom12):
     g = np.asarray(geom12, dtype=float).reshape(12)
     src = g[0:3]
@@ -156,29 +162,14 @@ def unity_geom12_from_worldcoords(
 
 
 def fetch_and_save_projections(out_dir: str, src_world: np.ndarray, obj_world: np.ndarray, det_world_base: np.ndarray, 
-                               alpha: float, angles_deg: np.ndarray, offset_x: float, offset_z: float,
-                               image_height: int, image_width: int,
-                               astra_scaling: float, det_spacing: float, voxel_size: float,
-                               det_col: np.ndarray, det_row: np.ndarray, filename_prefix: str = "proj", phantom_name: str = "cuboid_phantom.npy", debug=True):
+                                alpha: float, angles_deg: np.ndarray, offset_x: float, offset_z: float,
+                                image_height: int, image_width: int, initial_calibration: np.ndarray,
+                                astra_scaling: float, det_spacing: float, voxel_size: float,
+                                det_col: np.ndarray, det_row: np.ndarray, filename_prefix: str = "proj", 
+                                phantom_name: str = "cuboid_phantom.npy", debug=True):
     reset_folder(out_dir)
     rec = np.load(phantom_name)
 
-    # intial_calibration = np.array([
-    #     np.array([0.0, 0.0, -14.9192], dtype=np.float32),
-    #     np.array([-0.540527, 0.0, 0.0], dtype=np.float32), 
-    #     np.array([25.318359, 6.31, 25.081600], dtype=np.float32)
-    # ])
-    initial_calibration = np.array([
-        np.array([ 0.0     , 0.00, 00.00000], dtype=np.float32),
-        np.array([-0.540527, 0.00, 14.91920], dtype=np.float32),
-        np.array([25.318359, 6.31, 40.00080], dtype=np.float32)
-    ])
-    
-    # intial_calibration = np.array([
-    #     np.array([0.0, 0.0, 0.0], dtype=np.float32),
-    #     np.array([0.0, 0.0, 0.0], dtype=np.float32),
-    #     np.array([0.0, 0.0, 0.0], dtype=np.float32),
-    # ])
     if debug:
         write_scan_settings_txt(
             out_dir=out_dir,
@@ -270,6 +261,11 @@ if __name__ == "__main__":
     N_ANGLES = 360
     obj_rot_y_degs = np.linspace(0.0, 360.0, N_ANGLES, endpoint=False, dtype=np.float32)
 
+    initial_calibration = np.array([
+        np.array([0.0, 0.0, 0.0], dtype=np.float32),
+        np.array([0.0, 0.0, 0.0], dtype=np.float32),
+        np.array([0.0, 0.0, 0.0], dtype=np.float32),
+    ])
     fetch_and_save_projections(
         out_dir=OUT_DIR,
         src_world=SRC_WORLD,
@@ -278,6 +274,7 @@ if __name__ == "__main__":
         alpha= 0.0, angles_deg=obj_rot_y_degs, offset_x=0, offset_z=0,
         image_height=IMAGE_H,
         image_width=IMAGE_W,
+        initial_calibration=initial_calibration,
         astra_scaling=astra_scaling,
         det_spacing=DET_SPACING,
         voxel_size=VOXEL_SIZE,

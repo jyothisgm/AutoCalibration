@@ -1,6 +1,7 @@
 import napari
 import os
 import numpy as np
+from pathlib import Path
 
 from glob import glob
 from imageio.v3 import imread, imwrite
@@ -54,8 +55,9 @@ def crop_with_bbox(img, bbox):
 # ----------------------------
 # Paths
 # ----------------------------
-input_dir = r'C:\Users\Flex Ray\Documents\JGM\AutoCalibration\real_scans\2026-02-19_Beads_phantom\Scan1\recon'
-output_dir = input_dir.replace('recon', 'cropped')
+HERE = Path(__file__).resolve().parent
+input_dir = HERE / "real_scans" / "2026-02-19_Beads_phantom" / "Scan1" / "recon"
+output_dir = HERE / "real_scans" / "2026-02-19_Beads_phantom" / "Scan1" / "cropped"
 os.makedirs(output_dir, exist_ok=True)
 
 files = sorted(glob(os.path.join(input_dir, '*.tif')))
@@ -111,7 +113,7 @@ print("Image shapes after cropping should all be the same:", cropped_stack.shape
 # ----------------------------
 # Step 8: Load all cropped images into a single stack and save as .npy
 # ----------------------------
-vol = np.stack([imread(im) for im in sorted(glob('C:\\Users\\Flex Ray\\Documents\\JGM\\AutoCalibration\\real_scans\\2026-02-19_Beads_phantom\\Scan1\\cropped\\*.tif'))])
+vol = np.stack([imread(im) for im in sorted(output_dir.glob("*.tif"))])
 
 # To Visualize in Napari
 #napari.imshow(recon, axis_labels=("y", "z", "x"))
@@ -130,14 +132,7 @@ vol = np.stack([imread(im) for im in sorted(glob('C:\\Users\\Flex Ray\\Documents
 # ----------------------------
 target_shape = (498, 240, 160)  # (Z, Y, X)
 
-shrunk_vol = resize(
-    vol,
-    target_shape,
-    order=1,
-    mode="reflect",
-    anti_aliasing=True,
-    preserve_range=True
-).astype(vol.dtype)
+shrunk_vol = resize(vol, target_shape, order=1, mode="reflect", anti_aliasing=True, preserve_range=True ).astype(vol.dtype)
 
 # ----------------------------
 # Step 10: Rotate volume 180° around Unity Y axis
@@ -145,5 +140,6 @@ shrunk_vol = resize(
 shrunk_vol = shrunk_vol[ :, ::-1,:]
 
 # Save
-np.save(r"phantoms\scan2_160x240x498_transposed_rotY180.npy", shrunk_vol)
+out_file = HERE / "phantoms" / "scan2_160x240x498_transposed_rotY180.npy"
+np.save(out_file, shrunk_vol)
 print("Saved rotated volume with shape", shrunk_vol.shape)
