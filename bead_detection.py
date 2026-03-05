@@ -249,11 +249,11 @@ def build_wide_df_from_folder(folder: str, K: int = 5, min_area: int = 10, max_a
     return proj_data
 
 if __name__ == "__main__":
-    folder = f"2026-02-19_Beads_phantom/Scan11/out_line_integrals"
-    # folder = "projections_png_reakl"
+    folder = f"real_scans/2026-02-19_Beads_phantom/Scan1/out_line_integrals"
+    folder = f"fake_projections/test"
     K = 5
 
-    df = build_wide_df_from_folder(folder, K=K, min_area=10, max_area=2000, exclude_border=0, connectivity=8, file_type=".tif", tolerance=130)
+    df = build_wide_df_from_folder(folder, K=K, min_area=10, max_area=2000, exclude_border=0, connectivity=8, file_type=".png", tolerance=130)
     numeric_cols = df.select_dtypes(include=np.number)
 
     # Compute range (max - min)
@@ -265,4 +265,4 @@ if __name__ == "__main__":
     range_row["image"] = "range"
     df.loc[len(df)] = range_row
 
-    print(df)
+    df.to_csv(os.path.join(folder, "bead_detections.csv"), index=False)

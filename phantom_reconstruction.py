@@ -51,14 +51,10 @@ def crop_with_bbox(img, bbox):
     y0, y1, x0, x1 = bbox
     return img[..., y0:y1, x0:x1] if img.ndim==3 else img[y0:y1, x0:x1]
 
-
-
-
-
 # ----------------------------
 # Paths
 # ----------------------------
-input_dir = r'C:\Users\Flex Ray\Documents\JGM\AutoCalibration\2026-02-19_Beads_phantom\Scan1\recon'
+input_dir = r'C:\Users\Flex Ray\Documents\JGM\AutoCalibration\real_scans\2026-02-19_Beads_phantom\Scan1\recon'
 output_dir = input_dir.replace('recon', 'cropped')
 os.makedirs(output_dir, exist_ok=True)
 
@@ -115,7 +111,7 @@ print("Image shapes after cropping should all be the same:", cropped_stack.shape
 # ----------------------------
 # Step 8: Load all cropped images into a single stack and save as .npy
 # ----------------------------
-vol = np.stack([imread(im) for im in sorted(glob('C:\\Users\\Flex Ray\\Documents\\JGM\\AutoCalibration\\2026-02-19_Beads_phantom\\Scan1\\cropped\\*.tif'))])
+vol = np.stack([imread(im) for im in sorted(glob('C:\\Users\\Flex Ray\\Documents\\JGM\\AutoCalibration\\real_scans\\2026-02-19_Beads_phantom\\Scan1\\cropped\\*.tif'))])
 
 # To Visualize in Napari
 #napari.imshow(recon, axis_labels=("y", "z", "x"))
@@ -130,11 +126,24 @@ vol = np.stack([imread(im) for im in sorted(glob('C:\\Users\\Flex Ray\\Documents
 # vol = np.load("recon_cropped_scan_19.npy")              # shape should be (595, 285, 190)
 
 # ----------------------------
-# Step 9: Resize to target shape (Z, Y, X) = (498, 240, 160) to match size of the phantom
+# Step 9: Resize to target shape (Z, Y, X) = (498, 240, 160)
 # ----------------------------
-target_shape = (498, 240, 160)          # (Z, Y, X)
+target_shape = (498, 240, 160)  # (Z, Y, X)
 
-shrunk_vol = resize(vol, target_shape, order=1, mode="reflect", anti_aliasing=True, preserve_range=True).astype(vol.dtype)
+shrunk_vol = resize(
+    vol,
+    target_shape,
+    order=1,
+    mode="reflect",
+    anti_aliasing=True,
+    preserve_range=True
+).astype(vol.dtype)
 
-np.save("scan2_160x240x498.npy", shrunk_vol)
-print("Resized volume saved as scan2_160x240x498.npy with shape", shrunk_vol.shape)
+# ----------------------------
+# Step 10: Rotate volume 180° around Unity Y axis
+# ----------------------------
+shrunk_vol = shrunk_vol[ :, ::-1,:]
+
+# Save
+np.save(r"phantoms\scan2_160x240x498_transposed_rotY180.npy", shrunk_vol)
+print("Saved rotated volume with shape", shrunk_vol.shape)

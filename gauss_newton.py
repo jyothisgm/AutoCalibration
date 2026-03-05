@@ -127,20 +127,20 @@ def apply_theta_to_geometry(theta, src_world, obj_world, det_world, obj_rot_y_de
     return src_w, obj_w, det_w, rot_y
 
 def geom12_with_theta(theta, base_src_world, base_obj_world, base_det_world, base_rot_y_deg, 
-                      astra_scaling, det_spacing, src_up, src_right):
+                      astra_scaling, det_spacing, det_col, det_row):
     theta = np.asarray(theta, dtype=np.float64).reshape(9)
     dSx, dSy = theta[0], theta[1]
     dOx, dOy, dOz = theta[2], theta[3], theta[4]
     dDx, dDy, dDz = theta[5], theta[6], theta[7]
     alpha = theta[8]  # degrees
 
-    src_world = base_src_world + dSx * src_right + dSy * src_up
+    src_world = base_src_world + dSx * det_row + dSy * det_col
     obj_world = base_obj_world + np.array([dOx, dOy, dOz], dtype=np.float64)
     det_world = base_det_world + np.array([dDx, dDy, dDz], dtype=np.float64)
     rot_deg = float(base_rot_y_deg + alpha)
 
     return unity_geom12_from_worldcoords(src_world=src_world, obj_world=obj_world, det_world=det_world, obj_rot_y_deg=rot_deg,
-                                         astra_scaling=astra_scaling, det_spacing=det_spacing, src_up=src_up, src_right=src_right)
+                                         astra_scaling=astra_scaling, det_spacing=det_spacing, det_col=det_col, det_row=det_row)
 
 def project_points_cone_vec(geom12: np.ndarray, bead_xyz: np.ndarray, det_h: int, det_w: int):
     g = np.asarray(geom12, dtype=np.float64).reshape(12)
@@ -226,8 +226,8 @@ def build_residual(theta, df_wide, bead_xyz, angles_deg, cfg):
             base_rot_y_deg=float(angles_deg[i]),
             astra_scaling=cfg["astra_scaling"],
             det_spacing=cfg["DET_SPACING"],
-            src_up=cfg["SRC_UP"],
-            src_right=cfg["SRC_RIGHT"],
+            det_col=cfg["DET_COL"],
+            det_row=cfg["DET_ROW"],
         )
 
         pred = project_points_cone_vec(geom12, bead_xyz, det_h, det_w)
@@ -298,8 +298,8 @@ def generate_predicted_projections(theta, angles_deg, cfg, out_dir):
         astra_scaling=cfg["astra_scaling"],
         det_spacing=cfg["DET_SPACING"],
         voxel_size=cfg["VOXEL_SIZE"],
-        src_up=cfg["SRC_UP"],
-        src_right=cfg["SRC_RIGHT"],
+        det_col=cfg["DET_COL"],
+        det_row=cfg["DET_ROW"],
         filename_prefix="proj",
         #phantom_name=HERE/f"phantoms/cuboid_phantom_{cfg['K']}.npy"
         phantom_name=HERE/f"phantoms/recon_cropped_scan_1.npy"
@@ -382,8 +382,8 @@ def lm_solve_image_based(real_df, angles_deg, cfg, n_iters=10, lam=1e-2, fix_sou
             obj_rot_y_deg=rot_y,
             astra_scaling=cfg["astra_scaling"],
             det_spacing=cfg["DET_SPACING"],
-            src_up=cfg["SRC_UP"],
-            src_right=cfg["SRC_RIGHT"],
+            det_col=cfg["DET_COL"],
+            det_row=cfg["DET_ROW"],
         )
         #print_geometry_vector(geom12)
 
@@ -469,8 +469,8 @@ def main():
 
     # xraySource orientation (world). Use your real values if different.
     # If your source GameObject has default rotation, these are usually:
-    SRC_UP = np.array([1.0, 0.0, 0.0], dtype=np.float32)
-    SRC_RIGHT = np.array([0.0, 1.0, 0.0], dtype=np.float32)
+    DET_COL = np.array([1.0, 0.0, 0.0], dtype=np.float32)
+    DET_ROW = np.array([0.0, 1.0, 0.0], dtype=np.float32)
 
 
     GEOM_SCENARIOS = [
@@ -601,8 +601,8 @@ def main():
                     astra_scaling=astra_scaling,
                     det_spacing=DET_SPACING,
                     voxel_size=VOXEL_SIZE,
-                    src_up=SRC_UP,
-                    src_right=SRC_RIGHT,
+                    det_col=DET_COL,
+                    det_row=DET_ROW,
                     filename_prefix="proj",
                     phantom_name=HERE/f"phantoms/cuboid_phantom_{each_k}.npy"
                     # phantom_name=HERE/f"phantoms/recon_cropped_scan_1.npy"
@@ -630,8 +630,8 @@ def main():
                     "OBJ_WORLD": UNITY_OBJ_WORLD,
                     "DET_WORLD": DET_WORLD,
                     "VOXEL_SIZE": VOXEL_SIZE,
-                    "SRC_UP": SRC_UP,
-                    "SRC_RIGHT": SRC_RIGHT,
+                    "DET_COL": DET_COL,
+                    "DET_ROW": DET_ROW,
                     "min_area": MIN_AREA,
                     "max_area": MAX_AREA,
                 }

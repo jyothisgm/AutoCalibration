@@ -10,14 +10,16 @@ class AstraServer:
         n_slices, n_rows, n_cols = object.shape
         min_x = -n_cols / 2 * voxel_size
         max_x = n_cols / 2 * voxel_size
-        min_y = -n_rows/ 2 * voxel_size
-        max_y = n_rows / 2 * voxel_size
-        min_z = -n_slices/ 2 * voxel_size
-        max_z = n_slices/ 2 * voxel_size
+        min_z = -n_rows/ 2 * voxel_size
+        max_z = n_rows / 2 * voxel_size
+        min_y = -n_slices/ 2 * voxel_size
+        max_y = n_slices/ 2 * voxel_size
 
         # print(f"Volume geometry: cols={n_cols}, rows={n_rows}, slices={n_slices}")
+        # print(f"Volume bounds: x=[{min_x:.2f}, {max_x:.2f}], y=[{min_y:.2f}, {max_y:.2f}], z=[{min_z:.2f}, {max_z:.2f}]")
 
-        self.vol_geom = astra.create_vol_geom(n_rows, n_cols, n_slices, min_x, max_x, min_y, max_y, min_z, max_z)
+        # Unity XYZ -> Astra XZY
+        self.vol_geom = astra.create_vol_geom(n_rows, n_cols, n_slices, min_x, max_x, min_z, max_z, min_y, max_y)
         self.vol_id = astra.data3d.create('-vol', self.vol_geom, object)
         self.image_width = image_width
         self.image_height = image_height

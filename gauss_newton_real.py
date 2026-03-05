@@ -63,7 +63,7 @@ def print_delta_table(delta, iteration):
     print("delta offsets (Unity frame):")
     print(f"  Source   : dSx={dSx:8.3f}, dSy={dSy:8.3f}, dSz={0.0:8.3f}  (mm)")
     print(f"  Object   : dOx={dOx:8.3f}, dOy={dOy:8.3f}, dOz={dOz:8.3f}  (mm)")
-    print(f"  Object offset: offset_x={offset_x:8.3f}, offset_z={offset_z:8.3f} (mm)")
+    print(f"  Object offset: offset_x={offset_x:8.3f}, offset_z={offset_z:8.3f}  (mm)")
     print(f"  Detector : dDx={dDx:8.3f}, dDy={dDy:8.3f}, dDz={dDz:8.3f}  (mm)")
     print(f"  Obj Stage rotY : {alpha:8.3f} deg")
     print("=" * 60)
@@ -185,7 +185,8 @@ def residual_from_two_dfs(real_df, pred_df, K, area_weight: float = 1e-3, distan
 
     return r_vec, col_names
 
-def generate_predicted_projections(delta, angles_deg, cfg, out_dir):
+def build_residual_image_based(delta, real_df, angles_deg, cfg, pred_dir, debug=True):
+    # 1) generate predicted projections for current delta
     src_w, obj_w, det_w, alpha, offset_x, offset_z = apply_delta_to_geometry(
         delta=delta,
         src_world=cfg["SRC_WORLD"],
@@ -193,7 +194,7 @@ def generate_predicted_projections(delta, angles_deg, cfg, out_dir):
         det_world=cfg["DET_WORLD"],
     )
     fetch_and_save_projections(
-        out_dir=out_dir,
+        out_dir=pred_dir,
         src_world=src_w,
         obj_world=obj_w,
         det_world_base=det_w,
@@ -206,17 +207,13 @@ def generate_predicted_projections(delta, angles_deg, cfg, out_dir):
         astra_scaling=cfg["astra_scaling"],
         det_spacing=cfg["DET_SPACING"],
         voxel_size=cfg["VOXEL_SIZE"],
-        src_up=cfg["SRC_UP"],
-        src_right=cfg["SRC_RIGHT"],
+        det_col=cfg["DET_COL"],
+        det_row=cfg["DET_ROW"],
         filename_prefix="proj",
         #phantom_name=HERE/f"phantoms/cuboid_phantom_{cfg['K']}.npy"
-        phantom_name=HERE/f"phantoms/scan2_160x240x498.npy"
-        
+        phantom_name=HERE/f"phantoms/scan2_160x240x498_transposed_rotY180.npy",
+        debug=debug
     )
-
-def build_residual_image_based(delta, real_df, angles_deg, cfg, pred_dir):
-    # 1) generate predicted projections for current delta
-    generate_predicted_projections(delta, angles_deg, cfg, pred_dir)
 
     # 2) detect beads in predicted projections
     pred_df = build_wide_df_from_folder(
@@ -240,7 +237,7 @@ def build_residual_image_based(delta, real_df, angles_deg, cfg, pred_dir):
     return residual_from_two_dfs(real_df, pred_df, cfg["K"])
 
 def numerical_jacobian_image_based(delta, active_mask, real_df, angles_deg, cfg, eps, work_dir):
-    r0, cols = build_residual_image_based(delta, real_df, angles_deg, cfg, work_dir / "pred_base")
+    r0, cols = build_residual_image_based(delta, real_df, angles_deg, cfg, work_dir / "pred_base", debug=True)
 
     if len(r0) == 0:
         return None, None
@@ -254,8 +251,8 @@ def numerical_jacobian_image_based(delta, active_mask, real_df, angles_deg, cfg,
         t_m = delta.copy()
         t_p[j] += eps[j]; t_m[j] -= eps[j]
 
-        r_p, _ = build_residual_image_based(t_p, real_df, angles_deg, cfg, work_dir / f"pred_p_{j:02d}")
-        r_m, _ = build_residual_image_based(t_m, real_df, angles_deg, cfg, work_dir / f"pred_m_{j:02d}")
+        r_p, _ = build_residual_image_based(t_p, real_df, angles_deg, cfg, work_dir / f"pred_p_{j:02d}", debug=False)
+        r_m, _ = build_residual_image_based(t_m, real_df, angles_deg, cfg, work_dir / f"pred_m_{j:02d}", debug=False)
         if  len(r_p) == 0 or len(r_m) == 0:
             continue
 
@@ -279,7 +276,7 @@ def lm_solve_image_based(real_df, angles_deg, cfg, n_iters=10, lam=1e-2, fix_sou
         print_delta_table(delta, it)
 
         # ---- PRINT UNITY + ASTRA GEOM FOR FIRST VIEW ----
-        src_w, obj_w, det_w, alpha, offset_x, offset_z = apply_delta_to_geometry(delta, 
+        src_w, obj_w, det_w, _, _, _ = apply_delta_to_geometry(delta, 
             src_world=cfg["SRC_WORLD"],
             obj_world=cfg["OBJ_WORLD"],
             det_world=cfg["DET_WORLD"],
@@ -318,7 +315,8 @@ def lm_solve_image_based(real_df, angles_deg, cfg, n_iters=10, lam=1e-2, fix_sou
         df_iter.insert(2, "cost", [cost, cost_new])
         if df_r0 is None:
             df_r0 = pd.DataFrame(columns=["iter", "state", "cost"] + cols)
-        df_r0 = pd.concat([df_r0, df_iter], ignore_index=True)
+        df_r0 = pd.concat([df_r0, df_iter], ignore_index=True) 
+        df_r0.to_csv(os.path.join(work_dir, "residual_history.csv"), index=False)
 
         print(f"\niter {it:02d} cost={cost:.6f} -> {cost_new:.6f} |ddelta|={np.linalg.norm(ddelta):.6e}  lambda={lam:.3e}")
 
@@ -503,8 +501,8 @@ if __name__ == "__main__":
     
     astra_scaling = 1
 
-    SRC_UP = np.array([1.0, 0.0, 0.0], dtype=np.float32)
-    SRC_RIGHT = np.array([0.0, 1.0, 0.0], dtype=np.float32)
+    DET_ROW = np.array([0.0, 1.0, 0.0], dtype=np.float32)
+    DET_COL = np.array([1.0, 0.0, 0.0], dtype=np.float32)
 
     BEAD_COUNT = K = 5
     ANGLE_FACTORS = [3, 4, 5, 6, 8, 9, 10, 12, 15, 18, 20, 24, 30, 36, 40, 45, 60, 72, 90, 120, 180, 360]
@@ -514,7 +512,7 @@ if __name__ == "__main__":
     AREA_WEIGHT = 1e-3
     VOXEL_SIZE = 0.1
 
-    PHANTOM_PATH = HERE / "phantoms/scan2_160x240x498.npy"
+    PHANTOM_PATH = HERE / "phantoms/scan2_160x240x498_transposed_rotY180.npy"
     BASE_REAL_DIR = HERE / "real_scans/2026-02-19_Beads_phantom"
 
     used_projections = [360]
@@ -557,8 +555,8 @@ if __name__ == "__main__":
                 "OBJ_WORLD": sc["obj"],
                 "DET_WORLD": sc["det"],
                 "VOXEL_SIZE": VOXEL_SIZE,
-                "SRC_UP": SRC_UP,
-                "SRC_RIGHT": SRC_RIGHT,
+                "DET_COL": DET_COL,
+                "DET_ROW": DET_ROW,
                 "min_area": MIN_AREA,
                 "max_area": MAX_AREA,
                 "box_images": True,
