@@ -45,7 +45,7 @@ cpu_usage_cmd = "mpstat -P ALL 1 1 | grep \"all\" | awk '{print $NF}'"
 # BEAD_LIST = [5]
 # BEAD_LIST = [2]
 ANGLE_FACTORS = [360]
-SCENARIO = [2]
+SCENARIO = list(range(1, 12))
 # Initialize SSH client
 ssh = paramiko.SSHClient()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())  # Auto-accept unknown host keys
@@ -55,7 +55,7 @@ print("Current Host: ", hostname.split(".")[0].upper())
 
 counter = 0
 while True:
-    for i in range(90, 100):
+    for i in range(1, 100):
         try:
             # Connect to the SSH server
             host = f"{host_start}{i:02}"

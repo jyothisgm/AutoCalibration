@@ -523,7 +523,7 @@ if __name__ == "__main__":
     # initial_calibration = np.array([
     #     np.array([0.0, 0.0, 0.0], dtype=np.float32),
     #     np.array([0.0, 0.0, 0.0], dtype=np.float32), 
-    #     np.array([25.318359, 6.31, 25.081600], dtype=np.float32)
+    #     np.array([25.318359, 6.31, 40.00080], dtype=np.float32)
     # ])
     initial_calibration = np.array([
         np.array([ 0.0     , 0.00, 00.00000], dtype=np.float32),
@@ -579,7 +579,6 @@ if __name__ == "__main__":
                 "initial_calibration": initial_calibration,
                 "box_images": True,
             }
-            os.makedirs(HERE / f"lm_work_real", exist_ok=True)
             delta_hat, ddelta, cost, it = lm_solve_image_based(real_proj, projection_angles, cfg, n_iters=50, lam=1e-2, fix_source=True, fix_detector=True, fix_object=False, fix_offset=False, work_dir = HERE / f"fake_projections/trial4/{each_no_projections}" / f"{scenario_name}")
             # Diff
             # delta_minus_fake = delta_hat.copy()

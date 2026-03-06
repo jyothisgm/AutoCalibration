@@ -440,8 +440,7 @@ def lm_solve_image_based(real_df, angles_deg, cfg, n_iters=10, lam=1e-2, fix_sou
 # -----------------------------
 np.set_printoptions(suppress=True, precision=8)
 
-# if __name__ == "__main__":
-def main():
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Gauss-Newton calibration runner")
     parser.add_argument(
         "-a"
@@ -683,13 +682,3 @@ def main():
                     ]
 
                 writer.writerow(row)
-
-
-from line_profiler import LineProfiler
-
-lp = LineProfiler()
-lp.add_function(build_wide_df_from_folder)
-lp.add_function(detect_beads_single_image)
-
-lp.run('main()')
-lp.print_stats()

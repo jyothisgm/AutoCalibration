@@ -100,8 +100,8 @@ def print_unity_geometry(src_w, obj_w, det_w, rot_y_deg):
 def print_initial_calibration(calib):
     print("\nInitial calibration:")
     print(f"  Source   : x={calib[0][0]:8.3f}, y={calib[0][1]:8.3f}, z={calib[0][2]:8.3f}")
-    print(f"  Detector : x={calib[1][0]:8.3f}, y={calib[1][1]:8.3f}, z={calib[1][2]:8.3f}")
-    print(f"  Object   : x={calib[2][0]:8.3f}, y={calib[2][1]:8.3f}, z={calib[2][2]:8.3f}")
+    print(f"  Object   : x={calib[1][0]:8.3f}, y={calib[1][1]:8.3f}, z={calib[1][2]:8.3f}")
+    print(f"  Detector : x={calib[2][0]:8.3f}, y={calib[2][1]:8.3f}, z={calib[2][2]:8.3f}")
 
 def print_geometry_vector(geom12):
     g = np.asarray(geom12, dtype=float).reshape(12)
@@ -215,6 +215,9 @@ def fetch_and_save_projections(out_dir: str, src_world: np.ndarray, obj_world: n
             f"SDD={sdd:8.3f} mm | M={mag:6.3f} | "
             f"incident={inc_deg:6.4f}°"
         )
+        np.set_printoptions(suppress=True)
+
+        print(geom12_array[0].reshape(4, 3))
     # 2) Generate all projections in one call (server.generate_images from earlier)
     imgs = server.generate_stacked_images(geom12_array)  # (N, H, W, 3)
 
@@ -240,13 +243,12 @@ if __name__ == "__main__":
 
     # ---- Unity world coordinates you mentioned ----
     # source default position
-    SRC_WORLD = np.array([ 0.      , 24.997368,  0.      ], dtype=np.float32)
-
+    SRC_WORLD = np.array([ 4.999512, 29.994888,  0.      ], dtype=np.float32)
     # object position
-    OBJ_WORLD = np.array([  0.540527, 22.49 , 600.      ], dtype=np.float32)
+    OBJ_WORLD = np.array([  0.540527, 20 , 600.      ], dtype=np.float32)
 
     # detector position (world)
-    DET_WORLD = np.array([ -25.31836 ,   18.686905, 1059.      ], dtype=np.float32)
+    DET_WORLD = np.array([ -25.31836 ,   18.676949, 1059.      ], dtype=np.float32)
     VOXEL_SIZE = 0.1
 
     # xraySource orientation (world). Use your real values if different.
@@ -261,16 +263,34 @@ if __name__ == "__main__":
     N_ANGLES = 360
     obj_rot_y_degs = np.linspace(0.0, 360.0, N_ANGLES, endpoint=False, dtype=np.float32)
 
+    # initial_calibration = np.array([
+    #     np.array([0.0, 0.0, 0.0], dtype=np.float32),
+    #     np.array([0.0, 0.0, 0.0], dtype=np.float32),
+    #     np.array([0.0, 0.0, 0.0], dtype=np.float32),
+    # ])
+    
     initial_calibration = np.array([
-        np.array([0.0, 0.0, 0.0], dtype=np.float32),
-        np.array([0.0, 0.0, 0.0], dtype=np.float32),
-        np.array([0.0, 0.0, 0.0], dtype=np.float32),
+        np.array([ 0.0     , 0.00, 00.00000], dtype=np.float32),
+        np.array([-0.540527, 0.00, 14.91920], dtype=np.float32),
+        np.array([25.318359, 6.31, 40.00080], dtype=np.float32)
     ])
+    geom = {
+            'name': 'Scan1',
+            'src':np.array([-10.000488,  29.997368,   0.      ], dtype=np.float32),
+            'det':np.array([-20.002441,  33.6557  , 959.      ], dtype=np.float32),
+            'obj': np.array([  0.540527, 25 , 600.      ], dtype=np.float32),
+            'initial_angle_deg': -1.039974,
+            'projections': 1434,
+            'image_width': 956,
+            'image_height': 760,
+            'det_spacing': 0.149600,
+    }
+
     fetch_and_save_projections(
         out_dir=OUT_DIR,
-        src_world=SRC_WORLD,
-        obj_world=OBJ_WORLD,
-        det_world_base=DET_WORLD,
+        src_world=geom['src'],
+        obj_world=geom['obj'],
+        det_world_base=geom['det'],
         alpha= 0.0, angles_deg=obj_rot_y_degs, offset_x=0, offset_z=0,
         image_height=IMAGE_H,
         image_width=IMAGE_W,
