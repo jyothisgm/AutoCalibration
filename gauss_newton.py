@@ -1,9 +1,7 @@
 ﻿import os
-import glob
 import argparse
 from re import I
-from bead_detection import build_wide_df_from_folder, detect_beads_single_image
-import cv2
+from bead_detection import build_wide_df_from_folder
 import csv
 import numpy as np
 import pandas as pd
@@ -11,7 +9,7 @@ import itertools
 from pathlib import Path
 
 from phantom_generator import generate_k_bead_phantom
-from phantom_projector import fetch_and_save_projections, print_geometry_vector, print_unity_geometry, unity_geom12_from_worldcoords, unpack_xzy
+from phantom_projector import fetch_and_save_projections, print_unity_geometry, unity_geom12_from_world_coords, unpack_xzy
 
 pd.set_option("display.max_rows", None)
 pd.set_option("display.max_columns", None)
@@ -139,8 +137,8 @@ def geom12_with_theta(theta, base_src_world, base_obj_world, base_det_world, bas
     det_world = base_det_world + np.array([dDx, dDy, dDz], dtype=np.float64)
     rot_deg = float(base_rot_y_deg + alpha)
 
-    return unity_geom12_from_worldcoords(src_world=src_world, obj_world=obj_world, det_world=det_world, obj_rot_y_deg=rot_deg,
-                                         astra_scaling=astra_scaling, det_spacing=det_spacing, det_col=det_col, det_row=det_row)
+    return unity_geom12_from_world_coords(src_world=src_world, obj_world=obj_world, det_world=det_world, obj_rot_y_deg=rot_deg,
+                                            astra_scaling=astra_scaling, det_spacing=det_spacing, det_col=det_col, det_row=det_row)
 
 def project_points_cone_vec(geom12: np.ndarray, bead_xyz: np.ndarray, det_h: int, det_w: int):
     g = np.asarray(geom12, dtype=np.float64).reshape(12)
@@ -374,18 +372,6 @@ def lm_solve_image_based(real_df, angles_deg, cfg, n_iters=10, lam=1e-2, fix_sou
             det_world=cfg["DET_WORLD"], 
             obj_rot_y_deg=base_rot0)
         print_unity_geometry(src_w, obj_w, det_w, rot_y)
-
-        geom12 = unity_geom12_from_worldcoords(
-            src_world=src_w,
-            obj_world=obj_w,
-            det_world=det_w,
-            obj_rot_y_deg=rot_y,
-            astra_scaling=cfg["astra_scaling"],
-            det_spacing=cfg["DET_SPACING"],
-            det_col=cfg["DET_COL"],
-            det_row=cfg["DET_ROW"],
-        )
-        #print_geometry_vector(geom12)
 
         # ---- RESIDUAL + JACOBIAN (IMAGE-BASED) ----
         r, J = numerical_jacobian_image_based(theta, active_mask, real_df, angles_deg, cfg, eps, work_dir)

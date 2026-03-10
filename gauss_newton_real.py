@@ -1,18 +1,14 @@
 import os
-import glob
 import argparse
 from re import A, I
 from tkinter import OFF
 from bead_detection import build_wide_df_from_folder
-import cv2
-import csv
 import numpy as np
 import pandas as pd
 import itertools
 from pathlib import Path
 
-from phantom_generator import generate_k_bead_phantom
-from phantom_projector import fetch_and_save_projections, print_geometry_vector, print_unity_geometry, unity_geom12_from_worldcoords, unpack_xzy, print_initial_calibration
+from phantom_projector import fetch_and_save_projections, print_unity_geometry, print_initial_calibration
 
 pd.set_option("display.max_rows", None)
 pd.set_option("display.max_columns", None)
@@ -519,17 +515,22 @@ if __name__ == "__main__":
 
     PHANTOM_PATH = HERE / "phantoms/scan2_160x240x498_transposed_rotY180.npy"
     BASE_REAL_DIR = HERE / "real_scans/2026-02-19_Beads_phantom"
-    
+
     # initial_calibration = np.array([
     #     np.array([0.0, 0.0, 0.0], dtype=np.float32),
-    #     np.array([0.0, 0.0, 0.0], dtype=np.float32), 
-    #     np.array([25.318359, 6.31, 40.00080], dtype=np.float32)
+    #     np.array([0.0, 0.0, 14.91920], dtype=np.float32), 
+    #     np.array([0.0, 0.0, 40.00080], dtype=np.float32)
     # ])
     initial_calibration = np.array([
-        np.array([ 0.0     , 0.00, 00.00000], dtype=np.float32),
-        np.array([-0.540527, 0.00, 14.91920], dtype=np.float32),
+        np.array([0.0, 0.0, 0.0], dtype=np.float32),
+        np.array([0.0, 0.0, 0.0], dtype=np.float32), 
         np.array([25.318359, 6.31, 40.00080], dtype=np.float32)
     ])
+    # initial_calibration = np.array([
+    #     np.array([ 0.0     , 0.00, 00.00000], dtype=np.float32),
+    #     np.array([-0.540527, 0.00, 14.91920], dtype=np.float32),
+    #     np.array([25.318359, 6.31, 40.00080], dtype=np.float32)
+    # ])
 
     used_projections = [360]
 
@@ -579,7 +580,7 @@ if __name__ == "__main__":
                 "initial_calibration": initial_calibration,
                 "box_images": True,
             }
-            delta_hat, ddelta, cost, it = lm_solve_image_based(real_proj, projection_angles, cfg, n_iters=50, lam=1e-2, fix_source=True, fix_detector=True, fix_object=False, fix_offset=False, work_dir = HERE / f"fake_projections/trial4/{each_no_projections}" / f"{scenario_name}")
+            delta_hat, ddelta, cost, it = lm_solve_image_based(real_proj, projection_angles, cfg, n_iters=50, lam=1e-2, fix_source=True, fix_detector=True, fix_object=False, fix_offset=False, work_dir = HERE / f"fake_projections/trial11/{each_no_projections}" / f"{scenario_name}")
             # Diff
             # delta_minus_fake = delta_hat.copy()
             # delta_minus_fake -= fake_delta

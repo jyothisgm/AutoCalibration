@@ -45,6 +45,7 @@ cpu_usage_cmd = "mpstat -P ALL 1 1 | grep \"all\" | awk '{print $NF}'"
 # BEAD_LIST = [5]
 # BEAD_LIST = [2]
 ANGLE_FACTORS = [360]
+# SCENARIO = [2]
 SCENARIO = list(range(1, 12))
 # Initialize SSH client
 ssh = paramiko.SSHClient()

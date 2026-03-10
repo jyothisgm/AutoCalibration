@@ -115,7 +115,7 @@ def print_geometry_vector(geom12):
     print(f"  U vector : x={u[0]:8.4f}, z={u[1]:8.4f}, y={u[2]:8.4f}")
     print(f"  V vector : x={v[0]:8.4f}, z={v[1]:8.4f}, y={v[2]:8.4f}")
 
-def unity_geom12_from_worldcoords(
+def unity_geom12_from_world_coords(
     src_world: np.ndarray,     # xraySource.position
     obj_world: np.ndarray,     # imagedObject.position
     det_world: np.ndarray,     # detObject.position
@@ -131,8 +131,8 @@ def unity_geom12_from_worldcoords(
 ) -> np.ndarray:
     obj_rot = np.deg2rad(float(obj_rot_y_deg))
     alpha = np.deg2rad(float(alpha))
-    offset_x_rot = offset_x * np.cos(obj_rot + alpha) - offset_z * np.sin(obj_rot + alpha)
-    offset_z_rot = offset_x * np.sin(obj_rot + alpha) + offset_z * np.cos(obj_rot + alpha)
+    offset_x_rot = offset_x * np.cos(obj_rot) - offset_z * np.sin(obj_rot)
+    offset_z_rot = offset_x * np.sin(obj_rot) + offset_z * np.cos(obj_rot)
 
     src_world = np.asarray(src_world, dtype=np.float32) + initial_calibration[0]
     obj_world = np.asarray(obj_world, dtype=np.float32) + initial_calibration[1] + np.array([offset_x_rot, 0.0, offset_z_rot], dtype=np.float32)
@@ -143,6 +143,8 @@ def unity_geom12_from_worldcoords(
     # srcPos / detPos in "object space" (relative to object) and then scaled by SDD
     srcPos = (src_world - obj_world) * astra_scaling
     detPos = (det_world - obj_world) * astra_scaling
+    srcPos[1] = -srcPos[1]
+    detPos[1] = -detPos[1]
 
     # u and v from source basis
     u = det_col * det_spacing
@@ -190,7 +192,7 @@ def fetch_and_save_projections(out_dir: str, src_world: np.ndarray, obj_world: n
 
     # 1) Build all geometries first
     for ry in angles_deg:
-        geom12 = unity_geom12_from_worldcoords(
+        geom12 = unity_geom12_from_world_coords(
             src_world=src_world,
             obj_world=obj_world,
             det_world=det_world_base,
@@ -303,12 +305,3 @@ if __name__ == "__main__":
         filename_prefix="proj",
         phantom_name=PHANTOM_NAME
     )
-
-
-# from line_profiler import LineProfiler
-
-# lp = LineProfiler()
-# # lp.add_function(main)
-# lp.add_function(fetch_and_save_projections)
-# lp.run('main()')
-# lp.print_stats()
