@@ -303,14 +303,14 @@ def make_cuboid_with_beads_volume(width: float, breadth: float, height: float, b
         volume[z0:z1, y0:y1, x0:x1][mask] = bead_level
     return volume
 
-def generate_k_bead_phantom(k=NO_OF_BEADS, plot=True, mat=False):
+def generate_k_bead_phantom(k=NO_OF_BEADS, plot=True, mat=False, width=WIDTH, breadth=BREADTH, height=HEIGHT):
     phantom_path = HERE / f"phantoms/cuboid_phantom_{k}.npy"
     #if phantom_path.exists():
         #return  # or just skip saving
 
-    phantom_mesh, cuboid_mesh, beads_mesh, centers = generate_cuboid_spiral_beads(w=WIDTH, b=BREADTH, h=HEIGHT, k=k, bead_radius=BEAD_RADIUS, 
-                                                                                  margin=MARGIN, clearance=CLEARANCE, turns=TURNS, spiral_mode="rounded-rect", 
-                                                                                  rounded_rect_r=0.0, seed=66)
+    phantom_mesh, cuboid_mesh, beads_mesh, centers = generate_cuboid_spiral_beads(w=width, b=breadth, h=height, k=k, bead_radius=BEAD_RADIUS, 
+                                                                                    margin=MARGIN, clearance=CLEARANCE, turns=TURNS, spiral_mode="rounded-rect", 
+                                                                                    rounded_rect_r=0.0, seed=66)
     print("\nBead center positions (mm):")
     for i, (x, y, z) in enumerate(centers):
         print(f"  Bead {i:02d}: x = {x:.3f}, y = {y:.3f}, z = {z:.3f}")
@@ -322,8 +322,8 @@ def generate_k_bead_phantom(k=NO_OF_BEADS, plot=True, mat=False):
     # ---- SINGLE NPY PHANTOM ----
     VOXEL_SIZE = 0.1  # mm
 
-    volume = make_cuboid_with_beads_volume(width=WIDTH, breadth=BREADTH, height=HEIGHT, bead_centers_mm=centers, bead_radius_mm=BEAD_RADIUS,
-                                           voxel_size_mm=VOXEL_SIZE, cuboid_level=2.0, bead_level=255.0)
+    volume = make_cuboid_with_beads_volume(width=width, breadth=breadth, height=height, bead_centers_mm=centers, bead_radius_mm=BEAD_RADIUS,
+                                            voxel_size_mm=VOXEL_SIZE, cuboid_level=2.0, bead_level=255.0)
 
     values, counts = np.unique(volume, return_counts=True)
     print("Value distribution:")

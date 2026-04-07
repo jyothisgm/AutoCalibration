@@ -32,7 +32,7 @@ def apply_napari_contrast_and_gamma(
     high = np.percentile(img, high_percentile)
 
     if high <= low:
-        raise ValueError("Invalid contrast limits")
+        return np.zeros_like(img, dtype=np.uint8)
 
     # ---- Clip + rescale (napari behavior) ----
     clipped = np.clip(img, low, high)
@@ -120,12 +120,12 @@ def unity_geom12_from_world_coords(
     obj_world: np.ndarray,     # imagedObject.position
     det_world: np.ndarray,     # detObject.position
     initial_calibration: np.ndarray, # (3, 3) array of initial offsets to apply to src_world, obj_world, det_world respectively, to match Astra's geometry convention. Each row is a (x,y,z) offset.
-    obj_rot_y_deg: float,      # imagedObject.rotation.eulerAngles.y
-    alpha: float,               # initial angle offset (degrees) to apply to obj_rot_y_deg, if needed to match Astra's angle=0 convention
-    astra_scaling: float,      # astra scaling factor to convert from Unity units to mm (e.g. 1.0 if 1 unit = 1 mm)f
-    det_spacing: float,        # astraDetectorSpacing
-    det_col: np.ndarray,        # xraySource.up
-    det_row: np.ndarray,     # xraySource.right
+    obj_rot_y_deg: float,           # imagedObject.rotation.eulerAngles.y
+    alpha: float,                   # initial angle offset (degrees) to apply to obj_rot_y_deg, if needed to match Astra's angle=0 convention
+    astra_scaling: float,           # astra scaling factor to convert from Unity units to mm (e.g. 1.0 if 1 unit = 1 mm)f
+    det_spacing: float,             # astraDetectorSpacing
+    det_col: np.ndarray,            # xraySource.up
+    det_row: np.ndarray,            # xraySource.right
     offset_x: float = 0.0,          # Optional additional offset in x (Unity right) direction, applied after rotation
     offset_z: float = 0.0           # Optional additional offset in z (Unity forward) direction, applied after rotation
 ) -> np.ndarray:
@@ -221,13 +221,18 @@ def fetch_and_save_projections(out_dir: str, src_world: np.ndarray, obj_world: n
 
         print(geom12_array[0].reshape(4, 3))
     # 2) Generate all projections in one call (server.generate_images from earlier)
-    imgs = server.generate_stacked_images(geom12_array)  # (N, H, W, 3)
+    imgs = server.generate_stacked_images(geom12_array, normalize=True)
 
     # 3) Post-process + save per angle
     for idx in range(imgs.shape[0]):
         img = imgs[idx]
+        # img_min, img_max = img.min(), img.max()
+        # if img_max > img_min:
+        #     img_u16 = ((img - img_min) / (img_max - img_min) * 65535).astype("uint16")
+        # else:
+        #     img_u16 = img.astype("uint16")
         img = apply_napari_contrast_and_gamma(
-            img, low_percentile=99.5, high_percentile=100.0, gamma=0.2
+            img, low_percentile=95, high_percentile=100.0, gamma=0.2
         )
         Image.fromarray(img).save(os.path.join(out_dir, f"{filename_prefix}_{idx:03d}.png"))
     server.close()
@@ -258,11 +263,11 @@ if __name__ == "__main__":
     DET_ROW = np.array([0.0, 1.0, 0.0], dtype=np.float32)
     DET_COL = np.array([1.0, 0.0, 0.0], dtype=np.float32)
 
-    OUT_DIR = f"fake_projections/test"
+    OUT_DIR = f"fake_projections/test2"
     PHANTOM_NAME = f"phantoms/scan2_160x240x498_transposed_rotY180.npy"  # Must be a 3D numpy array representing the phantom volume. Adjust path if needed.
 
     # Number of angles: we emulate imagedObject.rotation.eulerAngles.y
-    N_ANGLES = 360
+    N_ANGLES = 2
     obj_rot_y_degs = np.linspace(0.0, 360.0, N_ANGLES, endpoint=False, dtype=np.float32)
 
     # initial_calibration = np.array([
@@ -278,7 +283,7 @@ if __name__ == "__main__":
     ])
     geom = {
             'name': 'Scan1',
-            'src':np.array([-10.000488,  29.997368,   0.      ], dtype=np.float32),
+            'src':np.array([-0.000488,  29.997368,   0.      ], dtype=np.float32),
             'det':np.array([-20.002441,  33.6557  , 959.      ], dtype=np.float32),
             'obj': np.array([  0.540527, 25 , 600.      ], dtype=np.float32),
             'initial_angle_deg': -1.039974,

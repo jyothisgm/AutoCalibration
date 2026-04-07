@@ -65,7 +65,7 @@ class AstraServer:
             normalized = (255 * image / max_val).astype(np.uint8)
         return np.dstack([normalized, normalized, normalized])
 
-    def generate_stacked_images(self, geometry_vectors):
+    def generate_stacked_images(self, geometry_vectors, normalize=False):
         gv = np.asarray(geometry_vectors, dtype=np.float32)
         if gv.ndim == 1:
             gv = gv.reshape(1, 12)
@@ -123,6 +123,17 @@ class AstraServer:
         if images.ndim == 3 and images.shape[0] == self.image_height and images.shape[1] == N:
             images = np.transpose(images, (1, 0, 2))
             # print(f"Images shape after transpose: {images.shape}")
+
+        if normalize:
+            out = np.empty_like(images, dtype=np.uint8)
+            for i in range(images.shape[0]):
+                img = np.clip(images[i], 0, np.percentile(images[i], 99.99))
+                max_val = img.max()
+                if max_val == 0:
+                    out[i] = np.zeros_like(img, dtype=np.uint8)
+                else:
+                    out[i] = (255 * img / max_val).astype(np.uint8)
+            return out
 
         return images
 

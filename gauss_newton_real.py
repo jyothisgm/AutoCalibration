@@ -26,22 +26,6 @@ PARAM_NAMES = [
     "offset_x", "offset_z",
 ]
 
-BOUNDS = {
-    # "dSx":   (-5.0,  +5.0),
-    # "dSy":   (-5.0,  +5.0),
-
-    # "dOx":   (-2.0,  +2.0),   # often fixed
-    # "dOy":   (-5.0,  +5.0),
-    # "dOz":   (-5.0,  +5.0),
-
-    # "dDx":   (-10.0, +10.0),
-    # "dDy":   (-10.0, +10.0),
-    # "dDz":   (-10.0, +10.0),
-
-    "alpha": (-15, +15),  # degrees
-}
-
-
 def parse_int_list(raw: str):
     if raw is None:
         return None
@@ -50,13 +34,13 @@ def parse_int_list(raw: str):
         return None
     return [int(p) for p in parts]
 
-def print_delta_table(delta, iteration):
-    dSx, dSy, dOx, dOy, dOz, dDx, dDy, dDz, alpha, offset_x, offset_z = delta
+def print_theta_table(theta, iteration):
+    dSx, dSy, dOx, dOy, dOz, dDx, dDy, dDz, alpha, offset_x, offset_z = theta
 
     print("\n" + "=" * 60)
     print(f"Iteration {iteration}")
     print("=" * 60)
-    print("delta offsets (Unity frame):")
+    print("Theta offsets (Unity frame):")
     print(f"  Source   : dSx={dSx:8.3f}, dSy={dSy:8.3f}, dSz={0.0:8.3f}  (mm)")
     print(f"  Object   : dOx={dOx:8.3f}, dOy={dOy:8.3f}, dOz={dOz:8.3f}  (mm)")
     print(f"  Object offset: offset_x={offset_x:8.3f}, offset_z={offset_z:8.3f}  (mm)")
@@ -97,11 +81,11 @@ def make_active_mask(fix_source: bool, fix_detector: bool, fix_object: bool=Fals
 
     return mask
 
-def apply_delta_to_geometry(delta, src_world, obj_world, det_world):
+def apply_theta_to_geometry(theta, src_world, obj_world, det_world):
     """
-    Apply parameter offsets delta to Unity-world geometry.
+    Apply parameter offsets theta to Unity-world geometry.
     """
-    dSx, dSy, dOx, dOy, dOz, dDx, dDy, dDz, alpha, offset_x, offset_z = delta
+    dSx, dSy, dOx, dOy, dOz, dDx, dDy, dDz, alpha, offset_x, offset_z = theta
 
     # Source: shift in detector plane (x,y)
     src_w = src_world + np.array([dSx, dSy, 0.0], dtype=np.float32)
@@ -128,7 +112,6 @@ def match_measured_to_pred(meas: np.ndarray, pred: np.ndarray, area_weight: floa
             print("WHT?????????????????" + str(diff))
     return meas[list(best_perm)]
 
-
 def residual_from_two_dfs(real_df, pred_df, K, area_weight: float = 1e-3, distance_weight: float = 1.0):
     real_df = real_df.sort_values("image").reset_index(drop=True)
     pred_df = pred_df.sort_values("image").reset_index(drop=True)
@@ -154,10 +137,11 @@ def residual_from_two_dfs(real_df, pred_df, K, area_weight: float = 1e-3, distan
         for k in range(K):
             dx = diff_pts[k, 0]
             dy = diff_pts[k, 1]
-            err = np.sqrt(dx**2 + dy**2)
 
-            r_list.append(err)
-            col_names.append(f"{image_id}_b{k+1}_b{k+1}")
+            r_list.append(dx)
+            col_names.append(f"{image_id}_b{k+1}_x")
+            r_list.append(dy)
+            col_names.append(f"{image_id}_b{k+1}_y")
 
         # -------------------------------
         # Pairwise residuals
@@ -181,10 +165,10 @@ def residual_from_two_dfs(real_df, pred_df, K, area_weight: float = 1e-3, distan
 
     return r_vec, col_names
 
-def build_residual_image_based(delta, real_df, angles_deg, cfg, pred_dir, debug=True):
-    # 1) generate predicted projections for current delta
-    src_w, obj_w, det_w, alpha, offset_x, offset_z = apply_delta_to_geometry(
-        delta=delta,
+def build_residual_image_based(theta, real_df, angles_deg, cfg, pred_dir, debug=True):
+    # 1) generate predicted projections for current theta
+    src_w, obj_w, det_w, alpha, offset_x, offset_z = apply_theta_to_geometry(
+        theta=theta,
         src_world=cfg["SRC_WORLD"],
         obj_world=cfg["OBJ_WORLD"],
         det_world=cfg["DET_WORLD"],
@@ -233,8 +217,8 @@ def build_residual_image_based(delta, real_df, angles_deg, cfg, pred_dir, debug=
     # 3) compare
     return residual_from_two_dfs(real_df, pred_df, cfg["K"])
 
-def numerical_jacobian_image_based(delta, active_mask, real_df, angles_deg, cfg, eps, work_dir):
-    r0, cols = build_residual_image_based(delta, real_df, angles_deg, cfg, work_dir / "pred_base", debug=True)
+def numerical_jacobian_image_based(theta, active_mask, real_df, angles_deg, cfg, eps, work_dir):
+    r0, cols = build_residual_image_based(theta, real_df, angles_deg, cfg, work_dir / "pred_base", debug=True)
 
     if len(r0) == 0:
         return None, None
@@ -244,8 +228,8 @@ def numerical_jacobian_image_based(delta, active_mask, real_df, angles_deg, cfg,
     J = np.zeros((M, P), dtype=np.float64)
 
     for col, j in enumerate(active_idx):
-        t_p = delta.copy()
-        t_m = delta.copy()
+        t_p = theta.copy()
+        t_m = theta.copy()
         t_p[j] += eps[j]; t_m[j] -= eps[j]
 
         r_p, _ = build_residual_image_based(t_p, real_df, angles_deg, cfg, work_dir / f"pred_p_{j:02d}", debug=False)
@@ -258,22 +242,22 @@ def numerical_jacobian_image_based(delta, active_mask, real_df, angles_deg, cfg,
 
 def lm_solve_image_based(real_df, angles_deg, cfg, n_iters=10, lam=1e-2, fix_source=False, fix_detector=False, fix_object=False, fix_offset=False, work_dir="lm_work"):
     os.makedirs(work_dir, exist_ok=True)
-    delta = np.zeros(11, dtype=np.float64)
+    theta = np.zeros(11, dtype=np.float64)
     eps = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.01, 0.01, 0.01], dtype=np.float64)
     # eps = np.ones(9, dtype=np.float64)
 
     active_mask = make_active_mask(fix_source, fix_detector, fix_object, fix_alpha=False, fix_offset=fix_offset)
     # --- stall tracking ---
-    ddelta_norm_hist = []
+    dtheta_norm_hist = []
     stall_count = 0
 
     df_r0 = None
     for it in range(200):
         # ---- PRINT PARAMS ----
-        print_delta_table(delta, it)
+        print_theta_table(theta, it)
 
         # ---- PRINT UNITY + ASTRA GEOM FOR FIRST VIEW ----
-        src_w, obj_w, det_w, _, _, _ = apply_delta_to_geometry(delta, 
+        src_w, obj_w, det_w, _, _, _ = apply_theta_to_geometry(theta, 
             src_world=cfg["SRC_WORLD"],
             obj_world=cfg["OBJ_WORLD"],
             det_world=cfg["DET_WORLD"],
@@ -285,7 +269,7 @@ def lm_solve_image_based(real_df, angles_deg, cfg, n_iters=10, lam=1e-2, fix_sou
         print_unity_geometry(src_w + calib[0], obj_w + calib[1], det_w + calib[2], angles_deg[0])
 
         # ---- RESIDUAL + JACOBIAN (IMAGE-BASED) ----
-        r, J, cols = numerical_jacobian_image_based(delta, active_mask, real_df, angles_deg, cfg, eps, work_dir)
+        r, J, cols = numerical_jacobian_image_based(theta, active_mask, real_df, angles_deg, cfg, eps, work_dir)
         r1 = np.asarray(r, dtype=np.float64).reshape(-1)
 
         print(f"Residual vector length: {r1.size}, Jacobian shape: {J.shape}")
@@ -293,24 +277,21 @@ def lm_solve_image_based(real_df, angles_deg, cfg, n_iters=10, lam=1e-2, fix_sou
         # ---- Gauss Newton STEP ----
         A = J.T @ J
         g = J.T @ r1
-        ddelta = -np.linalg.solve(A + lam * np.eye(A.shape[0]), g)
-        ddelta_full = np.zeros_like(delta)
-        ddelta_full[active_mask] = ddelta
-        new_delta = delta + ddelta_full
+        dtheta = -np.linalg.solve(A + lam * np.eye(A.shape[0]), g)
+        dtheta_full = np.zeros_like(theta)
+        dtheta_full[active_mask] = dtheta
+        new_theta = theta + dtheta_full
         
         cost = 0.5 * float(r1 @ r1)
 
-        r_new, cols_new = build_residual_image_based(new_delta, real_df, angles_deg, cfg, os.path.join(work_dir, "pred_trial"))
+        r_new, cols_new = build_residual_image_based(new_theta, real_df, angles_deg, cfg, os.path.join(work_dir, "pred_trial"))
         
         if cols_new != cols:
             raise ValueError("Column names/order mismatch between base and trial residuals")
 
         r2 = np.asarray(r_new, dtype=np.float64).reshape(-1)
         cost_new = 0.5 * float(r2 @ r2)
-        df_iter = pd.DataFrame(
-            [r1, r2],
-            columns=cols
-        )
+        df_iter = pd.DataFrame([r1, r2], columns=cols)
         df_iter.insert(0, "iter", it)
         df_iter.insert(1, "state", ["base", "trial"])
         df_iter.insert(2, "cost", [cost, cost_new])
@@ -319,21 +300,20 @@ def lm_solve_image_based(real_df, angles_deg, cfg, n_iters=10, lam=1e-2, fix_sou
         df_r0 = pd.concat([df_r0, df_iter], ignore_index=True) 
         df_r0.to_csv(os.path.join(work_dir, "residual_history.csv"), index=False)
 
-        print(f"\niter {it:02d} cost={cost:.6f} -> {cost_new:.6f} |ddelta|={np.linalg.norm(ddelta):.6e}  lambda={lam:.3e}")
+        print(f"\niter {it:02d} cost={cost:.6f} -> {cost_new:.6f} |dtheta|={np.linalg.norm(dtheta):.6e}  lambda={lam:.3e}")
 
         if cost_new < cost:
-            delta = new_delta
+            theta = new_theta
             lam = max(lam / 3.0, 1e-6)
         else:
             lam = min(lam * 5.0, 1e6)
 
-
-        if np.linalg.norm(ddelta) < 1e-6:
+        if np.linalg.norm(dtheta) < 1e-6:
             print("Converged.")
             break
-        ddelta_norm_hist.append(ddelta)
-        if len(ddelta_norm_hist) >= 5:
-            recent_norms = [np.linalg.norm(dn) for dn in ddelta_norm_hist[-5:]]
+        dtheta_norm_hist.append(dtheta)
+        if len(dtheta_norm_hist) >= 5:
+            recent_norms = [np.linalg.norm(dn) for dn in dtheta_norm_hist[-5:]]
             if max(recent_norms) - min(recent_norms) < 1e-8:
                 stall_count += 1
                 if stall_count >= 3:
@@ -342,15 +322,15 @@ def lm_solve_image_based(real_df, angles_deg, cfg, n_iters=10, lam=1e-2, fix_sou
             else:
                 stall_count = 0
 
-    print("\nEstimated delta:")
-    for name, v in zip(PARAM_NAMES, delta):
+    print("\nEstimated theta:")
+    for name, v in zip(PARAM_NAMES, theta):
         if name == "alpha":
             print(f"{name:>5s}: {v:+.6e} deg)")
         else:
             print(f"{name:>5s}: {v:+.6f}")
     print("\nFinal cost table:")
     df_r0.to_csv(os.path.join(work_dir, "residual_history.csv"), index=False)
-    return delta, f"{np.linalg.norm(ddelta):.6e}", cost_new, it+1
+    return theta, f"{np.linalg.norm(dtheta):.6e}", cost_new, it+1
 
 
 # -----------------------------
@@ -499,7 +479,7 @@ if __name__ == "__main__":
             'det_spacing': 0.149600,
         },
     ]
-    
+
     astra_scaling = 1
 
     DET_ROW = np.array([0.0, 1.0, 0.0], dtype=np.float32)
@@ -555,7 +535,7 @@ if __name__ == "__main__":
             real_out_dir = BASE_REAL_DIR / f"{scenario_name}" / f"out_line_integrals"
             print()
 
-            # Get bead positiond for real projections
+            # Get bead positions for real projections
             real_proj = build_wide_df_from_folder(real_out_dir, K=K, min_area=MIN_AREA, max_area=MAX_AREA, file_type=".tif", tolerance=130, indices=indices, box_images=True)
 
             # ---- Unity coordinates ----
@@ -580,28 +560,28 @@ if __name__ == "__main__":
                 "initial_calibration": initial_calibration,
                 "box_images": True,
             }
-            delta_hat, ddelta, cost, it = lm_solve_image_based(real_proj, projection_angles, cfg, n_iters=50, lam=1e-2, fix_source=True, fix_detector=True, fix_object=False, fix_offset=False, work_dir = HERE / f"fake_projections/trial11/{each_no_projections}" / f"{scenario_name}")
+            theta_hat, dtheta, cost, it = lm_solve_image_based(real_proj, projection_angles, cfg, n_iters=50, lam=1e-2, fix_source=True, fix_detector=True, fix_object=False, fix_offset=False, work_dir = HERE / f"fake_projections/trial11/{each_no_projections}" / f"{scenario_name}")
             # Diff
-            # delta_minus_fake = delta_hat.copy()
-            # delta_minus_fake -= fake_delta
-            # diff_sum = float(delta_minus_fake.sum())
+            # theta_minus_fake = theta_hat.copy()
+            # theta_minus_fake -= fake_theta
+            # diff_sum = float(theta_minus_fake.sum())
 
             # -----------------------------------------
             # Text log (append)
             # -----------------------------------------
-            os.makedirs(HERE / f"delta_log", exist_ok=True)
-            delta_TXT = HERE / f"delta_log/delta_hat_{scenario_name}_{each_no_projections}.txt"
-            with open(delta_TXT, "a") as ftxt:
+            os.makedirs(HERE / f"theta_log", exist_ok=True)
+            theta_TXT = HERE / f"theta_log/theta_hat_{scenario_name}_{each_no_projections}.txt"
+            with open(theta_TXT, "a") as ftxt:
                 ftxt.write(f"# scenario={scenario_name} N_ANGLES={each_no_projections}, K={K}\n")
-                ftxt.write(f"# final_cost={cost:.6f}, iterations={it}, final_ddelta_norm={ddelta}\n")
-                #ftxt.write("# fake_delta\n")
-                #ftxt.write(" ".join(f"{v:.2f}" for v in fake_delta) + "\n")
-                ftxt.write("# delta_hat\n")
-                ftxt.write(" ".join(f"{v:.3f}" for v in delta_hat) + "\n")
+                ftxt.write(f"# final_cost={cost:.6f}, iterations={it}, final_dtheta_norm={dtheta}\n")
+                #ftxt.write("# fake_theta\n")
+                #ftxt.write(" ".join(f"{v:.2f}" for v in fake_theta) + "\n")
+                ftxt.write("# theta_hat\n")
+                ftxt.write(" ".join(f"{v:.3f}" for v in theta_hat) + "\n")
                 #ftxt.write("# Diff from Expected\n")
-                #ftxt.write(" ".join(f"{v:.3f}" for v in delta_minus_fake) + "\n")
+                #ftxt.write(" ".join(f"{v:.3f}" for v in theta_minus_fake) + "\n")
                 #ftxt.write(f"# sum = {diff_sum:.3f}\n\n")
-            # print("Fake delta:", fake_delta)
-            print("Final estimated delta:", delta_hat)
-            # print("Diff from Expected:", delta_minus_fake)
+            # print("Fake theta:", fake_theta)
+            print("Final estimated theta:", theta_hat)
+            # print("Diff from Expected:", theta_minus_fake)
             print("#" * 80 + "\n")
