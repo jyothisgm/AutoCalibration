@@ -193,8 +193,7 @@ def build_residual_image_based(theta, real_df, angles_deg, cfg, pred_dir, debug=
         det_col=cfg["DET_COL"],
         det_row=cfg["DET_ROW"],
         filename_prefix="proj",
-        phantom_name=HERE/f"phantoms/cuboid_phantom_{cfg['K']}.npy",
-        # phantom_name=HERE/f"phantoms/recon_cropped_scan_1.npy",
+        phantom_name=HERE/f"phantoms/cuboid_phantom_{cfg['K']}_{cfg['cuboid_name']}.npy",
         debug=debug
     )
 
@@ -360,6 +359,14 @@ if __name__ == "__main__":
         default=None,
         help="Comma/space-separated list of K values. Example: 'Scan3,Scan4'",
     )
+    parser.add_argument(
+        "-c",
+        "--cuboid",
+        "--cuboid-size",
+        dest="cuboid",
+        default=None,
+        help="Name of a single cuboid size to run. Example: 'compact', 'medium'",
+    )
     args = parser.parse_args()
 
     GEOM_SCENARIOS = [
@@ -424,16 +431,16 @@ if __name__ == "__main__":
         {"name": "compact",    "width": 10.0, "breadth": 10.0, "height": 20.0},
         # Small
         {"name": "small",      "width": 20.0, "breadth": 20.0, "height": 40.0},
-        # Medium — your current default
-        {"name": "medium",     "width": 20.0, "breadth": 40.0, "height": 60.0},
-        # Large
-        {"name": "large",      "width": 40.0, "breadth": 60.0, "height": 100.0},
+        # Normal — your current default
+        {"name": "normal",     "width": 20.0, "breadth": 40.0, "height": 60.0},
+        # Square
+        {"name": "square",     "width": 30.0, "breadth": 30.0, "height": 30.0},
         # Tall — good vertical spread, poor lateral
-        {"name": "tall",       "width": 10.0, "breadth": 10.0, "height": 120.0},
+        {"name": "tall",       "width": 10.0, "breadth": 10.0, "height": 80.0},
         # Wide — good lateral spread, poor vertical
         {"name": "wide",       "width": 80.0, "breadth": 80.0, "height": 20.0},
         # Coplanar — all beads at same height, tests degeneracy
-        {"name": "coplanar",   "width": 40.0, "breadth": 40.0, "height": 0.0},
+        {"name": "coplanar",   "width": 40.0, "breadth": 40.0, "height": 5.0},
     ]
 
     cli_angles = parse_int_list(args.angles)
@@ -445,6 +452,9 @@ if __name__ == "__main__":
     
     if args.scenario is not None:
         GEOM_SCENARIOS = [sc for sc in GEOM_SCENARIOS if sc["name"] == args.scenario]
+
+    if args.cuboid is not None:
+        CUBOID_SIZES = [cs for cs in CUBOID_SIZES if cs["name"] == args.cuboid]
 
     MIN_AREA = 200
     MAX_AREA = 6000
@@ -462,109 +472,118 @@ if __name__ == "__main__":
 
     scenario_results = {}
 
-    for each_k in BEAD_LIST:
-        # generate_k_bead_phantom(each_k, plot=False)
-        for each_angle in ANGLE_FACTORS:
-            for sc in GEOM_SCENARIOS:
-                scenario_name = sc["name"]
+    for each_cuboid in CUBOID_SIZES:
+        cuboid_name = each_cuboid["name"]
+        for each_k in BEAD_LIST:
+            generate_k_bead_phantom(
+                each_k, plot=False,
+                width=each_cuboid["width"],
+                breadth=each_cuboid["breadth"],
+                height=each_cuboid["height"],
+                name=cuboid_name,
+            )
+            for each_angle in ANGLE_FACTORS:
+                for sc in GEOM_SCENARIOS:
+                    scenario_name = sc["name"]
 
-                print("\n" + "#" * 80)
-                print(f"Running scenario={scenario_name} N_ANGLES={each_angle}, K={each_k}")
-            
-                # ---- Fake Flex Ray coordinates ----
-                # Default position
-                SRC_WORLD = sc["SRC_WORLD"]
-                DET_WORLD = sc["DET_WORLD"]
-                real_out_dir = BASE_REAL_DIR / f"K{each_k}_N{each_angle}" / f"{scenario_name}"
-                real_out_dir.mkdir(parents=True, exist_ok=True)
+                    print("\n" + "#" * 80)
+                    print(f"Running cuboid={cuboid_name} scenario={scenario_name} N_ANGLES={each_angle}, K={each_k}")
 
-                REAL_OBJ_WORLD = sc["real_OBJ_WORLD"]
-                start_deg = float(sc["initial_angle_deg"])
-                ANGLE_DEGREES_REAL = np.linspace(0.0, 360.0, each_angle, endpoint=False)
+                    # ---- Fake Flex Ray coordinates ----
+                    # Default position
+                    SRC_WORLD = sc["SRC_WORLD"]
+                    DET_WORLD = sc["DET_WORLD"]
+                    real_out_dir = BASE_REAL_DIR / cuboid_name / f"K{each_k}_N{each_angle}" / f"{scenario_name}"
+                    real_out_dir.mkdir(parents=True, exist_ok=True)
 
-                # print("Generating projections with angles (deg):", ANGLE_DEGREES_REAL)
-                fetch_and_save_projections(
-                    out_dir=real_out_dir,
-                    src_world=SRC_WORLD,
-                    obj_world=REAL_OBJ_WORLD,
-                    det_world_base=DET_WORLD,
-                    alpha=start_deg,
-                    angles_deg=ANGLE_DEGREES_REAL,
-                    offset_x=0.0,
-                    offset_z=0.0,
-                    image_height=760,
-                    image_width=956,
-                    initial_calibration=initial_calibration,
-                    astra_scaling=astra_scaling,
-                    det_spacing=0.149600,
-                    voxel_size=VOXEL_SIZE,
-                    det_col=DET_COL,
-                    det_row=DET_ROW,
-                    filename_prefix="proj",
-                    phantom_name=HERE/f"phantoms/cuboid_phantom_{each_k}.npy"
-                    # phantom_name=HERE/f"phantoms/recon_cropped_scan_1.npy"
-                )
+                    REAL_OBJ_WORLD = sc["real_OBJ_WORLD"]
+                    start_deg = float(sc["initial_angle_deg"])
+                    ANGLE_DEGREES_REAL = np.linspace(0.0, 360.0, each_angle, endpoint=False)
 
-                real_proj = build_wide_df_from_folder(real_out_dir, K=each_k, min_area=MIN_AREA, max_area=MAX_AREA)
-                print(real_proj)
+                    # print("Generating projections with angles (deg):", ANGLE_DEGREES_REAL)
+                    fetch_and_save_projections(
+                        out_dir=real_out_dir,
+                        src_world=SRC_WORLD,
+                        obj_world=REAL_OBJ_WORLD,
+                        det_world_base=DET_WORLD,
+                        alpha=start_deg,
+                        angles_deg=ANGLE_DEGREES_REAL,
+                        offset_x=0.0,
+                        offset_z=0.0,
+                        image_height=760,
+                        image_width=956,
+                        initial_calibration=initial_calibration,
+                        astra_scaling=astra_scaling,
+                        det_spacing=0.149600,
+                        voxel_size=VOXEL_SIZE,
+                        det_col=DET_COL,
+                        det_row=DET_ROW,
+                        filename_prefix="proj",
+                        phantom_name=HERE/f"phantoms/cuboid_phantom_{each_k}_{cuboid_name}.npy"
+                        # phantom_name=HERE/f"phantoms/recon_cropped_scan_1.npy"
+                    )
 
-                # ---- Unity coordinates ----
-                # Default position
-                UNITY_OBJ_WORLD = sc["unity_OBJ_WORLD"]
-                ANGLE_DEGREES_UNITY = np.linspace(0.0, 360.0, each_angle, endpoint=False)
+                    real_proj = build_wide_df_from_folder(real_out_dir, K=each_k, min_area=MIN_AREA, max_area=MAX_AREA)
+                    print(real_proj)
 
-                fake_theta = sc["fake_theta"]  # from dict
-                # Ensure 2-decimal accuracy if you want strict formatting:
-                fake_theta = np.round(fake_theta.astype(np.float32), 2)
+                    # ---- Unity coordinates ----
+                    # Default position
+                    UNITY_OBJ_WORLD = sc["unity_OBJ_WORLD"]
+                    ANGLE_DEGREES_UNITY = np.linspace(0.0, 360.0, each_angle, endpoint=False)
 
-                cfg = {
-                    "K": each_k,
-                    "det_h": 760,
-                    "det_w": 956,
-                    "astra_scaling": astra_scaling,
-                    "DET_SPACING": 0.149600,
-                    "SRC_WORLD": SRC_WORLD,
-                    "OBJ_WORLD": UNITY_OBJ_WORLD,
-                    "DET_WORLD": DET_WORLD,
-                    "VOXEL_SIZE": VOXEL_SIZE,
-                    "DET_COL": DET_COL,
-                    "DET_ROW": DET_ROW,
-                    "min_area": MIN_AREA,
-                    "max_area": MAX_AREA,
-                    "initial_calibration": initial_calibration,
-                    "box_images": True,
-                }
-                theta_hat, dtheta, cost, it = lm_solve_image_based(real_proj, ANGLE_DEGREES_UNITY, cfg, n_iters=50, lam=1e-2, fix_source=True, fix_detector=True, fix_object=False, fix_offset=False, work_dir = HERE / f"simulated/trial1/{each_k}_{each_angle}" / f"{scenario_name}")
-                # Diff
-                theta_minus_fake = theta_hat.copy()
-                theta_minus_fake -= fake_theta
-                diff_sum = float(theta_minus_fake.sum())
+                    fake_theta = sc["fake_theta"]  # from dict
+                    # Ensure 2-decimal accuracy if you want strict formatting:
+                    fake_theta = np.round(fake_theta.astype(np.float32), 2)
 
-                # scenario_results[sc["name"]] = {
-                #     "sum": diff_sum,
-                #     "dtheta": float(dtheta),
-                #     "cost": float(cost),
-                #     "it": int(it),
-                # }
+                    cfg = {
+                        "K": each_k,
+                        "cuboid_name": cuboid_name,
+                        "det_h": 760,
+                        "det_w": 956,
+                        "astra_scaling": astra_scaling,
+                        "DET_SPACING": 0.149600,
+                        "SRC_WORLD": SRC_WORLD,
+                        "OBJ_WORLD": UNITY_OBJ_WORLD,
+                        "DET_WORLD": DET_WORLD,
+                        "VOXEL_SIZE": VOXEL_SIZE,
+                        "DET_COL": DET_COL,
+                        "DET_ROW": DET_ROW,
+                        "min_area": MIN_AREA,
+                        "max_area": MAX_AREA,
+                        "initial_calibration": initial_calibration,
+                        "box_images": True,
+                    }
+                    theta_hat, dtheta, cost, it = lm_solve_image_based(real_proj, ANGLE_DEGREES_UNITY, cfg, n_iters=50, lam=1e-2, fix_source=True, fix_detector=True, fix_object=False, fix_offset=False, work_dir = HERE / f"simulated/trial2/{cuboid_name}/{each_k}_{each_angle}" / f"{scenario_name}")
+                    # Diff
+                    theta_minus_fake = theta_hat.copy()
+                    theta_minus_fake -= fake_theta
+                    diff_sum = float(abs(theta_minus_fake).sum())
 
-                # -----------------------------------------
-                # Text log (append)
-                # -----------------------------------------
-                os.makedirs(HERE / f"simulated/theta_log", exist_ok=True)
-                THETA_TXT = HERE / f"simulated/theta_log/theta_hat_{each_k}_{each_angle}.txt"
-                with open(THETA_TXT, "a") as ftxt:
-                    ftxt.write(f"# scenario={scenario_name} N_ANGLES={each_angle}, K={each_k}\n")
-                    ftxt.write("# fake_theta\n")
-                    ftxt.write(" ".join(f"{v:.2f}" for v in fake_theta) + "\n")
-                    ftxt.write("# theta_hat\n")
-                    ftxt.write(" ".join(f"{v:.3f}" for v in theta_hat) + "\n")
-                    ftxt.write("# Diff from Expected\n")
-                    ftxt.write(" ".join(f"{v:.3f}" for v in theta_minus_fake) + "\n")
-                    ftxt.write(f"# sum = {diff_sum:.3f}\n\n")
-                print("Fake theta:", fake_theta)
-                print("Final estimated theta:", theta_hat)
-                print("Diff from Expected:", theta_minus_fake)
-                print("#" * 80 + "\n")
+                    # scenario_results[sc["name"]] = {
+                    #     "sum": diff_sum,
+                    #     "dtheta": float(dtheta),
+                    #     "cost": float(cost),
+                    #     "it": int(it),
+                    # }
+
+                    # -----------------------------------------
+                    # Text log (append)
+                    # -----------------------------------------
+                    os.makedirs(HERE / f"simulated/theta_log_cuboid", exist_ok=True)
+                    THETA_TXT = HERE / f"simulated/theta_log_cuboid/theta_hat_{cuboid_name}_{each_k}_{each_angle}.txt"
+                    with open(THETA_TXT, "a") as ftxt:
+                        ftxt.write(f"# cuboid={cuboid_name} scenario={scenario_name} N_ANGLES={each_angle}, K={each_k}\n")
+                        ftxt.write("# fake_theta\n")
+                        ftxt.write(" ".join(f"{v:.2f}" for v in fake_theta) + "\n")
+                        ftxt.write("# theta_hat\n")
+                        ftxt.write(" ".join(f"{v:.3f}" for v in theta_hat) + "\n")
+                        ftxt.write("# Diff from Expected\n")
+                        ftxt.write(" ".join(f"{v:.3f}" for v in theta_minus_fake) + "\n")
+                        ftxt.write(f"# sum = {diff_sum:.3f}\n\n")
+                    print("Fake theta:", fake_theta)
+                    print("Final estimated theta:", theta_hat)
+                    print("Diff from Expected:", theta_minus_fake)
+                    print("#" * 80 + "\n")
 
             # with open(HERE / f"simulated/, "a", newline="") as fcsv:
             #     writer = csv.writer(fcsv)

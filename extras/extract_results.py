@@ -18,7 +18,7 @@ def get_scenario_number(s):
 RE_ITER_HEADER = re.compile(r"^Iteration\s+(\d+)\s*$", re.MULTILINE)
 
 RE_ITER_LINE = re.compile(
-    r"iter\s+(\d+)\s+cost=([0-9eE+.\-]+)\s*->\s*([0-9eE+.\-]+)\s+\|ddelta\|=([0-9eE+.\-]+)\s+lambda=([0-9eE+.\-]+)"
+    r"iter\s+(\d+)\s+cost=([0-9eE+.\-]+)\s*->\s*([0-9eE+.\-]+)\s+\|dtheta\|=([0-9eE+.\-]+)\s+lambda=([0-9eE+.\-]+)"
 )
 
 RE_SCENARIO = re.compile(
@@ -52,8 +52,8 @@ RE_INITIAL_CALIB_BLOCK = re.compile(
     re.MULTILINE
 )
 
-RE_DELTA_BLOCK = re.compile(
-    r"delta offsets \(Unity frame\):\s*"
+RE_THETA_BLOCK = re.compile(
+    r"theta offsets \(Unity frame\):\s*"
     r"Source\s*:\s*dSx=\s*([0-9eE+.\-]+),\s*dSy=\s*([0-9eE+.\-]+),\s*dSz=\s*([0-9eE+.\-]+).*?\n"
     r"\s*Object\s*:\s*dOx=\s*([0-9eE+.\-]+),\s*dOy=\s*([0-9eE+.\-]+),\s*dOz=\s*([0-9eE+.\-]+).*?\n"
     r"\s*Object offset:\s*offset_x=\s*([0-9eE+.\-]+),\s*offset_z=\s*([0-9eE+.\-]+).*?\n"
@@ -62,8 +62,8 @@ RE_DELTA_BLOCK = re.compile(
     re.MULTILINE
 )
 
-RE_FINAL_ESTIMATED_DELTA_ARRAY = re.compile(
-    r"Final estimated delta:\s*\[([^\]]+)\]",
+RE_FINAL_ESTIMATED_THETA_ARRAY = re.compile(
+    r"Final estimated theta:\s*\[([^\]]+)\]",
     re.DOTALL
 )
 
@@ -104,11 +104,11 @@ def parse_log_file(path: str | Path) -> dict:
 
         # first-ever values
         row["cost_initial"] = _to_float(first_m.group(2))
-        row["dddelta_initial"] = _to_float(first_m.group(4))
+        row["ddtheta_initial"] = _to_float(first_m.group(4))
 
         # final values
         row["cost_final"] = _to_float(last_m.group(2))
-        row["ddelta"] = _to_float(last_m.group(4))
+        row["dtheta"] = _to_float(last_m.group(4))
         row["lambda"] = _to_float(last_m.group(5))
 
     # Initial calibration block
@@ -121,7 +121,6 @@ def parse_log_file(path: str | Path) -> dict:
             row["obj_x_cal"], row["obj_y_cal"], row["obj_z_cal"],
             row["det_x_cal"], row["det_y_cal"], row["det_z_cal"],
         ) = vals
-
     # Initial Unity geometry block = first unity geometry block anywhere
     unity_blocks = list(RE_UNITY_GEOM_BLOCK.finditer(text))
     if unity_blocks:
@@ -134,10 +133,10 @@ def parse_log_file(path: str | Path) -> dict:
             row["init_obj_rotY_deg"],
         ) = vals0
 
-    # Last delta offsets block
-    delta_blocks = list(RE_DELTA_BLOCK.finditer(text))
-    if delta_blocks:
-        m = delta_blocks[-1]
+    # Last theta offsets block
+    theta_blocks = list(RE_THETA_BLOCK.finditer(text))
+    if theta_blocks:
+        m = theta_blocks[-1]
         vals = list(map(_to_float, m.groups()))
         (
             row["dSx"], row["dSy"], row["dSz"],
@@ -170,23 +169,23 @@ def parse_log_file(path: str | Path) -> dict:
         ) = vals
 
     # Final array form, if present
-    m = RE_FINAL_ESTIMATED_DELTA_ARRAY.search(text)
+    m = RE_FINAL_ESTIMATED_THETA_ARRAY.search(text)
     if m:
         arr = [float(x) for x in m.group(1).replace("\n", " ").split()]
-        row["final_estimated_delta_array"] = arr
+        row["final_estimated_theta_array"] = arr
     cost_initial = row["cost_initial"]
     cost_final = row["cost_final"]
-    dddelta_initial = row["dddelta_initial"]
-    ddelta = row["ddelta"]
+    ddtheta_initial = row["ddtheta_initial"]
+    dtheta = row["dtheta"]
 
     row["cost_change_pct"] = (
         100.0 * (cost_initial - cost_final) / cost_initial
         if cost_initial != 0 else None
     )
 
-    row["ddelta_change_pct"] = (
-        100.0 * (dddelta_initial - ddelta) / dddelta_initial
-        if dddelta_initial != 0 else None
+    row["dtheta_change_pct"] = (
+        100.0 * (ddtheta_initial - dtheta) / ddtheta_initial
+        if ddtheta_initial != 0 else None
     )
     return row
 
@@ -221,7 +220,7 @@ def parse_log_folder(folder: str | Path, pattern: str = "*.log") -> pd.DataFrame
 
         "total_iters",
         "cost_initial", "cost_final", "cost_change_pct",
-        "dddelta_initial", "ddelta", "ddelta_change_pct", "lambda",
+        "ddtheta_initial", "dtheta", "dtheta_change_pct", "lambda",
 
         "dSx", "dSy", "dSz",
         "dOx", "dOy", "dOz",
@@ -242,65 +241,66 @@ def parse_log_folder(folder: str | Path, pattern: str = "*.log") -> pd.DataFrame
 
 
 if __name__ == "__main__":
-    for i in range(20, 23):
-        folder = f"/vol/home/s3777103/Documents/workspace/Thesis/AutoCalibration/logs/hp_test_{i}"
+    folder = Path("/vol/home/s3777103/Documents/workspace/Thesis/AutoCalibration/logs/hp_test_2")
+    # for folder in sorted(p for p in parent.iterdir() if p.is_dir()):
+    df = parse_log_folder(folder, pattern="*.log")
 
-        df = parse_log_folder(folder, pattern="*.log")
+    # ----------------------------
+    # mean / std rows
+    # ----------------------------
 
-        # ----------------------------
-        # mean / std rows
-        # ----------------------------
+    d_cols = [
+        "dSx", "dSy", "dSz",
+        "dOx", "dOy", "dOz",
+        "offset_x", "offset_z",
+        "dDx", "dDy", "dDz",
+        "stage_rotY_deg",
+    ]
+    if "scenario" in df.columns:
+        df["scenario_num"] = df["scenario"].apply(get_scenario_number)
+        df = df.sort_values(by=["scenario_num", "used"]).drop(columns="scenario_num").reset_index(drop=True)
+        
+    
 
-        d_cols = [
-            "dSx", "dSy", "dSz",
-            "dOx", "dOy", "dOz",
-            "offset_x", "offset_z",
-            "dDx", "dDy", "dDz",
-            "stage_rotY_deg",
-        ]
-        if "scenario" in df.columns:
-            df["scenario_num"] = df["scenario"].apply(get_scenario_number)
-            df = df.sort_values(by=["scenario_num", "used"]).drop(columns="scenario_num").reset_index(drop=True)
+    # keep only columns that exist
+    # d_cols = [c for c in d_cols if c in df.columns]
 
-        # keep only columns that exist
-        d_cols = [c for c in d_cols if c in df.columns]
+    # mean_row = {}
+    # std_row = {}
 
-        mean_row = {}
-        std_row = {}
+    # for c in d_cols:
+    #     if c in ["offset_x", "offset_z", "stage_rotY_deg"]:
+    #         scen_num = (
+    #             df["scenario"]
+    #             .astype(str)
+    #             .str.extract(r"(\d+)")[0]
+    #             .astype(float)
+    #         )
 
-        for c in d_cols:
-            if c in ["offset_x", "offset_z"]:
-                scen_num = (
-                    df["scenario"]
-                    .astype(str)
-                    .str.extract(r"(\d+)")[0]
-                    .astype(float)
-                )
+    #         mask1 = scen_num.between(1, 6)
+    #         mask2 = scen_num.between(7, 11)
 
-                mask1 = scen_num.between(1, 6)
-                mask2 = scen_num.between(7, 11)
+    #         vals1 = pd.to_numeric(df.loc[mask1, c], errors="coerce")
+    #         vals2 = pd.to_numeric(df.loc[mask2, c], errors="coerce")
 
-                vals1 = pd.to_numeric(df.loc[mask1, c], errors="coerce")
-                vals2 = pd.to_numeric(df.loc[mask2, c], errors="coerce")
+    #         mean_row[c] = f"{vals1.mean():.6f} | {vals2.mean():.6f}"
+    #         std_row[c]  = f"{vals1.std():.6f} | {vals2.std():.6f}"
 
-                mean_row[c] = f"{vals1.mean():.6f} | {vals2.mean():.6f}"
-                std_row[c]  = f"{vals1.std():.6f} | {vals2.std():.6f}"
+    #     else:
 
-            else:
+    #         vals = pd.to_numeric(df[c], errors="coerce")
 
-                vals = pd.to_numeric(df[c], errors="coerce")
-
-                mean_row[c] = vals.mean()
-                std_row[c]  = vals.std()
+    #         mean_row[c] = vals.mean()
+    #         std_row[c]  = vals.std()
 
 
-        mean_row["file"] = "MEAN"
-        std_row["file"] = "STD"
+    #     mean_row["file"] = "MEAN"
+    #     std_row["file"] = "STD"
 
-        df = pd.concat(
-            [df, pd.DataFrame([mean_row]), pd.DataFrame([std_row])],
-            ignore_index=True
-        )
+    #     df = pd.concat(
+    #         [df, pd.DataFrame([mean_row]), pd.DataFrame([std_row])],
+    #         ignore_index=True
+    #     )
 
         out_csv = Path(folder) / "calibration_log_summary.csv"
         df.to_csv(out_csv, index=False)

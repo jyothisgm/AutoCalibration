@@ -41,10 +41,10 @@ check_gn_running = "pgrep -f gauss_newton_real.py"
 gpu_usage_cmd = "nvidia-smi --query-gpu=utilization.gpu --format=csv,nounits,noheader"
 cpu_usage_cmd = "mpstat -P ALL 1 1 | grep \"all\" | awk '{print $NF}'"
 
-# ANGLE_FACTORS = [3, 4, 5, 6, 8, 9, 10, 12, 15, 18, 20, 24, 30, 36, 40, 45, 60, 72, 90, 120, 180, 360]
+ANGLE_FACTORS = [3, 4, 5, 6, 8, 9, 10, 12, 15, 18, 20, 24, 30, 36, 40, 45, 60, 72, 90, 120, 180, 360]
 # BEAD_LIST = [5]
 # BEAD_LIST = [2]
-ANGLE_FACTORS = [360]
+# ANGLE_FACTORS = [360]
 # SCENARIO = [2]
 SCENARIO = list(range(1, 12))
 # Initialize SSH client
@@ -90,7 +90,7 @@ while True:
                 continue
 
             # Kill and Test Python
-            stdin, stdout, stderr = ssh.exec_command(kill_python)
+            # stdin, stdout, stderr = ssh.exec_command(kill_python)
             stdin, stdout, stderr = ssh.exec_command(python_command)
             stdin.close()
             
@@ -141,7 +141,7 @@ while True:
                 continue
 
             # Hyper Parameter Training
-            # stdin, stdout, stderr = ssh.exec_command(run_rl)
+            stdin, stdout, stderr = ssh.exec_command(run_rl)
             stdin.close()
 
             print(f"Running: {run_rl}")

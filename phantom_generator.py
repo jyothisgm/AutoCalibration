@@ -303,10 +303,12 @@ def make_cuboid_with_beads_volume(width: float, breadth: float, height: float, b
         volume[z0:z1, y0:y1, x0:x1][mask] = bead_level
     return volume
 
-def generate_k_bead_phantom(k=NO_OF_BEADS, plot=True, mat=False, width=WIDTH, breadth=BREADTH, height=HEIGHT):
-    phantom_path = HERE / f"phantoms/cuboid_phantom_{k}.npy"
-    #if phantom_path.exists():
-        #return  # or just skip saving
+def generate_k_bead_phantom(k=NO_OF_BEADS, plot=True, mat=False, width=WIDTH, breadth=BREADTH, height=HEIGHT, name=None):
+    suffix = f"_{name}" if name is not None else ""
+    phantom_path = HERE / f"phantoms/cuboid_phantom_{k}{suffix}.npy"
+    if phantom_path.exists():
+        print(f"Phantom already exists, skipping: {phantom_path.name}")
+        return phantom_path
 
     phantom_mesh, cuboid_mesh, beads_mesh, centers = generate_cuboid_spiral_beads(w=width, b=breadth, h=height, k=k, bead_radius=BEAD_RADIUS, 
                                                                                     margin=MARGIN, clearance=CLEARANCE, turns=TURNS, spiral_mode="rounded-rect", 
@@ -331,7 +333,7 @@ def generate_k_bead_phantom(k=NO_OF_BEADS, plot=True, mat=False, width=WIDTH, br
         print(f"  value={v:.6f} : voxels={c}")
 
     np.save(phantom_path, volume)
-    print(f"Saved cuboid_phantom_{k}.npy", volume.shape)
+    print(f"Saved {phantom_path.name}", volume.shape)
     if plot:
         p = pv.Plotter()
         p.add_mesh(cuboid_mesh, opacity=0.15)

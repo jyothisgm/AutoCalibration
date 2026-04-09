@@ -533,7 +533,6 @@ if __name__ == "__main__":
 
             indices = np.linspace(0, projections - 1, each_no_projections, dtype=int)
             real_out_dir = BASE_REAL_DIR / f"{scenario_name}" / f"out_line_integrals"
-            print()
 
             # Get bead positions for real projections
             real_proj = build_wide_df_from_folder(real_out_dir, K=K, min_area=MIN_AREA, max_area=MAX_AREA, file_type=".tif", tolerance=130, indices=indices, box_images=True)
@@ -560,7 +559,7 @@ if __name__ == "__main__":
                 "initial_calibration": initial_calibration,
                 "box_images": True,
             }
-            theta_hat, dtheta, cost, it = lm_solve_image_based(real_proj, projection_angles, cfg, n_iters=50, lam=1e-2, fix_source=True, fix_detector=True, fix_object=False, fix_offset=False, work_dir = HERE / f"fake_projections/trial11/{each_no_projections}" / f"{scenario_name}")
+            theta_hat, dtheta, cost, it = lm_solve_image_based(real_proj, projection_angles, cfg, n_iters=50, lam=1e-2, fix_source=True, fix_detector=True, fix_object=False, fix_offset=False, work_dir = HERE / f"fake_projections/trial20/{each_no_projections}" / f"{scenario_name}")
             # Diff
             # theta_minus_fake = theta_hat.copy()
             # theta_minus_fake -= fake_theta

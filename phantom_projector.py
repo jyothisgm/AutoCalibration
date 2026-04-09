@@ -168,7 +168,7 @@ def fetch_and_save_projections(out_dir: str, src_world: np.ndarray, obj_world: n
                                 image_height: int, image_width: int, initial_calibration: np.ndarray,
                                 astra_scaling: float, det_spacing: float, voxel_size: float,
                                 det_col: np.ndarray, det_row: np.ndarray, filename_prefix: str = "proj", 
-                                phantom_name: str = "cuboid_phantom.npy", debug=True):
+                                phantom_name: str = "cuboid_phantom.npy", debug=True, normalize=True):
     reset_folder(out_dir)
     rec = np.load(phantom_name)
 
@@ -221,7 +221,7 @@ def fetch_and_save_projections(out_dir: str, src_world: np.ndarray, obj_world: n
 
         print(geom12_array[0].reshape(4, 3))
     # 2) Generate all projections in one call (server.generate_images from earlier)
-    imgs = server.generate_stacked_images(geom12_array, normalize=True)
+    imgs = server.generate_stacked_images(geom12_array, normalize=normalize)
 
     # 3) Post-process + save per angle
     for idx in range(imgs.shape[0]):
@@ -232,7 +232,7 @@ def fetch_and_save_projections(out_dir: str, src_world: np.ndarray, obj_world: n
         # else:
         #     img_u16 = img.astype("uint16")
         img = apply_napari_contrast_and_gamma(
-            img, low_percentile=95, high_percentile=100.0, gamma=0.2
+            img, low_percentile=99.5, high_percentile=100.0, gamma=0.2
         )
         Image.fromarray(img).save(os.path.join(out_dir, f"{filename_prefix}_{idx:03d}.png"))
     server.close()
