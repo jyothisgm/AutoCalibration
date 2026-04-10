@@ -53,7 +53,7 @@ RE_INITIAL_CALIB_BLOCK = re.compile(
 )
 
 RE_THETA_BLOCK = re.compile(
-    r"theta offsets \(Unity frame\):\s*"
+    r"[Tt]heta offsets \(Unity frame\):\s*"
     r"Source\s*:\s*dSx=\s*([0-9eE+.\-]+),\s*dSy=\s*([0-9eE+.\-]+),\s*dSz=\s*([0-9eE+.\-]+).*?\n"
     r"\s*Object\s*:\s*dOx=\s*([0-9eE+.\-]+),\s*dOy=\s*([0-9eE+.\-]+),\s*dOz=\s*([0-9eE+.\-]+).*?\n"
     r"\s*Object offset:\s*offset_x=\s*([0-9eE+.\-]+),\s*offset_z=\s*([0-9eE+.\-]+).*?\n"
@@ -241,7 +241,7 @@ def parse_log_folder(folder: str | Path, pattern: str = "*.log") -> pd.DataFrame
 
 
 if __name__ == "__main__":
-    folder = Path("/vol/home/s3777103/Documents/workspace/Thesis/AutoCalibration/logs/hp_test_2")
+    folder = Path("/vol/home/s3777103/Documents/workspace/Thesis/AutoCalibration/results/real")
     # for folder in sorted(p for p in parent.iterdir() if p.is_dir()):
     df = parse_log_folder(folder, pattern="*.log")
 

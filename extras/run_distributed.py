@@ -36,7 +36,8 @@ python_interpreter = folder_path + ".venv/bin/python"
 get_hname_cmd = "hostname"  # Get Hostname Command
 python_command = f"{python_interpreter} {remote_script}"   # Test Python Command
 kill_python = "pkill -f python"
-check_gn_running = "pgrep -f gauss_newton_real.py"
+check_gnr_running = "pgrep -f gauss_newton_real.py"
+check_gn_running = "pgrep -f gauss_newton.py"
 
 gpu_usage_cmd = "nvidia-smi --query-gpu=utilization.gpu --format=csv,nounits,noheader"
 cpu_usage_cmd = "mpstat -P ALL 1 1 | grep \"all\" | awk '{print $NF}'"
@@ -137,6 +138,17 @@ while True:
 
             if existing_pids:
                 print(f"Skipping {host}: gauss_newton.py already running (PID(s): {existing_pids})")
+                ssh.close()
+                continue
+
+            # Check if gauss_newton.py is already running for the current user
+            stdin, stdout, stderr = ssh.exec_command(check_gnr_running)
+            stdin.close()
+
+            existing_pids = stdout.read().decode().strip()
+
+            if existing_pids:
+                print(f"Skipping {host}: gauss_newton_real.py already running (PID(s): {existing_pids})")
                 ssh.close()
                 continue
 

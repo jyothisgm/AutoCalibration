@@ -36,19 +36,28 @@ python_interpreter = folder_path + ".venv/bin/python"
 get_hname_cmd = "hostname"  # Get Hostname Command
 python_command = f"{python_interpreter} {remote_script}"   # Test Python Command
 kill_python = "pkill -f python"
+
+check_gnr_running = "pgrep -f gauss_newton_real.py"
 check_gn_running = "pgrep -f gauss_newton.py"
 
 gpu_usage_cmd = "nvidia-smi --query-gpu=utilization.gpu --format=csv,nounits,noheader"
 cpu_usage_cmd = "mpstat -P ALL 1 1 | grep \"all\" | awk '{print $NF}'"
 
-ANGLE_FACTORS = [3, 4, 5, 6, 8, 9, 10, 12, 15, 18, 20, 24, 30, 36, 40, 45, 60, 72, 90, 120, 180, 360]
-# ANGLE_FACTORS = [3]
+# CUBOID_SIZES = ["compact", "small", "square", "normal", "tall", "wide", "coplanar"]
+CUBOID_SIZES = ["normal"]
 
-BEAD_LIST = [1, 2, 3, 4, 5, 6, 7]
-# BEAD_LIST = [7]
+# ANGLE_FACTORS = [3, 4, 5, 6, 8, 9, 10, 12, 15, 18, 20, 24, 30, 36, 40, 45, 60, 72, 90, 120, 180, 360]
+ANGLE_FACTORS = [3, 5, 6, 9, 10, 12, 15, 18, 24, 36, 60, 90, 180, 360]
+
+# BEAD_LIST = [1, 2, 3, 4, 5, 6, 7]
+BEAD_LIST = [3]
 
 SCENARIO = list(range(0, 5))
 # SCENARIO = [1, 2]
+
+# LAMBDA_VALUES = ["GN", "LM_low", "LM_high"]
+LAMBDA_VALUES = ["GN"]
+
 # Initialize SSH client
 ssh = paramiko.SSHClient()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())  # Auto-accept unknown host keys
@@ -68,18 +77,20 @@ while True:
             if hostname.split(".")[0].upper() == host.upper():
                 print(f"Skipping current host: {host}")
                 continue
-            overflow = counter // len(SCENARIO) // len(ANGLE_FACTORS) // len(BEAD_LIST)
+            overflow = counter // len(SCENARIO) // len(ANGLE_FACTORS) // len(BEAD_LIST) // len(CUBOID_SIZES) // len(LAMBDA_VALUES)
             if overflow:
                 print("overflow")
                 print("Total hosts: ", counter)
                 raise SystemExit(0)
 
-            s = SCENARIO[counter % len(SCENARIO)]
-            k = BEAD_LIST[counter // len(SCENARIO) % len(BEAD_LIST)]
-            a = ANGLE_FACTORS[counter // len(SCENARIO) // len(BEAD_LIST) % len(ANGLE_FACTORS)]
-            
-            run_rl =  f"nohup {python_interpreter} -u {run_script} -a {a} -s G{s} -k {k} > {log_folder}/run{counter:02d}_{host}.log 2>&1 &"
-            print(f"----\nConnecting to: {host}")
+            s       = SCENARIO[     counter % len(SCENARIO)]
+            a       = ANGLE_FACTORS[counter // len(SCENARIO) % len(ANGLE_FACTORS)]
+            k       = BEAD_LIST[    counter // len(SCENARIO) // len(ANGLE_FACTORS) % len(BEAD_LIST)]
+            cuboid  = CUBOID_SIZES[ counter // len(SCENARIO) // len(ANGLE_FACTORS) // len(BEAD_LIST) % len(CUBOID_SIZES)]
+            lam     = LAMBDA_VALUES[counter // len(SCENARIO) // len(ANGLE_FACTORS) // len(BEAD_LIST) // len(CUBOID_SIZES) % len(LAMBDA_VALUES)]
+
+            run_rl =  f"nohup {python_interpreter} -u {run_script} -a {a} -s G{s} -k {k} -c {cuboid} -l {lam} > {log_folder}/run{counter:02d}_{host}.log 2>&1 &"
+            print(f"----\nConnecting to: {host}  (K={k} N={a} G{s} cuboid={cuboid} lambda={lam})")
             ssh.connect(host, username=username, key_filename=key_path, timeout=10)
 
             # Run the Hostname command
@@ -140,6 +151,17 @@ while True:
 
             if existing_pids:
                 print(f"Skipping {host}: gauss_newton.py already running (PID(s): {existing_pids})")
+                ssh.close()
+                continue
+
+            # Check if gauss_newton.py is already running for the current user
+            stdin, stdout, stderr = ssh.exec_command(check_gnr_running)
+            stdin.close()
+
+            existing_pids = stdout.read().decode().strip()
+
+            if existing_pids:
+                print(f"Skipping {host}: gauss_newton_real.py already running (PID(s): {existing_pids})")
                 ssh.close()
                 continue
 

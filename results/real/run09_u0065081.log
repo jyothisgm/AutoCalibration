@@ -1,0 +1,1186 @@
+
+################################################################################
+Running scenario=Scan10 Projections=360 Used=3, K=5
+
+============================================================
+Iteration 0
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=   0.000, dOy=   0.000, dOz=   0.000  (mm)
+  Object offset: offset_x=   0.000, offset_z=   0.000  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    0.000 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   0.541, y=  20.000, z= 600.000
+  Detector : x= -20.002, y=  33.656, z= 959.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   0.541, y=  20.000, z= 600.000
+  Detector : x=   5.316, y=  39.966, z= 999.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 600.176 mm | SDD= 999.168 mm | M= 1.665 | incident=1.0480°
+[[ -58.31186    -597.25275      -9.997368  ]
+ [  36.550167    397.3519      -19.965702  ]
+ [   0.14912441   -0.01191922    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 60, Jacobian shape: (60, 6)
+view   0 | SOD= 676.079 mm | SDD= 999.168 mm | M= 1.478 | incident=1.0480°
+[[  85.340195   -670.64355      -6.058428  ]
+ [ -64.413536    317.18793     -16.026762  ]
+ [   0.14754888    0.02468774    0.        ]
+ [   0.            0.            0.1496    ]]
+/vol/home/s3777103/Documents/workspace/Thesis/AutoCalibration/gauss_newton_real.py:300: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+  df_r0 = pd.concat([df_r0, df_iter], ignore_index=True)
+
+iter 00 cost=255480.754420 -> 46830.382195 |dtheta|=6.637873e+01  lambda=1.000e-02
+
+============================================================
+Iteration 1
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=   6.108, dOy=   3.939, dOz=  62.320  (mm)
+  Object offset: offset_x=   8.770, offset_z=  13.955  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :   14.069 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   6.648, y=  23.939, z= 662.320
+  Detector : x= -20.002, y=  33.656, z= 959.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   6.648, y=  23.939, z= 662.320
+  Detector : x=   5.316, y=  39.966, z= 999.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 676.079 mm | SDD= 999.168 mm | M= 1.478 | incident=1.0480°
+[[  85.340195   -670.64355      -6.058428  ]
+ [ -64.413536    317.18793     -16.026762  ]
+ [   0.14754888    0.02468774    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 60, Jacobian shape: (60, 6)
+view   0 | SOD= 662.752 mm | SDD= 999.168 mm | M= 1.508 | incident=1.0480°
+[[ 121.57186    -651.47925      -5.957451  ]
+ [ -86.92441     325.64227     -15.925785  ]
+ [   0.14581062    0.03345777    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 01 cost=46830.382195 -> 36236.287552 |dtheta|=1.631912e+01  lambda=3.333e-03
+
+============================================================
+Iteration 2
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=   5.595, dOy=   4.040, dOz=  46.595  (mm)
+  Object offset: offset_x=   9.798, offset_z=  16.404  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :   17.493 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   6.136, y=  24.040, z= 646.595
+  Detector : x= -20.002, y=  33.656, z= 959.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   6.136, y=  24.040, z= 646.595
+  Detector : x=   5.316, y=  39.966, z= 999.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 662.752 mm | SDD= 999.168 mm | M= 1.508 | incident=1.0480°
+[[ 121.57186    -651.47925      -5.957451  ]
+ [ -86.92441     325.64227     -15.925785  ]
+ [   0.14581062    0.03345777    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 60, Jacobian shape: (60, 6)
+view   0 | SOD= 645.371 mm | SDD= 999.168 mm | M= 1.548 | incident=1.0480°
+[[ 135.12665    -631.0371       -6.0211906 ]
+ [-101.50086     339.65576     -15.989525  ]
+ [   0.14478359    0.03765466    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 02 cost=36236.287552 -> 34370.062131 |dtheta|=1.936292e+01  lambda=1.111e-03
+
+============================================================
+Iteration 3
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=   5.621, dOy=   3.976, dOz=  27.401  (mm)
+  Object offset: offset_x=  10.477, offset_z=  18.224  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :   19.148 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   6.161, y=  23.976, z= 627.401
+  Detector : x= -20.002, y=  33.656, z= 959.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   6.161, y=  23.976, z= 627.401
+  Detector : x=   5.316, y=  39.966, z= 999.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 645.371 mm | SDD= 999.168 mm | M= 1.548 | incident=1.0480°
+[[ 135.12665    -631.0371       -6.0211906 ]
+ [-101.50086     339.65576     -15.989525  ]
+ [   0.14478359    0.03765466    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 60, Jacobian shape: (60, 6)
+view   0 | SOD= 648.121 mm | SDD= 999.168 mm | M= 1.542 | incident=1.0480°
+[[  91.82797    -641.5547       -5.9811325 ]
+ [ -77.17663     343.16586     -15.949467  ]
+ [   0.14703895    0.02756274    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 03 cost=34370.062131 -> 34890.089097 |dtheta|=5.191282e+00  lambda=3.704e-04
+
+============================================================
+Iteration 4
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=   5.621, dOy=   3.976, dOz=  27.401  (mm)
+  Object offset: offset_x=  10.477, offset_z=  18.224  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :   19.148 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   6.161, y=  23.976, z= 627.401
+  Detector : x= -20.002, y=  33.656, z= 959.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   6.161, y=  23.976, z= 627.401
+  Detector : x=   5.316, y=  39.966, z= 999.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 645.371 mm | SDD= 999.168 mm | M= 1.548 | incident=1.0480°
+[[ 135.12665    -631.0371       -6.0211906 ]
+ [-101.50086     339.65576     -15.989525  ]
+ [   0.14478359    0.03765466    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 60, Jacobian shape: (60, 6)
+view   0 | SOD= 648.120 mm | SDD= 999.168 mm | M= 1.542 | incident=1.0480°
+[[  91.82882    -641.55383      -5.9811287 ]
+ [ -77.17722     343.1665      -15.949463  ]
+ [   0.14703892    0.02756295    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 04 cost=34370.062131 -> 34890.089097 |dtheta|=5.190757e+00  lambda=1.852e-03
+
+============================================================
+Iteration 5
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=   5.621, dOy=   3.976, dOz=  27.401  (mm)
+  Object offset: offset_x=  10.477, offset_z=  18.224  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :   19.148 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   6.161, y=  23.976, z= 627.401
+  Detector : x= -20.002, y=  33.656, z= 959.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   6.161, y=  23.976, z= 627.401
+  Detector : x=   5.316, y=  39.966, z= 999.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 645.371 mm | SDD= 999.168 mm | M= 1.548 | incident=1.0480°
+[[ 135.12665    -631.0371       -6.0211906 ]
+ [-101.50086     339.65576     -15.989525  ]
+ [   0.14478359    0.03765466    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 60, Jacobian shape: (60, 6)
+view   0 | SOD= 648.116 mm | SDD= 999.168 mm | M= 1.542 | incident=1.0480°
+[[  91.83303    -641.5495       -5.981098  ]
+ [ -77.18024     343.16962     -15.949432  ]
+ [   0.14703871    0.02756403    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 05 cost=34370.062131 -> 34890.222972 |dtheta|=5.188135e+00  lambda=9.259e-03
+
+============================================================
+Iteration 6
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=   5.621, dOy=   3.976, dOz=  27.401  (mm)
+  Object offset: offset_x=  10.477, offset_z=  18.224  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :   19.148 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   6.161, y=  23.976, z= 627.401
+  Detector : x= -20.002, y=  33.656, z= 959.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   6.161, y=  23.976, z= 627.401
+  Detector : x=   5.316, y=  39.966, z= 999.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 645.371 mm | SDD= 999.168 mm | M= 1.548 | incident=1.0480°
+[[ 135.12665    -631.0371       -6.0211906 ]
+ [-101.50086     339.65576     -15.989525  ]
+ [   0.14478359    0.03765466    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 60, Jacobian shape: (60, 6)
+view   0 | SOD= 648.098 mm | SDD= 999.168 mm | M= 1.542 | incident=1.0480°
+[[  91.854095   -641.5277       -5.9809475 ]
+ [ -77.19529     343.1852      -15.949282  ]
+ [   0.1470377     0.02756942    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 06 cost=34370.062131 -> 34889.473575 |dtheta|=5.175123e+00  lambda=4.630e-02
+
+============================================================
+Iteration 7
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=   5.621, dOy=   3.976, dOz=  27.401  (mm)
+  Object offset: offset_x=  10.477, offset_z=  18.224  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :   19.148 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   6.161, y=  23.976, z= 627.401
+  Detector : x= -20.002, y=  33.656, z= 959.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   6.161, y=  23.976, z= 627.401
+  Detector : x=   5.316, y=  39.966, z= 999.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 645.371 mm | SDD= 999.168 mm | M= 1.548 | incident=1.0480°
+[[ 135.12665    -631.0371       -6.0211906 ]
+ [-101.50086     339.65576     -15.989525  ]
+ [   0.14478359    0.03765466    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 60, Jacobian shape: (60, 6)
+view   0 | SOD= 648.008 mm | SDD= 999.168 mm | M= 1.542 | incident=1.0480°
+[[  91.95929    -641.4219       -5.980221  ]
+ [ -77.26996     343.26013     -15.948555  ]
+ [   0.14703266    0.02759628    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 07 cost=34370.062131 -> 34897.260992 |dtheta|=5.112385e+00  lambda=2.315e-01
+
+============================================================
+Iteration 8
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=   5.621, dOy=   3.976, dOz=  27.401  (mm)
+  Object offset: offset_x=  10.477, offset_z=  18.224  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :   19.148 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   6.161, y=  23.976, z= 627.401
+  Detector : x= -20.002, y=  33.656, z= 959.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   6.161, y=  23.976, z= 627.401
+  Detector : x=   5.316, y=  39.966, z= 999.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 645.371 mm | SDD= 999.168 mm | M= 1.548 | incident=1.0480°
+[[ 135.12665    -631.0371       -6.0211906 ]
+ [-101.50086     339.65576     -15.989525  ]
+ [   0.14478359    0.03765466    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 60, Jacobian shape: (60, 6)
+view   0 | SOD= 647.623 mm | SDD= 999.168 mm | M= 1.543 | incident=1.0480°
+[[  92.48198    -640.958        -5.977009  ]
+ [ -77.630424    343.5718      -15.945343  ]
+ [   0.14700785    0.02772815    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 08 cost=34370.062131 -> 34885.406003 |dtheta|=4.847166e+00  lambda=1.157e+00
+
+============================================================
+Iteration 9
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=   5.621, dOy=   3.976, dOz=  27.401  (mm)
+  Object offset: offset_x=  10.477, offset_z=  18.224  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :   19.148 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   6.161, y=  23.976, z= 627.401
+  Detector : x= -20.002, y=  33.656, z= 959.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   6.161, y=  23.976, z= 627.401
+  Detector : x=   5.316, y=  39.966, z= 999.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 645.371 mm | SDD= 999.168 mm | M= 1.548 | incident=1.0480°
+[[ 135.12665    -631.0371       -6.0211906 ]
+ [-101.50086     339.65576     -15.989525  ]
+ [   0.14478359    0.03765466    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 60, Jacobian shape: (60, 6)
+view   0 | SOD= 646.563 mm | SDD= 999.168 mm | M= 1.545 | incident=1.0480°
+[[  94.965706   -639.52295      -5.966755  ]
+ [ -79.21189     344.29584     -15.935089  ]
+ [   0.14689207    0.02833514    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 09 cost=34370.062131 -> 34894.342036 |dtheta|=4.121342e+00  lambda=5.787e+00
+
+============================================================
+Iteration 10
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=   5.621, dOy=   3.976, dOz=  27.401  (mm)
+  Object offset: offset_x=  10.477, offset_z=  18.224  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :   19.148 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   6.161, y=  23.976, z= 627.401
+  Detector : x= -20.002, y=  33.656, z= 959.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   6.161, y=  23.976, z= 627.401
+  Detector : x=   5.316, y=  39.966, z= 999.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 645.371 mm | SDD= 999.168 mm | M= 1.548 | incident=1.0480°
+[[ 135.12665    -631.0371       -6.0211906 ]
+ [-101.50086     339.65576     -15.989525  ]
+ [   0.14478359    0.03765466    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 60, Jacobian shape: (60, 6)
+view   0 | SOD= 645.425 mm | SDD= 999.168 mm | M= 1.548 | incident=1.0480°
+[[ 104.135956   -636.94116      -5.947296  ]
+ [ -84.56932     344.19467     -15.91563   ]
+ [   0.14645705    0.03050398    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 10 cost=34370.062131 -> 34791.191194 |dtheta|=2.963155e+00  lambda=2.894e+01
+
+============================================================
+Iteration 11
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=   5.621, dOy=   3.976, dOz=  27.401  (mm)
+  Object offset: offset_x=  10.477, offset_z=  18.224  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :   19.148 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   6.161, y=  23.976, z= 627.401
+  Detector : x= -20.002, y=  33.656, z= 959.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   6.161, y=  23.976, z= 627.401
+  Detector : x=   5.316, y=  39.966, z= 999.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 645.371 mm | SDD= 999.168 mm | M= 1.548 | incident=1.0480°
+[[ 135.12665    -631.0371       -6.0211906 ]
+ [-101.50086     339.65576     -15.989525  ]
+ [   0.14478359    0.03765466    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 60, Jacobian shape: (60, 6)
+view   0 | SOD= 645.030 mm | SDD= 999.168 mm | M= 1.549 | incident=1.0480°
+[[ 120.52363    -633.64233      -5.926979  ]
+ [ -93.81425     342.21448     -15.895313  ]
+ [   0.14560786    0.03432944    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 11 cost=34370.062131 -> 34489.827913 |dtheta|=1.468047e+00  lambda=1.447e+02
+
+============================================================
+Iteration 12
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=   5.621, dOy=   3.976, dOz=  27.401  (mm)
+  Object offset: offset_x=  10.477, offset_z=  18.224  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :   19.148 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   6.161, y=  23.976, z= 627.401
+  Detector : x= -20.002, y=  33.656, z= 959.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   6.161, y=  23.976, z= 627.401
+  Detector : x=   5.316, y=  39.966, z= 999.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 645.371 mm | SDD= 999.168 mm | M= 1.548 | incident=1.0480°
+[[ 135.12665    -631.0371       -6.0211906 ]
+ [-101.50086     339.65576     -15.989525  ]
+ [   0.14478359    0.03765466    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 60, Jacobian shape: (60, 6)
+view   0 | SOD= 645.076 mm | SDD= 999.168 mm | M= 1.549 | incident=1.0480°
+[[ 130.92867    -631.6214       -5.9359875 ]
+ [ -99.49816     340.56207     -15.904322  ]
+ [   0.14502098    0.03672975    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 12 cost=34370.062131 -> 34337.754241 |dtheta|=5.911605e-01  lambda=7.234e+02
+
+============================================================
+Iteration 13
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=   5.455, dOy=   4.061, dOz=  27.435  (mm)
+  Object offset: offset_x=  10.766, offset_z=  17.914  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :   18.782 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   5.995, y=  24.061, z= 627.435
+  Detector : x= -20.002, y=  33.656, z= 959.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   5.995, y=  24.061, z= 627.435
+  Detector : x=   5.316, y=  39.966, z= 999.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 645.076 mm | SDD= 999.168 mm | M= 1.549 | incident=1.0480°
+[[ 130.92867    -631.6214       -5.9359875 ]
+ [ -99.49816     340.56207     -15.904322  ]
+ [   0.14502098    0.03672975    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 60, Jacobian shape: (60, 6)
+view   0 | SOD= 644.516 mm | SDD= 999.168 mm | M= 1.550 | incident=1.0480°
+[[ 148.2324     -627.2115       -5.8121605 ]
+ [-106.34933     338.9279      -15.780495  ]
+ [   0.14406066    0.04033222    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 13 cost=34337.754241 -> 34846.455433 |dtheta|=2.206889e+00  lambda=2.411e+02
+
+============================================================
+Iteration 14
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=   5.455, dOy=   4.061, dOz=  27.435  (mm)
+  Object offset: offset_x=  10.766, offset_z=  17.914  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :   18.782 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   5.995, y=  24.061, z= 627.435
+  Detector : x= -20.002, y=  33.656, z= 959.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   5.995, y=  24.061, z= 627.435
+  Detector : x=   5.316, y=  39.966, z= 999.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 645.076 mm | SDD= 999.168 mm | M= 1.549 | incident=1.0480°
+[[ 130.92867    -631.6214       -5.9359875 ]
+ [ -99.49816     340.56207     -15.904322  ]
+ [   0.14502098    0.03672975    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 60, Jacobian shape: (60, 6)
+view   0 | SOD= 644.847 mm | SDD= 999.168 mm | M= 1.549 | incident=1.0480°
+[[ 136.08008    -630.298        -5.8608437 ]
+ [-100.96146     340.29382     -15.829178  ]
+ [   0.14476751    0.03771642    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 14 cost=34337.754241 -> 34364.258864 |dtheta|=9.554985e-01  lambda=1.206e+03
+
+============================================================
+Iteration 15
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=   5.455, dOy=   4.061, dOz=  27.435  (mm)
+  Object offset: offset_x=  10.766, offset_z=  17.914  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :   18.782 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   5.995, y=  24.061, z= 627.435
+  Detector : x= -20.002, y=  33.656, z= 959.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   5.995, y=  24.061, z= 627.435
+  Detector : x=   5.316, y=  39.966, z= 999.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 645.076 mm | SDD= 999.168 mm | M= 1.549 | incident=1.0480°
+[[ 130.92867    -631.6214       -5.9359875 ]
+ [ -99.49816     340.56207     -15.904322  ]
+ [   0.14502098    0.03672975    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 60, Jacobian shape: (60, 6)
+view   0 | SOD= 645.024 mm | SDD= 999.168 mm | M= 1.549 | incident=1.0480°
+[[ 132.1139     -631.3213       -5.9094105 ]
+ [ -99.746574    340.52127     -15.877745  ]
+ [   0.14496665    0.03694361    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 15 cost=34337.754241 -> 34262.518254 |dtheta|=2.715131e-01  lambda=6.028e+03
+
+============================================================
+Iteration 16
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=   5.435, dOy=   4.088, dOz=  27.437  (mm)
+  Object offset: offset_x=  10.517, offset_z=  17.851  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :   18.867 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   5.975, y=  24.088, z= 627.437
+  Detector : x= -20.002, y=  33.656, z= 959.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   5.975, y=  24.088, z= 627.437
+  Detector : x=   5.316, y=  39.966, z= 999.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 645.024 mm | SDD= 999.168 mm | M= 1.549 | incident=1.0480°
+[[ 132.1139     -631.3213       -5.9094105 ]
+ [ -99.746574    340.52127     -15.877745  ]
+ [   0.14496665    0.03694361    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 60, Jacobian shape: (60, 6)
+view   0 | SOD= 645.062 mm | SDD= 999.168 mm | M= 1.549 | incident=1.0480°
+[[ 132.21379    -631.33984      -5.901478  ]
+ [ -99.83169     340.45853     -15.869812  ]
+ [   0.14495961    0.03697121    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 16 cost=34262.518254 -> 34262.696009 |dtheta|=9.459340e-02  lambda=2.009e+03
+
+============================================================
+Iteration 17
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=   5.435, dOy=   4.088, dOz=  27.437  (mm)
+  Object offset: offset_x=  10.517, offset_z=  17.851  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :   18.867 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   5.975, y=  24.088, z= 627.437
+  Detector : x= -20.002, y=  33.656, z= 959.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   5.975, y=  24.088, z= 627.437
+  Detector : x=   5.316, y=  39.966, z= 999.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 645.024 mm | SDD= 999.168 mm | M= 1.549 | incident=1.0480°
+[[ 132.1139     -631.3213       -5.9094105 ]
+ [ -99.746574    340.52127     -15.877745  ]
+ [   0.14496665    0.03694361    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 60, Jacobian shape: (60, 6)
+view   0 | SOD= 645.029 mm | SDD= 999.168 mm | M= 1.549 | incident=1.0480°
+[[ 132.1275     -631.3235       -5.9065742 ]
+ [ -99.763794    340.51166     -15.874908  ]
+ [   0.14496548    0.03694821    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 17 cost=34262.518254 -> 34263.339649 |dtheta|=2.141727e-02  lambda=1.005e+04
+
+============================================================
+Iteration 18
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=   5.435, dOy=   4.088, dOz=  27.437  (mm)
+  Object offset: offset_x=  10.517, offset_z=  17.851  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :   18.867 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   5.975, y=  24.088, z= 627.437
+  Detector : x= -20.002, y=  33.656, z= 959.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   5.975, y=  24.088, z= 627.437
+  Detector : x=   5.316, y=  39.966, z= 999.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 645.024 mm | SDD= 999.168 mm | M= 1.549 | incident=1.0480°
+[[ 132.1139     -631.3213       -5.9094105 ]
+ [ -99.746574    340.52127     -15.877745  ]
+ [   0.14496665    0.03694361    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 60, Jacobian shape: (60, 6)
+view   0 | SOD= 645.025 mm | SDD= 999.168 mm | M= 1.549 | incident=1.0480°
+[[ 132.11623    -631.32166      -5.9087486 ]
+ [ -99.75001     340.5195      -15.877083  ]
+ [   0.14496642    0.03694447    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 18 cost=34262.518254 -> 34269.138088 |dtheta|=4.447838e-03  lambda=5.023e+04
+
+============================================================
+Iteration 19
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=   5.435, dOy=   4.088, dOz=  27.437  (mm)
+  Object offset: offset_x=  10.517, offset_z=  17.851  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :   18.867 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   5.975, y=  24.088, z= 627.437
+  Detector : x= -20.002, y=  33.656, z= 959.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   5.975, y=  24.088, z= 627.437
+  Detector : x=   5.316, y=  39.966, z= 999.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 645.024 mm | SDD= 999.168 mm | M= 1.549 | incident=1.0480°
+[[ 132.1139     -631.3213       -5.9094105 ]
+ [ -99.746574    340.52127     -15.877745  ]
+ [   0.14496665    0.03694361    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 60, Jacobian shape: (60, 6)
+view   0 | SOD= 645.024 mm | SDD= 999.168 mm | M= 1.549 | incident=1.0480°
+[[ 132.11436    -631.32135      -5.909273  ]
+ [ -99.74725     340.52087     -15.877607  ]
+ [   0.1449666     0.03694378    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 19 cost=34262.518254 -> 34269.777887 |dtheta|=8.969879e-04  lambda=2.512e+05
+
+============================================================
+Iteration 20
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=   5.435, dOy=   4.088, dOz=  27.437  (mm)
+  Object offset: offset_x=  10.517, offset_z=  17.851  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :   18.867 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   5.975, y=  24.088, z= 627.437
+  Detector : x= -20.002, y=  33.656, z= 959.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   5.975, y=  24.088, z= 627.437
+  Detector : x=   5.316, y=  39.966, z= 999.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 645.024 mm | SDD= 999.168 mm | M= 1.549 | incident=1.0480°
+[[ 132.1139     -631.3213       -5.9094105 ]
+ [ -99.746574    340.52127     -15.877745  ]
+ [   0.14496665    0.03694361    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 60, Jacobian shape: (60, 6)
+view   0 | SOD= 645.024 mm | SDD= 999.168 mm | M= 1.549 | incident=1.0480°
+[[ 132.11401    -631.3213       -5.909376  ]
+ [ -99.74674     340.52115     -15.87771   ]
+ [   0.14496663    0.03694365    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 20 cost=34262.518254 -> 34262.755130 |dtheta|=2.256574e-04  lambda=1.000e+06
+
+============================================================
+Iteration 21
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=   5.435, dOy=   4.088, dOz=  27.437  (mm)
+  Object offset: offset_x=  10.517, offset_z=  17.851  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :   18.867 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   5.975, y=  24.088, z= 627.437
+  Detector : x= -20.002, y=  33.656, z= 959.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   5.975, y=  24.088, z= 627.437
+  Detector : x=   5.316, y=  39.966, z= 999.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 645.024 mm | SDD= 999.168 mm | M= 1.549 | incident=1.0480°
+[[ 132.1139     -631.3213       -5.9094105 ]
+ [ -99.746574    340.52127     -15.877745  ]
+ [   0.14496665    0.03694361    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 60, Jacobian shape: (60, 6)
+view   0 | SOD= 645.024 mm | SDD= 999.168 mm | M= 1.549 | incident=1.0480°
+[[ 132.11401    -631.3213       -5.909376  ]
+ [ -99.74674     340.52115     -15.87771   ]
+ [   0.14496663    0.03694365    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 21 cost=34262.518254 -> 34262.755130 |dtheta|=2.256574e-04  lambda=1.000e+06
+
+============================================================
+Iteration 22
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=   5.435, dOy=   4.088, dOz=  27.437  (mm)
+  Object offset: offset_x=  10.517, offset_z=  17.851  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :   18.867 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   5.975, y=  24.088, z= 627.437
+  Detector : x= -20.002, y=  33.656, z= 959.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   5.975, y=  24.088, z= 627.437
+  Detector : x=   5.316, y=  39.966, z= 999.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 645.024 mm | SDD= 999.168 mm | M= 1.549 | incident=1.0480°
+[[ 132.1139     -631.3213       -5.9094105 ]
+ [ -99.746574    340.52127     -15.877745  ]
+ [   0.14496665    0.03694361    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 60, Jacobian shape: (60, 6)
+view   0 | SOD= 645.024 mm | SDD= 999.168 mm | M= 1.549 | incident=1.0480°
+[[ 132.11401    -631.3213       -5.909376  ]
+ [ -99.74674     340.52115     -15.87771   ]
+ [   0.14496663    0.03694365    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 22 cost=34262.518254 -> 34262.755130 |dtheta|=2.256574e-04  lambda=1.000e+06
+
+============================================================
+Iteration 23
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=   5.435, dOy=   4.088, dOz=  27.437  (mm)
+  Object offset: offset_x=  10.517, offset_z=  17.851  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :   18.867 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   5.975, y=  24.088, z= 627.437
+  Detector : x= -20.002, y=  33.656, z= 959.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   5.975, y=  24.088, z= 627.437
+  Detector : x=   5.316, y=  39.966, z= 999.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 645.024 mm | SDD= 999.168 mm | M= 1.549 | incident=1.0480°
+[[ 132.1139     -631.3213       -5.9094105 ]
+ [ -99.746574    340.52127     -15.877745  ]
+ [   0.14496665    0.03694361    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 60, Jacobian shape: (60, 6)
+view   0 | SOD= 645.024 mm | SDD= 999.168 mm | M= 1.549 | incident=1.0480°
+[[ 132.11401    -631.3213       -5.909376  ]
+ [ -99.74674     340.52115     -15.87771   ]
+ [   0.14496663    0.03694365    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 23 cost=34262.518254 -> 34262.755130 |dtheta|=2.256574e-04  lambda=1.000e+06
+
+============================================================
+Iteration 24
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=   5.435, dOy=   4.088, dOz=  27.437  (mm)
+  Object offset: offset_x=  10.517, offset_z=  17.851  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :   18.867 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   5.975, y=  24.088, z= 627.437
+  Detector : x= -20.002, y=  33.656, z= 959.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   5.975, y=  24.088, z= 627.437
+  Detector : x=   5.316, y=  39.966, z= 999.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 645.024 mm | SDD= 999.168 mm | M= 1.549 | incident=1.0480°
+[[ 132.1139     -631.3213       -5.9094105 ]
+ [ -99.746574    340.52127     -15.877745  ]
+ [   0.14496665    0.03694361    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 60, Jacobian shape: (60, 6)
+view   0 | SOD= 645.024 mm | SDD= 999.168 mm | M= 1.549 | incident=1.0480°
+[[ 132.11401    -631.3213       -5.909376  ]
+ [ -99.74674     340.52115     -15.87771   ]
+ [   0.14496663    0.03694365    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 24 cost=34262.518254 -> 34262.755130 |dtheta|=2.256574e-04  lambda=1.000e+06
+
+============================================================
+Iteration 25
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=   5.435, dOy=   4.088, dOz=  27.437  (mm)
+  Object offset: offset_x=  10.517, offset_z=  17.851  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :   18.867 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   5.975, y=  24.088, z= 627.437
+  Detector : x= -20.002, y=  33.656, z= 959.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   5.975, y=  24.088, z= 627.437
+  Detector : x=   5.316, y=  39.966, z= 999.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 645.024 mm | SDD= 999.168 mm | M= 1.549 | incident=1.0480°
+[[ 132.1139     -631.3213       -5.9094105 ]
+ [ -99.746574    340.52127     -15.877745  ]
+ [   0.14496665    0.03694361    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 60, Jacobian shape: (60, 6)
+view   0 | SOD= 645.024 mm | SDD= 999.168 mm | M= 1.549 | incident=1.0480°
+[[ 132.11401    -631.3213       -5.909376  ]
+ [ -99.74674     340.52115     -15.87771   ]
+ [   0.14496663    0.03694365    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 25 cost=34262.518254 -> 34262.755130 |dtheta|=2.256574e-04  lambda=1.000e+06
+
+============================================================
+Iteration 26
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=   5.435, dOy=   4.088, dOz=  27.437  (mm)
+  Object offset: offset_x=  10.517, offset_z=  17.851  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :   18.867 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   5.975, y=  24.088, z= 627.437
+  Detector : x= -20.002, y=  33.656, z= 959.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x= -10.000, y=  29.997, z=   0.000
+  Object   : x=   5.975, y=  24.088, z= 627.437
+  Detector : x=   5.316, y=  39.966, z= 999.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 645.024 mm | SDD= 999.168 mm | M= 1.549 | incident=1.0480°
+[[ 132.1139     -631.3213       -5.9094105 ]
+ [ -99.746574    340.52127     -15.877745  ]
+ [   0.14496665    0.03694361    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 60, Jacobian shape: (60, 6)
+view   0 | SOD= 645.024 mm | SDD= 999.168 mm | M= 1.549 | incident=1.0480°
+[[ 132.11401    -631.3213       -5.909376  ]
+ [ -99.74674     340.52115     -15.87771   ]
+ [   0.14496663    0.03694365    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 26 cost=34262.518254 -> 34262.755130 |dtheta|=2.256574e-04  lambda=1.000e+06
+Stalled.
+
+Estimated theta:
+  dSx: +0.000000
+  dSy: +0.000000
+  dOx: +5.434922
+  dOy: +4.087957
+  dOz: +27.437461
+  dDx: +0.000000
+  dDy: +0.000000
+  dDz: +0.000000
+alpha: +1.886688e+01 deg)
+offset_x: +10.517443
+offset_z: +17.850947
+
+Final cost table:
+Final estimated theta: [ 0.          0.          5.43492161  4.08795689 27.43746139  0.
+  0.          0.         18.86688152 10.51744346 17.85094685]
+################################################################################
+

@@ -1,0 +1,23 @@
+Inner rectangle for bead centers: x[-17.0, 17.0], y[-17.0, 17.0]
+Bead z range: [0.5, -0.5]
+Traceback (most recent call last):
+  File "/vol/home/s3777103/Documents/workspace/Thesis/AutoCalibration/gauss_newton.py", line 478, in <module>
+    generate_k_bead_phantom(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        each_k, plot=False,
+        ^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        name=cuboid_name,
+        ^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/vol/home/s3777103/Documents/workspace/Thesis/AutoCalibration/phantom_generator.py", line 313, in generate_k_bead_phantom
+    phantom_mesh, cuboid_mesh, beads_mesh, centers = generate_cuboid_spiral_beads(w=width, b=breadth, h=height, k=k, bead_radius=BEAD_RADIUS,
+                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                                                                    margin=MARGIN, clearance=CLEARANCE, turns=TURNS, spiral_mode="rounded-rect",
+                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                                                                    rounded_rect_r=0.0, seed=66)
+                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/vol/home/s3777103/Documents/workspace/Thesis/AutoCalibration/phantom_generator.py", line 74, in generate_cuboid_spiral_beads
+    raise ValueError("Cuboid height too small for bead_radius + clearance.")
+ValueError: Cuboid height too small for bead_radius + clearance.

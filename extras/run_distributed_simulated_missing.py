@@ -51,8 +51,12 @@ if not missing_csv.exists():
     )
 
 missing_df = pd.read_csv(missing_csv)
-# Each row: K, N, scenario  (scenario is like G0, G1, ...)
-jobs = list(missing_df[["K", "N", "scenario"]].itertuples(index=False, name=None))
+# Each row: K, N, scenario, cuboid, lambda  (scenario is like G0, G1, ...; lambda is GN/LM_low/LM_high)
+if "lambda" not in missing_df.columns:
+    missing_df["lambda"] = "GN"
+if "cuboid" not in missing_df.columns:
+    missing_df["cuboid"] = "normal"
+jobs = list(missing_df[["K", "N", "scenario", "cuboid", "lambda"]].itertuples(index=False, name=None))
 total_jobs = len(jobs)
 print(f"Loaded {total_jobs} missing jobs from {missing_csv}")
 
@@ -88,14 +92,14 @@ while True:
                 print(f"Skipping current host: {host}")
                 continue
 
-            k, n, scenario = jobs[counter]
+            k, n, scenario, cuboid, lam = jobs[counter]
             run_cmd = (
                 f"nohup {python_interpreter} -u {run_script} "
-                f"-a {n} -s {scenario} -k {k} "
+                f"-a {n} -s {scenario} -k {k} -c {cuboid} -l {lam} "
                 f"> {log_folder}/run{counter:03d}_{host}.log 2>&1 &"
             )
 
-            print(f"---- Connecting to: {host}  (job {counter+1}/{total_jobs}: K={k} N={n} {scenario})")
+            print(f"---- Connecting to: {host}  (job {counter+1}/{total_jobs}: K={k} N={n} {scenario} cuboid={cuboid} lambda={lam})")
             ssh.connect(host, username=username, key_filename=key_path, timeout=10)
 
             # hostname check

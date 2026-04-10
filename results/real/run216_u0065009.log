@@ -1,0 +1,2095 @@
+
+################################################################################
+Running scenario=Scan8 Projections=360 Used=120, K=5
+
+============================================================
+Iteration 0
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=   0.000, dOy=   0.000, dOz=   0.000  (mm)
+  Object offset: offset_x=   0.000, offset_z=   0.000  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    0.000 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.541, y=  20.000, z= 800.000
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.541, y=  20.000, z= 800.000
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 800.074 mm | SDD=1099.024 mm | M= 1.374 | incident=0.3692°
+[[ -59.29429    -797.8116       -9.992371  ]
+ [  23.2838      298.09387      -4.9769535 ]
+ [   0.14912441   -0.01191922    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 844.978 mm | SDD=1099.024 mm | M= 1.301 | incident=0.3692°
+[[ -49.443157   -843.50854      -5.9996376 ]
+ [   2.9545794   254.2539       -0.9842205 ]
+ [   0.14939588   -0.00781219    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1       y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  367.283733  2.07181  193.0  278.401103  50.171353  415.0  168.480459  92.124621  149.0  167.251834  80.203066  113.0  302.722221  97.924487  613.0
+FAILURE!!!! Some beads might have been misidentified
+/vol/home/s3777103/Documents/workspace/Thesis/AutoCalibration/gauss_newton_real.py:300: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+  df_r0 = pd.concat([df_r0, df_iter], ignore_index=True)
+
+iter 00 cost=5252939.937788 -> 836665.748919 |dtheta|=4.005384e+01  lambda=1.000e-02
+
+============================================================
+Iteration 1
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.385, dOy=   3.993, dOz=  37.840  (mm)
+  Object offset: offset_x=   9.574, offset_z=   7.888  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    1.576 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.155, y=  23.993, z= 837.839
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.155, y=  23.993, z= 837.839
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 844.978 mm | SDD=1099.024 mm | M= 1.301 | incident=0.3692°
+[[ -49.443157   -843.50854      -5.9996376 ]
+ [   2.9545794   254.2539       -0.9842205 ]
+ [   0.14939588   -0.00781219    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1       y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  367.283733  2.07181  193.0  278.401103  50.171353  415.0  168.480459  92.124621  149.0  167.251834  80.203066  113.0  302.722221  97.924487  613.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4         x5         y5  area5
+range  367.306841  2.094638  191.0  278.450542  50.223735  416.0  168.490166  92.168813  150.0  167.295161  80.158684  112.0  303.02115  97.948323  608.0
+FAILURE!!!! Some beads might have been misidentified
+               x1       y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4         x5         y5  area5
+range  367.244424  2.07049  190.0  278.406482  50.285366  418.0  168.539929  92.157931  147.0  167.227187  80.228768  110.0  302.75426  98.022684  608.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  367.272095  6.849449  309.0  278.412962  50.520109  411.0  168.482988  92.083061  152.0  167.257137  80.062008  108.0  302.750218  97.823439  607.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  367.220689  2.062339  191.0  278.401103  50.428374  413.0  168.480459  92.095751  149.0  167.182741  80.203066  113.0  302.661667  97.921867  613.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  367.334153  2.075831  192.0  278.412216  50.153711  415.0  168.525806  92.124621  150.0  167.291261  80.223021  111.0  302.721263  97.950862  613.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  367.283733  2.075689  192.0  278.411491  50.262512  415.0  168.510649  92.114961  150.0  167.204497  80.203423  110.0  302.724957  97.924487  613.0
+FAILURE!!!! Some beads might have been misidentified
+               x1       y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  367.283733  2.07181  193.0  278.401103  50.330278  413.0  168.480459  92.105411  149.0  167.251834  80.203066  113.0  302.714103  97.924487  613.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  367.334153  2.083144  193.0  278.607101  50.411992  411.0  168.644203  92.174409  148.0  167.339077  80.197351  110.0  302.770822  97.940572  612.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1         x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  367.195037  2.074215  193.0  278.26789  50.169355  415.0  168.295024  92.106755  146.0  167.142758  80.182803  115.0  302.724574  97.989818  611.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  367.375819  2.064339  192.0  278.439346  50.349331  412.0  168.480459  92.109356  149.0  167.385063  80.169109  116.0  302.913389  98.098436  612.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1          x2        y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  367.172704  2.067998  192.0  278.333764  50.47402  412.0  168.510649  92.126414  148.0  167.105621  80.214627  112.0  302.758647  97.904679  609.0
+FAILURE!!!! Some beads might have been misidentified
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 832.609 mm | SDD=1099.024 mm | M= 1.320 | incident=0.3692°
+[[ -45.38245    -831.34845      -6.204117  ]
+ [  -2.1398926   266.8127       -1.1886997 ]
+ [   0.14945583   -0.00656623    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 01 cost=836665.748919 -> 431834.712894 |dtheta|=1.320509e+01  lambda=3.333e-03
+
+============================================================
+Iteration 2
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=   0.002, dOy=   3.788, dOz=  25.035  (mm)
+  Object offset: offset_x=  12.666, offset_z=   8.541  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    2.054 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.542, y=  23.788, z= 825.035
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.542, y=  23.788, z= 825.035
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 832.609 mm | SDD=1099.024 mm | M= 1.320 | incident=0.3692°
+[[ -45.38245    -831.34845      -6.204117  ]
+ [  -2.1398926   266.8127       -1.1886997 ]
+ [   0.14945583   -0.00656623    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 833.543 mm | SDD=1099.024 mm | M= 1.318 | incident=0.3692°
+[[ -23.238152   -833.1997       -5.698927  ]
+ [ -10.860817    265.74283      -0.6835098 ]
+ [   0.1495813    -0.00236531    0.        ]
+ [   0.            0.            0.1496    ]]
+              x1       y1  area1          x2         y2  area2          x3         y3  area3          x4        y4  area4          x5          y5  area5
+range  469.95288  8.64524  251.0  383.144299  50.485874  437.0  255.762599  93.505689  174.0  265.417953  82.44432  128.0  386.601181  100.077291  548.0
+FAILURE!!!! Some beads might have been misidentified
+
+iter 02 cost=431834.712894 -> 160074.548494 |dtheta|=3.962544e+00  lambda=1.111e-03
+
+============================================================
+Iteration 3
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.254, dOy=   4.293, dOz=  23.238  (mm)
+  Object offset: offset_x=  13.913, offset_z=  11.370  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    3.664 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.287, y=  24.293, z= 823.237
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.287, y=  24.293, z= 823.237
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 833.543 mm | SDD=1099.024 mm | M= 1.318 | incident=0.3692°
+[[ -23.238152   -833.1997       -5.698927  ]
+ [ -10.860817    265.74283      -0.6835098 ]
+ [   0.1495813    -0.00236531    0.        ]
+ [   0.            0.            0.1496    ]]
+              x1       y1  area1          x2         y2  area2          x3         y3  area3          x4        y4  area4          x5          y5  area5
+range  469.95288  8.64524  251.0  383.144299  50.485874  437.0  255.762599  93.505689  174.0  265.417953  82.44432  128.0  386.601181  100.077291  548.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5          y5  area5
+range  469.833791  8.811247  247.0  383.045065  50.577178  431.0  255.751371  93.522037  170.0  265.416923  82.368277  129.0  386.580785  100.009473  551.0
+FAILURE!!!! Some beads might have been misidentified
+               x1       y1  area1          x2         y2  area2          x3        y3  area3          x4         y4  area4          x5          y5  area5
+range  469.871649  8.93335  262.0  383.150015  50.435384  445.0  255.877814  93.47816  169.0  265.347043  82.412527  125.0  386.657845  100.126594  552.0
+FAILURE!!!! Some beads might have been misidentified
+               x1       y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  469.877976  8.87643  257.0  383.133142  50.821517  427.0  255.750272  93.493513  165.0  265.489662  82.374397  123.0  386.613637  98.840587  550.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4        y4  area4          x5         y5  area5
+range  469.862755  8.578995  250.0  383.131794  50.576599  434.0  255.817006  93.642378  165.0  265.417741  82.53041  125.0  386.562039  99.961025  549.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1         x2         y2  area2          x3         y3  area3          x4        y4  area4          x5         y5  area5
+range  469.844632  8.713336  253.0  383.09647  50.639119  433.0  255.762599  93.502742  173.0  265.396911  82.45657  128.0  386.472633  100.05331  552.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5          y5  area5
+range  469.962248  8.796894  250.0  383.145086  50.484816  439.0  255.798534  93.570265  174.0  265.475212  82.421335  127.0  386.643632  100.103147  548.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4        y4  area4          x5         y5  area5
+range  469.905464  8.673382  252.0  383.144299  50.477093  437.0  255.798534  93.529948  174.0  265.417953  82.44432  128.0  386.559883  100.09773  548.0
+FAILURE!!!! Some beads might have been misidentified
+              x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5          y5  area5
+range  469.95288  8.635124  250.0  383.120182  50.485874  437.0  255.762599  93.505689  174.0  265.444134  82.423133  129.0  386.601181  100.077291  547.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1          x2         y2  area2          x3         y3  area3         x4         y4  area4          x5          y5  area5
+range  470.005686  8.840706  252.0  383.215983  50.583415  442.0  256.001832  93.523637  171.0  265.56278  82.419698  128.0  386.685785  100.090752  552.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1          x2         y2  area2         x3         y3  area3          x4         y4  area4          x5          y5  area5
+range  469.779495  8.817603  248.0  382.951094  50.629613  431.0  255.64155  93.497749  168.0  265.354686  82.389665  128.0  386.500312  100.031777  546.0
+FAILURE!!!! Some beads might have been misidentified
+               x1       y1  area1          x2         y2  area2          x3         y3  area3         x4         y4  area4          x5          y5  area5
+range  470.005686  8.82554  248.0  383.178716  50.622831  432.0  255.798534  93.532099  174.0  265.56278  82.383198  128.0  386.782988  100.085968  551.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5          y5  area5
+range  469.763366  8.470835  244.0  383.026813  50.475635  437.0  255.762599  93.547308  173.0  265.354686  82.422817  127.0  386.423069  100.027022  551.0
+FAILURE!!!! Some beads might have been misidentified
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 826.959 mm | SDD=1099.024 mm | M= 1.329 | incident=0.3692°
+[[ -15.591409   -826.79315      -5.619358  ]
+ [ -13.460568    272.217        -0.60394096]
+ [   0.14959686   -0.0009706     0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 03 cost=160074.548494 -> 81665.240731 |dtheta|=7.188727e+00  lambda=3.704e-04
+
+============================================================
+Iteration 4
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.277, dOy=   4.373, dOz=  16.094  (mm)
+  Object offset: offset_x=  14.056, offset_z=  11.942  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    4.198 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.264, y=  24.373, z= 816.093
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.264, y=  24.373, z= 816.093
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 826.959 mm | SDD=1099.024 mm | M= 1.329 | incident=0.3692°
+[[ -15.591409   -826.79315      -5.619358  ]
+ [ -13.460568    272.217        -0.60394096]
+ [   0.14959686   -0.0009706     0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1          x2         y2  area2         x3        y3  area3          x4         y4  area4          x5         y5  area5
+range  482.942468  4.044664  209.0  394.733797  51.034587  459.0  263.72632  94.29563  170.0  276.659504  83.387408  131.0  398.027731  99.704295  566.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1          x2         y2  area2          x3         y3  area3         x4         y4  area4          x5         y5  area5
+range  482.945979  3.936024  209.0  394.793476  51.126936  457.0  263.671004  94.293147  169.0  276.65009  83.384332  125.0  398.005781  99.896833  563.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  483.019377  4.023249  207.0  394.891373  51.061999  457.0  263.826398  94.317199  167.0  276.712773  83.364701  127.0  398.969191  99.696234  564.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  482.842211  3.968014  212.0  394.660584  51.069327  458.0  263.679577  94.289767  169.0  276.497166  83.364701  128.0  397.962073  99.763685  565.0
+FAILURE!!!! Some beads might have been misidentified
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 831.258 mm | SDD=1099.024 mm | M= 1.322 | incident=0.3692°
+[[  -1.4876447  -831.2366       -5.7239647 ]
+ [ -18.274746    267.64743      -0.7085476 ]
+ [   0.14959139    0.00160461    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 04 cost=81665.240731 -> 72818.445256 |dtheta|=4.185476e+00  lambda=1.235e-04
+
+============================================================
+Iteration 5
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.366, dOy=   4.268, dOz=  20.143  (mm)
+  Object offset: offset_x=  14.301, offset_z=  12.209  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    5.184 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.175, y=  24.268, z= 820.142
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.175, y=  24.268, z= 820.142
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 831.258 mm | SDD=1099.024 mm | M= 1.322 | incident=0.3692°
+[[  -1.4876447  -831.2366       -5.7239647 ]
+ [ -18.274746    267.64743      -0.7085476 ]
+ [   0.14959139    0.00160461    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.661 mm | SDD=1099.024 mm | M= 1.325 | incident=0.3692°
+[[  -4.298054   -829.6307       -5.6988487 ]
+ [ -17.529034    269.3019       -0.6834316 ]
+ [   0.1495958     0.00112052    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 05 cost=72818.445256 -> 49114.561579 |dtheta|=2.476151e+00  lambda=4.115e-05
+
+============================================================
+Iteration 6
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.293, dOy=   4.294, dOz=  17.792  (mm)
+  Object offset: offset_x=  14.277, offset_z=  12.962  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    4.999 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.247, y=  24.294, z= 817.792
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.247, y=  24.294, z= 817.792
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 829.661 mm | SDD=1099.024 mm | M= 1.325 | incident=0.3692°
+[[  -4.298054   -829.6307       -5.6988487 ]
+ [ -17.529034    269.3019       -0.6834316 ]
+ [   0.1495958     0.00112052    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 830.108 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  -2.1297314  -830.086        -5.7116184 ]
+ [ -18.356087    268.80643      -0.6962013 ]
+ [   0.14959219    0.00152827    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 06 cost=49114.561579 -> 42658.634914 |dtheta|=5.296137e-01  lambda=1.372e-05
+
+============================================================
+Iteration 7
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.261, dOy=   4.281, dOz=  17.740  (mm)
+  Object offset: offset_x=  14.302, offset_z=  13.463  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    5.155 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.280, y=  24.281, z= 817.740
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.280, y=  24.281, z= 817.740
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 830.108 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  -2.1297314  -830.086        -5.7116184 ]
+ [ -18.356087    268.80643      -0.6962013 ]
+ [   0.14959219    0.00152827    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.901 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[   2.266636   -829.8782       -5.6740875 ]
+ [ -19.640196    268.9157       -0.6586704 ]
+ [   0.1495823     0.00230157    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 07 cost=42658.634914 -> 41638.853048 |dtheta|=4.235151e-01  lambda=4.572e-06
+
+============================================================
+Iteration 8
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.304, dOy=   4.318, dOz=  17.460  (mm)
+  Object offset: offset_x=  14.231, offset_z=  13.532  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    5.451 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.237, y=  24.318, z= 817.459
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.237, y=  24.318, z= 817.459
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 829.901 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[   2.266636   -829.8782       -5.6740875 ]
+ [ -19.640196    268.9157       -0.6586704 ]
+ [   0.1495823     0.00230157    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 830.072 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[   7.101233   -830.0222       -5.703247  ]
+ [ -21.292545    268.62317      -0.68783   ]
+ [   0.1495661     0.00318467    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 08 cost=41638.853048 -> 40778.155112 |dtheta|=3.906989e-01  lambda=1.524e-06
+
+============================================================
+Iteration 9
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.279, dOy=   4.289, dOz=  17.444  (mm)
+  Object offset: offset_x=  14.260, offset_z=  13.721  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    5.790 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 830.072 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[   7.101233   -830.0222       -5.703247  ]
+ [ -21.292545    268.62317      -0.68783   ]
+ [   0.1495661     0.00318467    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.075 mm | SDD=1099.024 mm | M= 1.326 | incident=0.3692°
+[[  14.854913   -828.9227       -5.670206  ]
+ [ -23.787247    269.40994      -0.654789  ]
+ [   0.14952987    0.00457988    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1          x2         y2  area2        x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  506.169655  9.911483  269.0  416.079417  50.457431  452.0  279.4888  94.239009  173.0  300.110592  83.471898  134.0  422.077581  99.088625  565.0
+FAILURE!!!! Some beads might have been misidentified
+
+iter 09 cost=40778.155112 -> 77234.889431 |dtheta|=1.054104e+00  lambda=1.000e-06
+
+============================================================
+Iteration 10
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.279, dOy=   4.289, dOz=  17.444  (mm)
+  Object offset: offset_x=  14.260, offset_z=  13.721  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    5.790 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 830.072 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[   7.101233   -830.0222       -5.703247  ]
+ [ -21.292545    268.62317      -0.68783   ]
+ [   0.1495661     0.00318467    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.075 mm | SDD=1099.024 mm | M= 1.326 | incident=0.3692°
+[[  14.854913   -828.9227       -5.670206  ]
+ [ -23.787247    269.40994      -0.654789  ]
+ [   0.14952987    0.00457988    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1          x2         y2  area2        x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  506.169655  9.911483  269.0  416.079417  50.457431  452.0  279.4888  94.239009  173.0  300.110592  83.471898  134.0  422.077581  99.088625  565.0
+FAILURE!!!! Some beads might have been misidentified
+
+iter 10 cost=40778.155112 -> 77234.889431 |dtheta|=1.054104e+00  lambda=5.000e-06
+
+============================================================
+Iteration 11
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.279, dOy=   4.289, dOz=  17.444  (mm)
+  Object offset: offset_x=  14.260, offset_z=  13.721  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    5.790 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 830.072 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[   7.101233   -830.0222       -5.703247  ]
+ [ -21.292545    268.62317      -0.68783   ]
+ [   0.1495661     0.00318467    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.075 mm | SDD=1099.024 mm | M= 1.326 | incident=0.3692°
+[[  14.854913   -828.9227       -5.670206  ]
+ [ -23.787247    269.40994      -0.654789  ]
+ [   0.14952987    0.00457988    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1          x2         y2  area2        x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  506.169655  9.911483  269.0  416.079417  50.457431  452.0  279.4888  94.239009  173.0  300.110592  83.471898  134.0  422.077581  99.088625  565.0
+FAILURE!!!! Some beads might have been misidentified
+
+iter 11 cost=40778.155112 -> 77234.889431 |dtheta|=1.054104e+00  lambda=2.500e-05
+
+============================================================
+Iteration 12
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.279, dOy=   4.289, dOz=  17.444  (mm)
+  Object offset: offset_x=  14.260, offset_z=  13.721  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    5.790 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 830.072 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[   7.101233   -830.0222       -5.703247  ]
+ [ -21.292545    268.62317      -0.68783   ]
+ [   0.1495661     0.00318467    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.075 mm | SDD=1099.024 mm | M= 1.326 | incident=0.3692°
+[[  14.854912   -828.9227       -5.670206  ]
+ [ -23.787245    269.40994      -0.654789  ]
+ [   0.14952987    0.00457988    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1          x2         y2  area2        x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  506.169655  9.911483  269.0  416.079417  50.457431  452.0  279.4888  94.239009  173.0  300.110592  83.471898  134.0  422.077581  99.088625  565.0
+FAILURE!!!! Some beads might have been misidentified
+
+iter 12 cost=40778.155112 -> 77234.889431 |dtheta|=1.054104e+00  lambda=1.250e-04
+
+============================================================
+Iteration 13
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.279, dOy=   4.289, dOz=  17.444  (mm)
+  Object offset: offset_x=  14.260, offset_z=  13.721  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    5.790 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 830.072 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[   7.101233   -830.0222       -5.703247  ]
+ [ -21.292545    268.62317      -0.68783   ]
+ [   0.1495661     0.00318467    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.075 mm | SDD=1099.024 mm | M= 1.326 | incident=0.3692°
+[[  14.85491    -828.9227       -5.670206  ]
+ [ -23.787245    269.40994      -0.654789  ]
+ [   0.14952987    0.00457988    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1          x2         y2  area2        x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  506.169655  9.911483  269.0  416.079417  50.457431  452.0  279.4888  94.239009  173.0  300.110592  83.471898  134.0  422.077581  99.088625  565.0
+FAILURE!!!! Some beads might have been misidentified
+
+iter 13 cost=40778.155112 -> 77234.889431 |dtheta|=1.054103e+00  lambda=6.250e-04
+
+============================================================
+Iteration 14
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.279, dOy=   4.289, dOz=  17.444  (mm)
+  Object offset: offset_x=  14.260, offset_z=  13.721  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    5.790 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 830.072 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[   7.101233   -830.0222       -5.703247  ]
+ [ -21.292545    268.62317      -0.68783   ]
+ [   0.1495661     0.00318467    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.075 mm | SDD=1099.024 mm | M= 1.326 | incident=0.3692°
+[[  14.854901   -828.9227       -5.670208  ]
+ [ -23.787243    269.40994      -0.6547909 ]
+ [   0.14952987    0.00457988    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1          x2         y2  area2        x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  506.169655  9.911483  269.0  416.079417  50.457431  452.0  279.4888  94.239009  173.0  300.110592  83.478136  135.0  422.077581  99.088625  565.0
+FAILURE!!!! Some beads might have been misidentified
+
+iter 14 cost=40778.155112 -> 77235.673585 |dtheta|=1.054097e+00  lambda=3.125e-03
+
+============================================================
+Iteration 15
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.279, dOy=   4.289, dOz=  17.444  (mm)
+  Object offset: offset_x=  14.260, offset_z=  13.721  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    5.790 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 830.072 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[   7.101233   -830.0222       -5.703247  ]
+ [ -21.292545    268.62317      -0.68783   ]
+ [   0.1495661     0.00318467    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.075 mm | SDD=1099.024 mm | M= 1.326 | incident=0.3692°
+[[  14.8548565  -828.9227       -5.670208  ]
+ [ -23.787228    269.40994      -0.6547909 ]
+ [   0.14952987    0.00457987    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1          x2         y2  area2        x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  506.169655  9.911483  269.0  416.079417  50.457431  452.0  279.4888  94.239009  173.0  300.110592  83.478136  135.0  422.077581  99.088625  565.0
+FAILURE!!!! Some beads might have been misidentified
+
+iter 15 cost=40778.155112 -> 77237.162744 |dtheta|=1.054067e+00  lambda=1.562e-02
+
+============================================================
+Iteration 16
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.279, dOy=   4.289, dOz=  17.444  (mm)
+  Object offset: offset_x=  14.260, offset_z=  13.721  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    5.790 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 830.072 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[   7.101233   -830.0222       -5.703247  ]
+ [ -21.292545    268.62317      -0.68783   ]
+ [   0.1495661     0.00318467    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.075 mm | SDD=1099.024 mm | M= 1.326 | incident=0.3692°
+[[  14.854645   -828.9229       -5.670208  ]
+ [ -23.787144    269.4098       -0.6547909 ]
+ [   0.14952987    0.00457983    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1          x2         y2  area2        x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  506.169655  9.911483  269.0  416.079417  50.457431  452.0  279.4888  94.239009  173.0  300.110592  83.471898  134.0  422.077581  99.088625  565.0
+FAILURE!!!! Some beads might have been misidentified
+
+iter 16 cost=40778.155112 -> 77235.505429 |dtheta|=1.053918e+00  lambda=7.812e-02
+
+============================================================
+Iteration 17
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.279, dOy=   4.289, dOz=  17.444  (mm)
+  Object offset: offset_x=  14.260, offset_z=  13.721  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    5.790 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 830.072 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[   7.101233   -830.0222       -5.703247  ]
+ [ -21.292545    268.62317      -0.68783   ]
+ [   0.1495661     0.00318467    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.076 mm | SDD=1099.024 mm | M= 1.326 | incident=0.3692°
+[[  14.8535795  -828.92377      -5.6702137 ]
+ [ -23.78673     269.40897      -0.6547966 ]
+ [   0.14952989    0.00457963    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  506.169655  9.911483  269.0  416.067792  50.457431  452.0  279.478874  94.239009  173.0  300.110592  83.471898  134.0  422.077581  99.088625  565.0
+FAILURE!!!! Some beads might have been misidentified
+
+iter 17 cost=40778.155112 -> 77235.330165 |dtheta|=1.053175e+00  lambda=3.906e-01
+
+============================================================
+Iteration 18
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.279, dOy=   4.289, dOz=  17.444  (mm)
+  Object offset: offset_x=  14.260, offset_z=  13.721  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    5.790 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 830.072 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[   7.101233   -830.0222       -5.703247  ]
+ [ -21.292545    268.62317      -0.68783   ]
+ [   0.1495661     0.00318467    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.080 mm | SDD=1099.024 mm | M= 1.326 | incident=0.3692°
+[[  14.848258   -828.9281       -5.670244  ]
+ [ -23.784664    269.4049       -0.6548271 ]
+ [   0.14952992    0.00457862    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  506.169655  9.911483  269.0  416.067792  50.457431  452.0  279.478874  94.239009  172.0  300.110592  83.471898  135.0  422.077581  99.088625  565.0
+FAILURE!!!! Some beads might have been misidentified
+
+iter 18 cost=40778.155112 -> 77232.269423 |dtheta|=1.049481e+00  lambda=1.953e+00
+
+============================================================
+Iteration 19
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.279, dOy=   4.289, dOz=  17.444  (mm)
+  Object offset: offset_x=  14.260, offset_z=  13.721  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    5.790 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 830.072 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[   7.101233   -830.0222       -5.703247  ]
+ [ -21.292545    268.62317      -0.68783   ]
+ [   0.1495661     0.00318467    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.101 mm | SDD=1099.024 mm | M= 1.326 | incident=0.3692°
+[[  14.821804   -828.949        -5.6703873 ]
+ [ -23.774437    269.38528      -0.65497017]
+ [   0.14953007    0.00457363    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  506.169655  9.931415  268.0  416.067792  50.459711  456.0  279.472001  94.228467  171.0  300.110592  83.470231  135.0  422.077581  99.137619  565.0
+FAILURE!!!! Some beads might have been misidentified
+
+iter 19 cost=40778.155112 -> 77237.166993 |dtheta|=1.031525e+00  lambda=9.766e+00
+
+============================================================
+Iteration 20
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.279, dOy=   4.289, dOz=  17.444  (mm)
+  Object offset: offset_x=  14.260, offset_z=  13.721  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    5.790 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 830.072 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[   7.101233   -830.0222       -5.703247  ]
+ [ -21.292545    268.62317      -0.68783   ]
+ [   0.1495661     0.00318467    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.191 mm | SDD=1099.024 mm | M= 1.325 | incident=0.3692°
+[[  14.693124   -829.04114      -5.6710243 ]
+ [ -23.725449    269.29935      -0.6556072 ]
+ [   0.14953081    0.00454944    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  506.138252  4.326702  209.0  415.976155  50.469496  454.0  279.348698  94.184831  172.0  300.076402  83.478384  133.0  421.808911  99.119158  565.0
+FAILURE!!!! Some beads might have been misidentified
+
+iter 20 cost=40778.155112 -> 76939.629945 |dtheta|=9.529336e-01  lambda=4.883e+01
+
+============================================================
+Iteration 21
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.279, dOy=   4.289, dOz=  17.444  (mm)
+  Object offset: offset_x=  14.260, offset_z=  13.721  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    5.790 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 830.072 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[   7.101233   -830.0222       -5.703247  ]
+ [ -21.292545    268.62317      -0.68783   ]
+ [   0.1495661     0.00318467    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.461 mm | SDD=1099.024 mm | M= 1.325 | incident=0.3692°
+[[  14.121086   -829.32184      -5.6729927 ]
+ [ -23.518051    269.04565      -0.6575756 ]
+ [   0.149534      0.00444332    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1          x2        y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  506.030871  4.359933  206.0  415.675003  50.37141  455.0  279.064205  94.186859  175.0  300.021049  83.465209  133.0  421.894738  99.103133  563.0
+FAILURE!!!! Some beads might have been misidentified
+
+iter 21 cost=40778.155112 -> 77026.381720 |dtheta|=7.210343e-01  lambda=2.441e+02
+
+============================================================
+Iteration 22
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.279, dOy=   4.289, dOz=  17.444  (mm)
+  Object offset: offset_x=  14.260, offset_z=  13.721  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    5.790 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 830.072 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[   7.101233   -830.0222       -5.703247  ]
+ [ -21.292545    268.62317      -0.68783   ]
+ [   0.1495661     0.00318467    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.802 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  12.241986   -829.69196      -5.6759396 ]
+ [ -22.881361    268.75888      -0.66052246]
+ [   0.14954378    0.00410082    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1         x2         y2  area2          x3         y3  area3          x4        y4  area4          x5         y5  area5
+range  505.932122  4.649758  204.0  415.34702  50.439117  459.0  278.510406  94.172225  176.0  300.043205  83.43173  126.0  422.422438  99.030827  560.0
+FAILURE!!!! Some beads might have been misidentified
+
+iter 22 cost=40778.155112 -> 77180.270819 |dtheta|=4.139417e-01  lambda=1.221e+03
+
+============================================================
+Iteration 23
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.279, dOy=   4.289, dOz=  17.444  (mm)
+  Object offset: offset_x=  14.260, offset_z=  13.721  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    5.790 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.262, y=  24.289, z= 817.444
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 830.072 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[   7.101233   -830.0222       -5.703247  ]
+ [ -21.292545    268.62317      -0.68783   ]
+ [   0.1495661     0.00318467    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.959 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[   9.3382635  -829.8872       -5.679634  ]
+ [ -21.933275    268.68         -0.664217  ]
+ [   0.14955725    0.00357644    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 23 cost=40778.155112 -> 40777.299528 |dtheta|=1.825565e-01  lambda=6.104e+03
+
+============================================================
+Iteration 24
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.283, dOy=   4.313, dOz=  17.398  (mm)
+  Object offset: offset_x=  14.203, offset_z=  13.651  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    5.940 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.258, y=  24.313, z= 817.397
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.258, y=  24.313, z= 817.397
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 829.959 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[   9.3382635  -829.8872       -5.679634  ]
+ [ -21.933275    268.68         -0.664217  ]
+ [   0.14955725    0.00357644    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.968 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  10.353948   -829.8842       -5.6816216 ]
+ [ -22.24459     268.64444      -0.66620445]
+ [   0.1495528     0.00375709    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 24 cost=40777.299528 -> 40447.852957 |dtheta|=2.045629e-01  lambda=2.035e+03
+
+============================================================
+Iteration 25
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.295, dOy=   4.311, dOz=  17.267  (mm)
+  Object offset: offset_x=  14.192, offset_z=  13.791  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    6.009 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.245, y=  24.311, z= 817.266
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.245, y=  24.311, z= 817.266
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 829.968 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  10.353948   -829.8842       -5.6816216 ]
+ [ -22.24459     268.64444      -0.66620445]
+ [   0.1495528     0.00375709    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.791 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  16.909113   -829.59906      -5.6706715 ]
+ [ -24.444662    268.63486      -0.65525436]
+ [   0.14951812    0.00494905    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1        x2         y2  area2         x3         y3  area3          x4        y4  area4          x5         y5  area5
+range  507.669314  9.174584  244.0  417.3301  50.642611  447.0  280.72204  94.265157  179.0  301.560774  83.50736  134.0  423.634453  99.026415  563.0
+FAILURE!!!! Some beads might have been misidentified
+
+iter 25 cost=40447.852957 -> 77002.326784 |dtheta|=4.801438e-01  lambda=6.782e+02
+
+============================================================
+Iteration 26
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.295, dOy=   4.311, dOz=  17.267  (mm)
+  Object offset: offset_x=  14.192, offset_z=  13.791  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    6.009 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.245, y=  24.311, z= 817.266
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.245, y=  24.311, z= 817.266
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 829.968 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  10.353948   -829.8842       -5.6816216 ]
+ [ -22.24459     268.64444      -0.66620445]
+ [   0.1495528     0.00375709    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.893 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  13.924819   -829.75714      -5.6721306 ]
+ [ -23.464922    268.61887      -0.6567135 ]
+ [   0.149535      0.00440937    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5          y5  area5
+range  507.763904  4.386691  217.0  417.152862  50.664621  458.0  280.098067  94.143374  175.0  301.825595  83.477762  133.0  424.208673  100.019766  561.0
+FAILURE!!!! Some beads might have been misidentified
+
+iter 26 cost=40447.852957 -> 76993.337920 |dtheta|=2.593375e-01  lambda=3.391e+03
+
+============================================================
+Iteration 27
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.295, dOy=   4.311, dOz=  17.267  (mm)
+  Object offset: offset_x=  14.192, offset_z=  13.791  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    6.009 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.245, y=  24.311, z= 817.266
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.245, y=  24.311, z= 817.266
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 829.968 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  10.353948   -829.8842       -5.6816216 ]
+ [ -22.24459     268.64444      -0.66620445]
+ [   0.1495528     0.00375709    0.        ]
+ [   0.            0.            0.1496    ]]
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.928 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  11.422434   -829.8295       -5.6748657 ]
+ [ -22.63432     268.65488      -0.6594486 ]
+ [   0.1495477     0.00395562    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 27 cost=40447.852957 -> 40387.206815 |dtheta|=8.900333e-02  lambda=1.695e+04
+
+============================================================
+Iteration 28
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.293, dOy=   4.318, dOz=  17.259  (mm)
+  Object offset: offset_x=  14.225, offset_z=  13.760  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    6.085 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.247, y=  24.318, z= 817.259
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.247, y=  24.318, z= 817.259
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 829.928 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  11.422434   -829.8295       -5.6748657 ]
+ [ -22.63432     268.65488      -0.6594486 ]
+ [   0.1495477     0.00395562    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1       y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  507.823724  4.46874  215.0  416.935042  50.565798  464.0  279.272788  94.100739  175.0  301.864816  83.437885  129.0  424.459266  99.978974  561.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5          y5  area5
+range  507.783516  4.385973  214.0  416.914074  50.604575  459.0  279.309902  94.185933  171.0  301.931277  83.543403  130.0  424.622938  100.041484  556.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  507.859104  4.882645  216.0  416.856023  50.654853  462.0  279.259055  94.118813  174.0  301.911608  83.393351  126.0  424.586894  99.974358  560.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5          y5  area5
+range  507.864382  4.852945  215.0  416.945337  50.654853  462.0  279.314782  94.128559  174.0  301.933093  83.428282  126.0  424.601317  100.042725  559.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5          y5  area5
+range  507.814277  4.829805  215.0  416.842036  50.613651  461.0  279.088235  94.170075  180.0  301.831983  83.466646  131.0  424.540731  100.021026  562.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5          y5  area5
+range  507.936128  4.828179  214.0  417.023762  50.685445  460.0  279.314782  94.101183  175.0  302.053085  83.441005  131.0  424.798515  100.014729  557.0
+FAILURE!!!! Some beads might have been misidentified
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.834 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  13.284439   -829.7077       -5.68309   ]
+ [ -23.293661    268.69562      -0.6676731 ]
+ [   0.14953822    0.00429887    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 28 cost=40387.206815 -> 40330.480366 |dtheta|=1.684575e-01  lambda=5.651e+03
+
+============================================================
+Iteration 29
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.284, dOy=   4.309, dOz=  17.264  (mm)
+  Object offset: offset_x=  14.263, offset_z=  13.663  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    6.216 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.256, y=  24.309, z= 817.264
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.256, y=  24.309, z= 817.264
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 829.834 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  13.284439   -829.7077       -5.68309   ]
+ [ -23.293661    268.69562      -0.6676731 ]
+ [   0.14953822    0.00429887    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1          x2        y2  area2         x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  506.755761  4.434275  215.0  416.586259  50.53268  457.0  279.89911  94.184163  170.0  300.666208  83.377507  134.0  422.868292  99.140807  557.0
+FAILURE!!!! Some beads might have been misidentified
+               x1         y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  506.737478  10.141974  271.0  416.561189  50.604856  447.0  279.919223  94.247766  171.0  300.681798  83.476277  133.0  422.525683  99.115714  559.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  506.849957  4.399184  217.0  416.675248  50.589443  452.0  279.978813  94.165915  175.0  300.758074  83.365417  133.0  422.651405  99.076365  557.0
+FAILURE!!!! Some beads might have been misidentified
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.819 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  14.273447   -829.6769       -5.628191  ]
+ [ -23.652506    268.68076      -0.6127739 ]
+ [   0.14953284    0.00448237    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5          y5  area5
+range  507.324593  4.278917  212.0  417.198683  50.356706  453.0  280.449453  94.154602  179.0  301.294653  83.466389  126.0  423.508507  100.179085  556.0
+FAILURE!!!! Some beads might have been misidentified
+
+iter 29 cost=40330.480366 -> 77225.884646 |dtheta|=1.153331e-01  lambda=1.884e+03
+
+============================================================
+Iteration 30
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.284, dOy=   4.309, dOz=  17.264  (mm)
+  Object offset: offset_x=  14.263, offset_z=  13.663  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    6.216 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.256, y=  24.309, z= 817.264
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.256, y=  24.309, z= 817.264
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 829.834 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  13.284439   -829.7077       -5.68309   ]
+ [ -23.293661    268.69562      -0.6676731 ]
+ [   0.14953822    0.00429887    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1          x2        y2  area2         x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  506.755761  4.434275  215.0  416.586259  50.53268  457.0  279.89911  94.184163  170.0  300.666208  83.377507  134.0  422.868292  99.140807  557.0
+FAILURE!!!! Some beads might have been misidentified
+               x1         y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  506.737478  10.141974  271.0  416.561189  50.604856  447.0  279.919223  94.247766  171.0  300.681798  83.476277  133.0  422.525683  99.115714  559.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  506.849957  4.399184  217.0  416.675248  50.589443  452.0  279.978813  94.165915  175.0  300.758074  83.365417  133.0  422.651405  99.076365  557.0
+FAILURE!!!! Some beads might have been misidentified
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.857 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  13.611405   -829.72595      -5.6336727 ]
+ [ -23.432192    268.6618       -0.6182556 ]
+ [   0.14953639    0.00436225    0.        ]
+ [   0.            0.            0.1496    ]]
+              x1         y1  area1         x2         y2  area2          x3         y3  area3          x4         y4  area4          x5          y5  area5
+range  507.26979  10.221847  276.0  417.04752  50.379198  457.0  280.191111  94.215232  179.0  301.292338  83.472555  129.0  423.468665  100.271262  557.0
+FAILURE!!!! Some beads might have been misidentified
+
+iter 30 cost=40330.480366 -> 77446.095208 |dtheta|=6.943363e-02  lambda=9.419e+03
+
+============================================================
+Iteration 31
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.284, dOy=   4.309, dOz=  17.264  (mm)
+  Object offset: offset_x=  14.263, offset_z=  13.663  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    6.216 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.256, y=  24.309, z= 817.264
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.256, y=  24.309, z= 817.264
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 829.834 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  13.284439   -829.7077       -5.68309   ]
+ [ -23.293661    268.69562      -0.6676731 ]
+ [   0.14953822    0.00429887    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1          x2        y2  area2         x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  506.755761  4.434275  215.0  416.586259  50.53268  457.0  279.89911  94.184163  170.0  300.666208  83.377507  134.0  422.868292  99.140807  557.0
+FAILURE!!!! Some beads might have been misidentified
+               x1         y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  506.737478  10.141974  271.0  416.561189  50.604856  447.0  279.919223  94.247766  171.0  300.681798  83.476277  133.0  422.525683  99.115714  559.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  506.849957  4.399184  217.0  416.675248  50.589443  452.0  279.978813  94.165915  175.0  300.758074  83.365417  133.0  422.651405  99.076365  557.0
+FAILURE!!!! Some beads might have been misidentified
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.851 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  13.347644   -829.72473      -5.6497    ]
+ [ -23.335163    268.6751       -0.63428307]
+ [   0.14953782    0.00431313    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1         y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  507.102744  10.204524  272.0  416.816377  50.495935  455.0  280.025794  94.150069  174.0  301.004099  83.452672  126.0  423.252622  99.282398  555.0
+FAILURE!!!! Some beads might have been misidentified
+
+iter 31 cost=40330.480366 -> 77308.534735 |dtheta|=4.168140e-02  lambda=4.710e+04
+
+============================================================
+Iteration 32
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.284, dOy=   4.309, dOz=  17.264  (mm)
+  Object offset: offset_x=  14.263, offset_z=  13.663  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    6.216 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.256, y=  24.309, z= 817.264
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.256, y=  24.309, z= 817.264
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 829.834 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  13.284439   -829.7077       -5.68309   ]
+ [ -23.293661    268.69562      -0.6676731 ]
+ [   0.14953822    0.00429887    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1          x2        y2  area2         x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  506.755761  4.434275  215.0  416.586259  50.53268  457.0  279.89911  94.184163  170.0  300.666208  83.377507  134.0  422.868292  99.140807  557.0
+FAILURE!!!! Some beads might have been misidentified
+               x1         y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  506.737478  10.141974  271.0  416.561189  50.604856  447.0  279.919223  94.247766  171.0  300.681798  83.476277  133.0  422.525683  99.115714  559.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  506.849957  4.399184  217.0  416.675248  50.589443  452.0  279.978813  94.165915  175.0  300.758074  83.365417  133.0  422.651405  99.076365  557.0
+FAILURE!!!! Some beads might have been misidentified
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.840 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  13.294934   -829.71375      -5.6702538 ]
+ [ -23.303673    268.68893      -0.65483665]
+ [   0.14953814    0.00430167    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1         y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  506.838774  10.321527  275.0  416.672822  50.648299  448.0  279.942681  94.154508  175.0  300.702581  83.371416  129.0  422.955779  99.254668  558.0
+FAILURE!!!! Some beads might have been misidentified
+
+iter 32 cost=40330.480366 -> 77362.860746 |dtheta|=1.530148e-02  lambda=2.355e+05
+
+============================================================
+Iteration 33
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.284, dOy=   4.309, dOz=  17.264  (mm)
+  Object offset: offset_x=  14.263, offset_z=  13.663  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    6.216 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.256, y=  24.309, z= 817.264
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.256, y=  24.309, z= 817.264
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 829.834 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  13.284439   -829.7077       -5.68309   ]
+ [ -23.293661    268.69562      -0.6676731 ]
+ [   0.14953822    0.00429887    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1          x2        y2  area2         x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  506.755761  4.434275  215.0  416.586259  50.53268  457.0  279.89911  94.184163  170.0  300.666208  83.377507  134.0  422.868292  99.140807  557.0
+FAILURE!!!! Some beads might have been misidentified
+               x1         y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  506.737478  10.141974  271.0  416.561189  50.604856  447.0  279.919223  94.247766  171.0  300.681798  83.476277  133.0  422.525683  99.115714  559.0
+FAILURE!!!! Some beads might have been misidentified
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4          x5         y5  area5
+range  506.849957  4.399184  217.0  416.675248  50.589443  452.0  279.978813  94.165915  175.0  300.758074  83.365417  133.0  422.651405  99.076365  557.0
+FAILURE!!!! Some beads might have been misidentified
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.835 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  13.287819   -829.7094       -5.679302  ]
+ [ -23.29502     268.69376      -0.6638851 ]
+ [   0.1495382     0.00429952    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 33 cost=40330.480366 -> 40196.844074 |dtheta|=4.682985e-03  lambda=1.000e+06
+
+============================================================
+Iteration 34
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.283, dOy=   4.313, dOz=  17.264  (mm)
+  Object offset: offset_x=  14.262, offset_z=  13.665  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    6.217 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.258, y=  24.313, z= 817.264
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.258, y=  24.313, z= 817.264
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 829.835 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  13.287819   -829.7094       -5.679302  ]
+ [ -23.29502     268.69376      -0.6638851 ]
+ [   0.1495382     0.00429952    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4         x5         y5  area5
+range  506.802821  4.433619  214.0  416.605383  50.754849  451.0  279.858085  94.193755  172.0  300.692567  83.411104  130.0  422.88876  99.157928  558.0
+FAILURE!!!! Some beads might have been misidentified
+               x1         y1  area1         x2         y2  area2          x3         y3  area3          x4        y4  area4          x5          y5  area5
+range  506.765714  10.186682  272.0  416.60603  50.613161  450.0  279.900596  94.179051  171.0  300.659068  83.57202  130.0  422.534285  100.035135  561.0
+FAILURE!!!! Some beads might have been misidentified
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.812 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  13.157059   -829.6882       -5.6680584 ]
+ [ -23.257559    268.72058      -0.6526413 ]
+ [   0.14953886    0.00427662    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 34 cost=40196.844074 -> 40447.078397 |dtheta|=2.862799e-02  lambda=3.333e+05
+
+============================================================
+Iteration 35
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.283, dOy=   4.313, dOz=  17.264  (mm)
+  Object offset: offset_x=  14.262, offset_z=  13.665  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    6.217 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.258, y=  24.313, z= 817.264
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.258, y=  24.313, z= 817.264
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 829.835 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  13.287819   -829.7094       -5.679302  ]
+ [ -23.29502     268.69376      -0.6638851 ]
+ [   0.1495382     0.00429952    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4         x5         y5  area5
+range  506.802821  4.433619  214.0  416.605383  50.754849  451.0  279.858085  94.193755  172.0  300.692567  83.411104  130.0  422.88876  99.157928  558.0
+FAILURE!!!! Some beads might have been misidentified
+               x1         y1  area1         x2         y2  area2          x3         y3  area3          x4        y4  area4          x5          y5  area5
+range  506.765714  10.186682  272.0  416.60603  50.613161  450.0  279.900596  94.179051  171.0  300.659068  83.57202  130.0  422.534285  100.035135  561.0
+FAILURE!!!! Some beads might have been misidentified
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.823 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  13.183852   -829.69855      -5.670454  ]
+ [ -23.27242     268.70883      -0.6550369 ]
+ [   0.1495387     0.00428229    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 35 cost=40196.844074 -> 40476.605101 |dtheta|=1.810010e-02  lambda=1.000e+06
+
+============================================================
+Iteration 36
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.283, dOy=   4.313, dOz=  17.264  (mm)
+  Object offset: offset_x=  14.262, offset_z=  13.665  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    6.217 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.258, y=  24.313, z= 817.264
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.258, y=  24.313, z= 817.264
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 829.835 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  13.287819   -829.7094       -5.679302  ]
+ [ -23.29502     268.69376      -0.6638851 ]
+ [   0.1495382     0.00429952    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4         x5         y5  area5
+range  506.802821  4.433619  214.0  416.605383  50.754849  451.0  279.858085  94.193755  172.0  300.692567  83.411104  130.0  422.88876  99.157928  558.0
+FAILURE!!!! Some beads might have been misidentified
+               x1         y1  area1         x2         y2  area2          x3         y3  area3          x4        y4  area4          x5          y5  area5
+range  506.765714  10.186682  272.0  416.60603  50.613161  450.0  279.900596  94.179051  171.0  300.659068  83.57202  130.0  422.534285  100.035135  561.0
+FAILURE!!!! Some beads might have been misidentified
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.823 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  13.183852   -829.69855      -5.670454  ]
+ [ -23.27242     268.70883      -0.6550369 ]
+ [   0.1495387     0.00428229    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 36 cost=40196.844074 -> 40476.605101 |dtheta|=1.810010e-02  lambda=1.000e+06
+
+============================================================
+Iteration 37
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.283, dOy=   4.313, dOz=  17.264  (mm)
+  Object offset: offset_x=  14.262, offset_z=  13.665  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    6.217 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.258, y=  24.313, z= 817.264
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.258, y=  24.313, z= 817.264
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 829.835 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  13.287819   -829.7094       -5.679302  ]
+ [ -23.29502     268.69376      -0.6638851 ]
+ [   0.1495382     0.00429952    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4         x5         y5  area5
+range  506.802821  4.433619  214.0  416.605383  50.754849  451.0  279.858085  94.193755  172.0  300.692567  83.411104  130.0  422.88876  99.157928  558.0
+FAILURE!!!! Some beads might have been misidentified
+               x1         y1  area1         x2         y2  area2          x3         y3  area3          x4        y4  area4          x5          y5  area5
+range  506.765714  10.186682  272.0  416.60603  50.613161  450.0  279.900596  94.179051  171.0  300.659068  83.57202  130.0  422.534285  100.035135  561.0
+FAILURE!!!! Some beads might have been misidentified
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.823 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  13.183852   -829.69855      -5.670454  ]
+ [ -23.27242     268.70883      -0.6550369 ]
+ [   0.1495387     0.00428229    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 37 cost=40196.844074 -> 40476.605101 |dtheta|=1.810010e-02  lambda=1.000e+06
+
+============================================================
+Iteration 38
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.283, dOy=   4.313, dOz=  17.264  (mm)
+  Object offset: offset_x=  14.262, offset_z=  13.665  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    6.217 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.258, y=  24.313, z= 817.264
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.258, y=  24.313, z= 817.264
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 829.835 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  13.287819   -829.7094       -5.679302  ]
+ [ -23.29502     268.69376      -0.6638851 ]
+ [   0.1495382     0.00429952    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4         x5         y5  area5
+range  506.802821  4.433619  214.0  416.605383  50.754849  451.0  279.858085  94.193755  172.0  300.692567  83.411104  130.0  422.88876  99.157928  558.0
+FAILURE!!!! Some beads might have been misidentified
+               x1         y1  area1         x2         y2  area2          x3         y3  area3          x4        y4  area4          x5          y5  area5
+range  506.765714  10.186682  272.0  416.60603  50.613161  450.0  279.900596  94.179051  171.0  300.659068  83.57202  130.0  422.534285  100.035135  561.0
+FAILURE!!!! Some beads might have been misidentified
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.823 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  13.183852   -829.69855      -5.670454  ]
+ [ -23.27242     268.70883      -0.6550369 ]
+ [   0.1495387     0.00428229    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 38 cost=40196.844074 -> 40476.605101 |dtheta|=1.810010e-02  lambda=1.000e+06
+
+============================================================
+Iteration 39
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.283, dOy=   4.313, dOz=  17.264  (mm)
+  Object offset: offset_x=  14.262, offset_z=  13.665  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    6.217 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.258, y=  24.313, z= 817.264
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.258, y=  24.313, z= 817.264
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 829.835 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  13.287819   -829.7094       -5.679302  ]
+ [ -23.29502     268.69376      -0.6638851 ]
+ [   0.1495382     0.00429952    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4         x5         y5  area5
+range  506.802821  4.433619  214.0  416.605383  50.754849  451.0  279.858085  94.193755  172.0  300.692567  83.411104  130.0  422.88876  99.157928  558.0
+FAILURE!!!! Some beads might have been misidentified
+               x1         y1  area1         x2         y2  area2          x3         y3  area3          x4        y4  area4          x5          y5  area5
+range  506.765714  10.186682  272.0  416.60603  50.613161  450.0  279.900596  94.179051  171.0  300.659068  83.57202  130.0  422.534285  100.035135  561.0
+FAILURE!!!! Some beads might have been misidentified
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.823 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  13.183852   -829.69855      -5.670454  ]
+ [ -23.27242     268.70883      -0.6550369 ]
+ [   0.1495387     0.00428229    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 39 cost=40196.844074 -> 40476.605101 |dtheta|=1.810010e-02  lambda=1.000e+06
+
+============================================================
+Iteration 40
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.283, dOy=   4.313, dOz=  17.264  (mm)
+  Object offset: offset_x=  14.262, offset_z=  13.665  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    6.217 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.258, y=  24.313, z= 817.264
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.258, y=  24.313, z= 817.264
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 829.835 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  13.287819   -829.7094       -5.679302  ]
+ [ -23.29502     268.69376      -0.6638851 ]
+ [   0.1495382     0.00429952    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4         x5         y5  area5
+range  506.802821  4.433619  214.0  416.605383  50.754849  451.0  279.858085  94.193755  172.0  300.692567  83.411104  130.0  422.88876  99.157928  558.0
+FAILURE!!!! Some beads might have been misidentified
+               x1         y1  area1         x2         y2  area2          x3         y3  area3          x4        y4  area4          x5          y5  area5
+range  506.765714  10.186682  272.0  416.60603  50.613161  450.0  279.900596  94.179051  171.0  300.659068  83.57202  130.0  422.534285  100.035135  561.0
+FAILURE!!!! Some beads might have been misidentified
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.823 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  13.183852   -829.69855      -5.670454  ]
+ [ -23.27242     268.70883      -0.6550369 ]
+ [   0.1495387     0.00428229    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 40 cost=40196.844074 -> 40476.605101 |dtheta|=1.810010e-02  lambda=1.000e+06
+
+============================================================
+Iteration 41
+============================================================
+Theta offsets (Unity frame):
+  Source   : dSx=   0.000, dSy=   0.000, dSz=   0.000  (mm)
+  Object   : dOx=  -0.283, dOy=   4.313, dOz=  17.264  (mm)
+  Object offset: offset_x=  14.262, offset_z=  13.665  (mm)
+  Detector : dDx=   0.000, dDy=   0.000, dDz=   0.000  (mm)
+  Obj Stage rotY :    6.217 deg
+============================================================
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.258, y=  24.313, z= 817.264
+  Detector : x= -25.318, y=  18.667, z=1059.000
+  Obj rotY :  -4.5698 deg
+
+Initial calibration:
+  Source   : x=   0.000, y=   0.000, z=   0.000
+  Object   : x=   0.000, y=   0.000, z=   0.000
+  Detector : x=  25.318, y=   6.310, z=  40.001
+
+After Calibration: 
+
+Unity geometry (world coordinates):
+  Source   : x=   5.000, y=  29.992, z=   0.000
+  Object   : x=   0.258, y=  24.313, z= 817.264
+  Detector : x=   0.000, y=  24.977, z=1099.001
+  Obj rotY :  -4.5698 deg
+view   0 | SOD= 829.835 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  13.287819   -829.7094       -5.679302  ]
+ [ -23.29502     268.69376      -0.6638851 ]
+ [   0.1495382     0.00429952    0.        ]
+ [   0.            0.            0.1496    ]]
+               x1        y1  area1          x2         y2  area2          x3         y3  area3          x4         y4  area4         x5         y5  area5
+range  506.802821  4.433619  214.0  416.605383  50.754849  451.0  279.858085  94.193755  172.0  300.692567  83.411104  130.0  422.88876  99.157928  558.0
+FAILURE!!!! Some beads might have been misidentified
+               x1         y1  area1         x2         y2  area2          x3         y3  area3          x4        y4  area4          x5          y5  area5
+range  506.765714  10.186682  272.0  416.60603  50.613161  450.0  279.900596  94.179051  171.0  300.659068  83.57202  130.0  422.534285  100.035135  561.0
+FAILURE!!!! Some beads might have been misidentified
+Residual vector length: 2400, Jacobian shape: (2400, 6)
+view   0 | SOD= 829.823 mm | SDD=1099.024 mm | M= 1.324 | incident=0.3692°
+[[  13.183852   -829.69855      -5.670454  ]
+ [ -23.27242     268.70883      -0.6550369 ]
+ [   0.1495387     0.00428229    0.        ]
+ [   0.            0.            0.1496    ]]
+
+iter 41 cost=40196.844074 -> 40476.605101 |dtheta|=1.810010e-02  lambda=1.000e+06
+Stalled.
+
+Estimated theta:
+  dSx: +0.000000
+  dSy: +0.000000
+  dOx: -0.282831
+  dOy: +4.313069
+  dOz: +17.264115
+  dDx: +0.000000
+  dDy: +0.000000
+  dDz: +0.000000
+alpha: +6.216736e+00 deg)
+offset_x: +14.262033
+offset_z: +13.664726
+
+Final cost table:
+Final estimated theta: [ 0.          0.         -0.28283057  4.31306867 17.26411504  0.
+  0.          0.          6.2167361  14.26203268 13.66472584]
+################################################################################
+
