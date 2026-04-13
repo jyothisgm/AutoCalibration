@@ -6,7 +6,7 @@ import pandas as pd
 
 THETA_NAMES = ["dSx", "dSy", "dOx", "dOy", "dOz", "dDx", "dDy", "dDz", "alpha", "offset_x", "offset_z"]
 
-RESULTS_LAMBDA_DIR = Path(__file__).resolve().parent.parent / "results" / "K*N*G"
+RESULTS_LAMBDA_DIR = Path(__file__).resolve().parent.parent / "results" / "archive" / "lambda"
 
 # Must match gauss_newton.py LAMBDA_VALUES
 LAMBDA_VALUES = [
@@ -176,8 +176,10 @@ def parse_all(folder: Path = RESULTS_LAMBDA_DIR) -> pd.DataFrame:
             .drop(columns=["_lam_ord", "_scen_num"])
             .reset_index(drop=True))
 
+    df["M"] = df["N"] * (2 * df["K"] + df["K"] * (df["K"] - 1) // 2)
+
     priority = [
-        "lambda", "cuboid", "K", "N", "scenario", "file", "sum",
+        "lambda", "cuboid", "K", "N", "M", "scenario", "file", "sum",
         "total_iters", "cost_initial", "cost_final", "cost_change_pct",
         "ddtheta_initial", "dtheta", "dtheta_change_pct", "final_lambda",
     ]
@@ -196,6 +198,8 @@ BRACKET_LABELS = ["0–0.1", "0.1–1", "1–3", "3–10", "10+"]
 BRACKET_COLORS = ["#1a9641", "#a6d96a", "#ffffbf", "#fdae61", "#d7191c"]
 
 EXPECTED_N = [3, 5, 6, 9, 10, 12, 15, 18, 24, 36, 60, 90, 180, 360]
+EXPECTED_K = [3]
+EXPECTED_SCENARIOS = ["G0", "G1", "G2", "G3", "G4"]
 
 
 def plot_heatmap(df: pd.DataFrame, out_path: Path) -> None:
@@ -271,16 +275,41 @@ def plot_heatmap(df: pd.DataFrame, out_path: Path) -> None:
     print(f"Saved heatmap: {out_path}")
 
 
+def missing_combinations(df: pd.DataFrame) -> pd.DataFrame:
+    import itertools
+    full = pd.DataFrame(
+        list(itertools.product(LAMBDA_ORDER, EXPECTED_K, EXPECTED_N, EXPECTED_SCENARIOS)),
+        columns=["lambda", "K", "N", "scenario"],
+    )
+    full["M"] = full["N"] * (2 * full["K"] + full["K"] * (full["K"] - 1) // 2)
+
+    if df.empty:
+        return full.sort_values(["lambda", "K", "N", "scenario"]).reset_index(drop=True)
+
+    present = df[["lambda", "K", "N", "scenario"]].drop_duplicates()
+    merged = full.merge(present, on=["lambda", "K", "N", "scenario"], how="left", indicator=True)
+    missing = (merged[merged["_merge"] == "left_only"]
+               .drop(columns="_merge")
+               .sort_values(["lambda", "K", "N", "scenario"])
+               .reset_index(drop=True))
+    return missing
+
+
 if __name__ == "__main__":
     df = parse_all()
     print(f"Parsed {len(df)} rows from {df['lambda'].nunique() if not df.empty else 0} lambda types")
 
     if not df.empty:
-        print(df[["lambda", "cuboid", "scenario", "N", "K", "sum"]].to_string(index=False))
+        print(df[["lambda", "cuboid", "K", "N", "M", "scenario", "sum", "total_iters"]].to_string(index=False))
 
     out_csv = RESULTS_LAMBDA_DIR / "lambda_results_summary.csv"
     df.to_csv(out_csv, index=False)
     print(f"\nSaved CSV: {out_csv}")
+
+    missing = missing_combinations(df)
+    out_missing = RESULTS_LAMBDA_DIR / "lambda_missing_combinations.csv"
+    missing.to_csv(out_missing, index=False)
+    print(f"Missing combinations: {len(missing)}  |  Saved: {out_missing}")
 
     if not df.empty:
         out_heatmap = RESULTS_LAMBDA_DIR / "lambda_results_heatmap.png"

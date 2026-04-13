@@ -25,6 +25,10 @@ RE_SCENARIO = re.compile(
     r"Running scenario=(.*?)\s+Projections=(\d+)\s+Used=(\d+),\s*K=(\d+)"
 )
 
+RE_SCENARIO_NEW = re.compile(
+    r"Running cuboid=\S+\s+scenario=(\S+)\s+N_ANGLES=(\d+),\s*K=(\d+)"
+)
+
 RE_UNITY_GEOM_BLOCK = re.compile(
     r"Unity geometry \(world coordinates\):\s*"
     r"Source\s*:\s*x=\s*([0-9eE+.\-]+),\s*y=\s*([0-9eE+.\-]+),\s*z=\s*([0-9eE+.\-]+)\s*"
@@ -91,6 +95,13 @@ def parse_log_file(path: str | Path) -> dict:
         row["projections"] = int(m.group(2))
         row["used"] = int(m.group(3))
         row["K"] = int(m.group(4))
+    else:
+        m = RE_SCENARIO_NEW.search(text)
+        if m:
+            row["scenario"] = m.group(1).strip()
+            row["used"] = int(m.group(2))
+            row["projections"] = row["used"]
+            row["K"] = int(m.group(3))
 
     # Last iteration header seen
     iter_headers = [int(m.group(1)) for m in RE_ITER_HEADER.finditer(text)]
@@ -308,7 +319,7 @@ def plot_scan_angle_heatmap(
 
 
 if __name__ == "__main__":
-    folder = Path("/vol/home/s3777103/Documents/workspace/Thesis/AutoCalibration/results/real")
+    folder = Path("/vol/home/s3777103/Documents/workspace/Thesis/AutoCalibration/logs_sim/hp_test_8")
     # for folder in sorted(p for p in parent.iterdir() if p.is_dir()):
     df = parse_log_folder(folder, pattern="*.log")
 
