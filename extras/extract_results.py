@@ -173,6 +173,7 @@ def parse_log_file(path: str | Path) -> dict:
     if m:
         arr = [float(x) for x in m.group(1).replace("\n", " ").split()]
         row["final_estimated_theta_array"] = arr
+        row["final_theta_abs_sum"] = sum(abs(v) for v in arr)
     cost_initial = row["cost_initial"]
     cost_final = row["cost_final"]
     ddtheta_initial = row["ddtheta_initial"]
@@ -240,6 +241,72 @@ def parse_log_folder(folder: str | Path, pattern: str = "*.log") -> pd.DataFrame
     return df[cols]
 
 
+def plot_scan_angle_heatmap(
+    df: pd.DataFrame,
+    out_path: Path,
+    metric: str = "cost_final",
+    baseline_used: int = 360,
+) -> None:
+    import matplotlib.pyplot as plt
+
+    if df.empty:
+        print("Heatmap skipped: empty dataframe")
+        return
+    if metric not in df.columns:
+        print(f"Heatmap skipped: metric '{metric}' not found in dataframe")
+        return
+    if "scenario" not in df.columns or "used" not in df.columns:
+        print("Heatmap skipped: requires 'scenario' and 'used' columns")
+        return
+
+    # Baseline per scan from Used=baseline_used rows
+    base = (
+        df[df["used"] == baseline_used]
+        .groupby("scenario")[metric]
+        .mean()
+    )
+
+    grouped = (
+        df.groupby(["scenario", "used"])[metric]
+        .mean()
+        .reset_index()
+    )
+    grouped["baseline"] = grouped["scenario"].map(base)
+    grouped["delta"] = grouped[metric] - grouped["baseline"]
+
+    pivot = grouped.pivot(index="scenario", columns="used", values="delta")
+
+    scenarios = sorted(pivot.index.tolist(), key=get_scenario_number)
+    angles = sorted(pivot.columns.tolist())
+    pivot = pivot.reindex(index=scenarios, columns=angles)
+
+    fig, ax = plt.subplots(
+        figsize=(max(9, len(angles) * 0.9 + 2), max(3, len(scenarios) * 0.6 + 2))
+    )
+    im = ax.imshow(pivot.values, aspect="auto", cmap="viridis")
+
+    ax.set_xticks(range(len(angles)))
+    ax.set_xticklabels(angles, rotation=45, ha="right", fontsize=8)
+    ax.set_yticks(range(len(scenarios)))
+    ax.set_yticklabels(scenarios, fontsize=8)
+    ax.set_xlabel("N (number of angles used)", fontsize=10)
+    ax.set_ylabel("Scan", fontsize=10)
+    ax.set_title(f"{metric} delta vs {baseline_used} baseline (positive = worse)", fontsize=11)
+
+    for ri, scen in enumerate(scenarios):
+        for ci, n in enumerate(angles):
+            val = pivot.loc[scen, n]
+            if not pd.isna(val):
+                ax.text(ci, ri, f"{val:.3g}", ha="center", va="center", fontsize=6, color="white" if val > 0 else "black")
+
+    cbar = fig.colorbar(im, ax=ax)
+    cbar.set_label(f"{metric} - baseline({baseline_used})", fontsize=9)
+    plt.tight_layout()
+    fig.savefig(out_path, dpi=150, bbox_inches="tight")
+    plt.close(fig)
+    print(f"Saved heatmap: {out_path}")
+
+
 if __name__ == "__main__":
     folder = Path("/vol/home/s3777103/Documents/workspace/Thesis/AutoCalibration/results/real")
     # for folder in sorted(p for p in parent.iterdir() if p.is_dir()):
@@ -302,7 +369,9 @@ if __name__ == "__main__":
     #         ignore_index=True
     #     )
 
-        out_csv = Path(folder) / "calibration_log_summary.csv"
-        df.to_csv(out_csv, index=False)
+    out_csv = Path(folder) / "calibration_log_summary.csv"
+    df.to_csv(out_csv, index=False)
+    print("saved:", out_csv)
 
-        print("saved:", out_csv)
+    out_heatmap = Path(folder) / "real_cal_heatmap.png"
+    plot_scan_angle_heatmap(df, out_heatmap, metric="final_theta_abs_sum", baseline_used=360)

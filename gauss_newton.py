@@ -133,7 +133,8 @@ def residual_from_two_dfs(real_df, pred_df, K, area_weight: float = 1e-3, distan
         # -------------------------------
         # Bead-to-bead residuals
         # -------------------------------
-        meas_aligned = match_measured_to_pred(meas, pred, area_weight=area_weight)
+        # meas_aligned = match_measured_to_pred(meas, pred, area_weight=area_weight)
+        meas_aligned = meas
         diff_pts = (pred - meas_aligned).copy()
 
         for k in range(K):
@@ -244,7 +245,7 @@ def numerical_jacobian_image_based(theta, active_mask, real_df, angles_deg, cfg,
 def lm_solve_image_based(real_df, angles_deg, cfg, n_iters=10, lam=1e-2, fix_source=False, fix_detector=False, fix_object=False, fix_offset=False, work_dir="lm_work"):
     os.makedirs(work_dir, exist_ok=True)
     theta = np.zeros(11, dtype=np.float64)
-    eps = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.01, 0.01, 0.01], dtype=np.float64)
+    eps = np.array([0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01], dtype=np.float64)
     # eps = np.ones(9, dtype=np.float64)
 
     active_mask = make_active_mask(fix_source, fix_detector, fix_object, fix_alpha=False, fix_offset=fix_offset)
@@ -375,7 +376,7 @@ if __name__ == "__main__":
         "--lambda-name",
         dest="lam",
         default=None,
-        help="Lambda variant to run. Example: 'GN', 'LM_low', 'LM_high'",
+        help="Lambda variant to run. Example: 'GN', 'LM_low', 'LM_normal', 'LM_high'",
     )
     args = parser.parse_args()
 
@@ -384,55 +385,112 @@ if __name__ == "__main__":
     DET_ROW = np.array([0.0, 1.0, 0.0], dtype=np.float32)
     DET_COL = np.array([1.0, 0.0, 0.0], dtype=np.float32)
 
+    # GEOM_SCENARIOS = [
+    #     {
+    #         "name": "G0",
+    #         "SRC_WORLD": np.array([0.0, 45.0, 0.0], dtype=np.float32),
+    #         "DET_WORLD": np.array([0.0, 0.0, 674.0], dtype=np.float32),
+    #         "real_OBJ_WORLD": np.array([0.0, 20.0, 570.0], dtype=np.float32),
+    #         "unity_OBJ_WORLD": np.array([10.0, 15.0, 589.0], dtype=np.float32),
+    #         "initial_angle_deg": 10.0,
+    #         "fake_theta": np.array([0.0, 0.0, -10.0, 5.0, -19.0, 0.0, 0.0, 0.0, 10.0, 0.0, 0.0], dtype=np.float32),
+    #     },
+    #     {
+    #         "name": "G1",
+    #         "SRC_WORLD": np.array([2.0, 45.0, 0.0], dtype=np.float32),
+    #         "DET_WORLD": np.array([10.0, 2.0, 704.0], dtype=np.float32),
+    #         "real_OBJ_WORLD": np.array([0.0, 20.0, 570.0], dtype=np.float32),
+    #         "unity_OBJ_WORLD": np.array([6.0, 18.0, 585.0], dtype=np.float32),
+    #         "initial_angle_deg": 8.0,
+    #         "fake_theta": np.array([0.0, 0.0, -6.0, 2.0, -15.0, 0.0, 0.0, 0.0, 8.0, 0.0, 0.0], dtype=np.float32),
+    #     },
+    #     {
+    #         "name": "G2",
+    #         "SRC_WORLD": np.array([-8.0, 47.0, 0.0], dtype=np.float32),
+    #         "DET_WORLD": np.array([1.0, 40.0, 696.0], dtype=np.float32),
+    #         "real_OBJ_WORLD": np.array([0.0, 40.0, 570.0], dtype=np.float32),
+    #         "unity_OBJ_WORLD": np.array([14.0, 32.0, 592.0], dtype=np.float32),
+    #         "initial_angle_deg": 12.3,
+    #         "fake_theta": np.array([0.0, 0.0, -14.0,  8.0, -22.0, 0.0, 0.0, 0.0, 12.3, 0.0, 0.0], dtype=np.float32),
+    #     },
+    #     {
+    #         "name": "G3",
+    #         "SRC_WORLD": np.array([10.0, 43.0, 0.0], dtype=np.float32),
+    #         "DET_WORLD": np.array([-2.0, 0.0, 704.0], dtype=np.float32),
+    #         "real_OBJ_WORLD": np.array([0.0, 20.0, 570.0], dtype=np.float32),
+    #         "unity_OBJ_WORLD": np.array([8.0, 14.0, 595.0], dtype=np.float32),
+    #         "initial_angle_deg": 14.1,
+    #         "fake_theta": np.array([0.0, 0.0, -8.0,  6.0, -25.0, 0.0, 0.0, 0.0, 14.1, 0.0, 0.0], dtype=np.float32),
+
+    #     },
+    #     {
+    #         "name": "G4",
+    #         "SRC_WORLD": np.array([1.0, 46.0, 0.0], dtype=np.float32),
+    #         "DET_WORLD": np.array([0.0, -2.0, 808.0], dtype=np.float32),
+    #         "real_OBJ_WORLD": np.array([0.0, 20.0, 570.0], dtype=np.float32),
+    #         "unity_OBJ_WORLD": np.array([12.0, 17.0, 583.0], dtype=np.float32),
+    #         "initial_angle_deg": 3.3,
+    #         "fake_theta": np.array([0.0, 0.0, -12.0,  3.0, -13.0, 0.0, 0.0, 0.0,  3.3, 0.0, 0.0], dtype=np.float32),
+    #     },
+    # ]
+
     GEOM_SCENARIOS = [
         {
+            # G0 - baseline, moderate offsets
             "name": "G0",
             "SRC_WORLD": np.array([0.0, 45.0, 0.0], dtype=np.float32),
             "DET_WORLD": np.array([0.0, 0.0, 674.0], dtype=np.float32),
             "real_OBJ_WORLD": np.array([0.0, 20.0, 570.0], dtype=np.float32),
             "unity_OBJ_WORLD": np.array([10.0, 15.0, 589.0], dtype=np.float32),
             "initial_angle_deg": 10.0,
+            # dOx=0-10=-10, dOy=20-15=5, dOz=570-589=-19
             "fake_theta": np.array([0.0, 0.0, -10.0, 5.0, -19.0, 0.0, 0.0, 0.0, 10.0, 0.0, 0.0], dtype=np.float32),
         },
         {
+            # G1 - source right, detector shifted, small angle
             "name": "G1",
-            "SRC_WORLD": np.array([2.0, 45.0, 0.0], dtype=np.float32),
-            "DET_WORLD": np.array([0.0, 2.0, 704.0], dtype=np.float32),
-            "real_OBJ_WORLD": np.array([0.0, 20.0, 570.0], dtype=np.float32),
-            "unity_OBJ_WORLD": np.array([6.0, 18.0, 585.0], dtype=np.float32),
-            "initial_angle_deg": 8.0,
-            "fake_theta": np.array([0.0, 0.0, -6.0, 2.0, -15.0, 0.0, 0.0, 0.0, 8.0, 0.0, 0.0], dtype=np.float32),
+            "SRC_WORLD": np.array([8.0, 50.0, 0.0], dtype=np.float32),
+            "DET_WORLD": np.array([-5.0, 10.0, 720.0], dtype=np.float32),
+            "real_OBJ_WORLD": np.array([0.0, 22.0, 565.0], dtype=np.float32),
+            "unity_OBJ_WORLD": np.array([6.0, 28.0, 577.0], dtype=np.float32),
+            "initial_angle_deg": 5.0,
+            # dOx=0-6=-6, dOy=22-28=-6, dOz=565-577=-12
+            "fake_theta": np.array([0.0, 0.0, -6.0, -6.0, -12.0, 0.0, 0.0, 0.0, 5.0, 0.0, 0.0], dtype=np.float32),
         },
         {
+            # G2 - source left, detector high, medium angle
             "name": "G2",
-            "SRC_WORLD": np.array([-2.0, 47.0, 0.0], dtype=np.float32),
-            "DET_WORLD": np.array([1.0, 47.0, 696.0], dtype=np.float32),
-            "real_OBJ_WORLD": np.array([0.0, 40.0, 570.0], dtype=np.float32),
-            "unity_OBJ_WORLD": np.array([14.0, 32.0, 592.0], dtype=np.float32),
-            "initial_angle_deg": 12.3,
-            "fake_theta": np.array([0.0, 0.0, -14.0,  8.0, -22.0, 0.0, 0.0, 0.0, 12.3, 0.0, 0.0], dtype=np.float32),
+            "SRC_WORLD": np.array([-10.0, 55.0, 0.0], dtype=np.float32),
+            "DET_WORLD": np.array([8.0, 20.0, 760.0], dtype=np.float32),
+            "real_OBJ_WORLD": np.array([0.0, 30.0, 560.0], dtype=np.float32),
+            "unity_OBJ_WORLD": np.array([15.0, 42.0, 582.0], dtype=np.float32),
+            "initial_angle_deg": 15.0,
+            # dOx=0-15=-15, dOy=30-42=-12, dOz=560-582=-22
+            "fake_theta": np.array([0.0, 0.0, -15.0, -12.0, -22.0, 0.0, 0.0, 0.0, 15.0, 0.0, 0.0], dtype=np.float32),
         },
         {
+            # G3 - source high, detector offset, large angle
             "name": "G3",
-            "SRC_WORLD": np.array([0.0, 43.0, 0.0], dtype=np.float32),
-            "DET_WORLD": np.array([-2.0, 0.0, 704.0], dtype=np.float32),
-            "real_OBJ_WORLD": np.array([0.0, 20.0, 570.0], dtype=np.float32),
-            "unity_OBJ_WORLD": np.array([8.0, 14.0, 595.0], dtype=np.float32),
-            "initial_angle_deg": 14.1,
-            "fake_theta": np.array([0.0, 0.0, -8.0,  6.0, -25.0, 0.0, 0.0, 0.0, 14.1, 0.0, 0.0], dtype=np.float32),
-
+            "SRC_WORLD": np.array([5.0, 60.0, 0.0], dtype=np.float32),
+            "DET_WORLD": np.array([-8.0, -5.0, 800.0], dtype=np.float32),
+            "real_OBJ_WORLD": np.array([0.0, 15.0, 555.0], dtype=np.float32),
+            "unity_OBJ_WORLD": np.array([18.0, 23.0, 580.0], dtype=np.float32),
+            "initial_angle_deg": 25.0,
+            # dOx=0-18=-18, dOy=15-23=-8, dOz=555-580=-25
+            "fake_theta": np.array([0.0, 0.0, -18.0, -8.0, -25.0, 0.0, 0.0, 0.0, 25.0, 0.0, 0.0], dtype=np.float32),
         },
         {
+            # G4 - source low, near detector, small offsets
             "name": "G4",
-            "SRC_WORLD": np.array([1.0, 46.0, 0.0], dtype=np.float32),
-            "DET_WORLD": np.array([0.0, -2.0, 808.0], dtype=np.float32),
-            "real_OBJ_WORLD": np.array([0.0, 20.0, 570.0], dtype=np.float32),
-            "unity_OBJ_WORLD": np.array([12.0, 17.0, 583.0], dtype=np.float32),
-            "initial_angle_deg": 3.3,
-            "fake_theta": np.array([0.0, 0.0, -12.0,  3.0, -13.0, 0.0, 0.0, 0.0,  3.3, 0.0, 0.0], dtype=np.float32),
+            "SRC_WORLD": np.array([-5.0, 38.0, 0.0], dtype=np.float32),
+            "DET_WORLD": np.array([10.0, 3.0, 690.0], dtype=np.float32),
+            "real_OBJ_WORLD": np.array([0.0, 18.0, 568.0], dtype=np.float32),
+            "unity_OBJ_WORLD": np.array([7.0, 20.0, 576.0], dtype=np.float32),
+            "initial_angle_deg": 3.0,
+            # dOx=0-7=-7, dOy=18-20=-2, dOz=568-576=-8
+            "fake_theta": np.array([0.0, 0.0, -7.0, -2.0, -8.0, 0.0, 0.0, 0.0, 3.0, 0.0, 0.0], dtype=np.float32),
         },
     ]
-
     BEAD_LIST = list(range(1, 8))
     ANGLE_FACTORS = [3, 4, 5, 6, 8, 9, 10, 12, 15, 18, 20, 24, 30, 36, 40, 45, 60, 72, 90, 120, 180, 360]
 
@@ -445,19 +503,19 @@ if __name__ == "__main__":
 
     CUBOID_SIZES = [
         # Compact — beads close together, minimal spread
-        {"name": "compact",    "width": 10.0, "breadth": 10.0, "height": 20.0},
+        {"name": "compact",    "width": 10.0, "breadth": 15.0, "height": 20.0},
         # Small
-        {"name": "small",      "width": 20.0, "breadth": 20.0, "height": 40.0},
+        {"name": "small",      "width": 20.0, "breadth": 22.0, "height": 40.0},
         # Normal — your current default
         {"name": "normal",     "width": 20.0, "breadth": 40.0, "height": 60.0},
         # Square
         {"name": "square",     "width": 30.0, "breadth": 30.0, "height": 30.0},
         # Tall — good vertical spread, poor lateral
-        {"name": "tall",       "width": 10.0, "breadth": 10.0, "height": 80.0},
+        {"name": "tall",       "width": 10.0, "breadth": 15.0, "height": 80.0},
         # Wide — good lateral spread, poor vertical
         {"name": "wide",       "width": 80.0, "breadth": 80.0, "height": 20.0},
         # Coplanar — all beads at same height, tests degeneracy
-        {"name": "coplanar",   "width": 40.0, "breadth": 40.0, "height": 5.0},
+        {"name": "coplanar",   "width": 40.0, "breadth": 60.0, "height": 10.0},
     ]
 
     cli_angles = parse_int_list(args.angles)
@@ -575,7 +633,7 @@ if __name__ == "__main__":
                             "box_images": True,
                         }
                         lambda_name = each_lambda["name"]
-                        theta_hat, dtheta, cost, it = lm_solve_image_based(real_proj, ANGLE_DEGREES_UNITY, cfg, n_iters=50, lam=each_lambda["lam"], fix_source=True, fix_detector=True, fix_object=False, fix_offset=False, work_dir = HERE / f"simulated/trial3/{lambda_name}/{cuboid_name}/{each_k}_{each_angle}" / f"{scenario_name}")
+                        theta_hat, dtheta, cost, it = lm_solve_image_based(real_proj, ANGLE_DEGREES_UNITY, cfg, n_iters=50, lam=each_lambda["lam"], fix_source=True, fix_detector=True, fix_object=False, fix_offset=False, work_dir = HERE / f"simulated/trial4/{lambda_name}/{cuboid_name}/{each_k}_{each_angle}" / f"{scenario_name}")
                         # Diff
                         theta_minus_fake = theta_hat.copy()
                         theta_minus_fake -= fake_theta

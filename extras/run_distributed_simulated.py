@@ -43,20 +43,21 @@ check_gn_running = "pgrep -f gauss_newton.py"
 gpu_usage_cmd = "nvidia-smi --query-gpu=utilization.gpu --format=csv,nounits,noheader"
 cpu_usage_cmd = "mpstat -P ALL 1 1 | grep \"all\" | awk '{print $NF}'"
 
-# CUBOID_SIZES = ["compact", "small", "square", "normal", "tall", "wide", "coplanar"]
+CUBOID_SIZES = ["compact", "small", "square", "normal", "tall", "wide", "coplanar"]
 CUBOID_SIZES = ["normal"]
 
 # ANGLE_FACTORS = [3, 4, 5, 6, 8, 9, 10, 12, 15, 18, 20, 24, 30, 36, 40, 45, 60, 72, 90, 120, 180, 360]
 ANGLE_FACTORS = [3, 5, 6, 9, 10, 12, 15, 18, 24, 36, 60, 90, 180, 360]
+# ANGLE_FACTORS = [3]
 
-# BEAD_LIST = [1, 2, 3, 4, 5, 6, 7]
-BEAD_LIST = [3]
+BEAD_LIST = [1, 2, 3, 4, 5, 6, 7]
+# BEAD_LIST = [3]
 
 SCENARIO = list(range(0, 5))
 # SCENARIO = [1, 2]
 
-# LAMBDA_VALUES = ["GN", "LM_low", "LM_high"]
-LAMBDA_VALUES = ["GN"]
+# LAMBDA_VALUES = ["GN", "LM_low", "LM_normal" "LM_high"]
+LAMBDA_VALUES = ["LM_normal"]
 
 # Initialize SSH client
 ssh = paramiko.SSHClient()
@@ -193,5 +194,5 @@ while True:
         print("")
         ssh.close()
     
-    print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Completed full host sweep (0–100). Sleeping 5 minutes...")
-    time.sleep(300)
+    print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Completed full host sweep (0–100). Sleeping 1.5 minutes...")
+    time.sleep(90)
