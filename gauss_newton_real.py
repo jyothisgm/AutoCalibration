@@ -243,7 +243,7 @@ def numerical_jacobian_image_based(theta, active_mask, real_df, angles_deg, cfg,
 def lm_solve_image_based(real_df, angles_deg, cfg, n_iters=10, lam=1e-2, fix_source=False, fix_detector=False, fix_object=False, fix_offset=False, work_dir="lm_work"):
     os.makedirs(work_dir, exist_ok=True)
     theta = np.zeros(11, dtype=np.float64)
-    eps = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.01, 0.01, 0.01], dtype=np.float64)
+    eps = np.array([0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01], dtype=np.float64)
     # eps = np.ones(9, dtype=np.float64)
 
     active_mask = make_active_mask(fix_source, fix_detector, fix_object, fix_alpha=False, fix_offset=fix_offset)

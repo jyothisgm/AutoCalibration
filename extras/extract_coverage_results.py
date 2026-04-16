@@ -6,7 +6,7 @@ import pandas as pd
 
 THETA_NAMES = ["dSx", "dSy", "dOx", "dOy", "dOz", "dDx", "dDy", "dDz", "alpha", "offset_x", "offset_z"]
 
-RESULTS_COVERAGE_DIR = Path(__file__).resolve().parent.parent / "results" / "archive" / "coverage"
+RESULTS_COVERAGE_DIR = Path(__file__).resolve().parent.parent / "results" / "cuboid"
 
 # Must match gauss_newton.py LAMBDA_VALUES
 LAMBDA_VALUES = [
@@ -19,7 +19,7 @@ LAMBDA_ORDER = [lv["name"] for lv in LAMBDA_VALUES]
 _LAM_MAP: dict[str, str] = {f"{lv['lam']:.3e}": lv["name"] for lv in LAMBDA_VALUES}
 
 # Must match gauss_newton.py CUBOID_SIZES (order used for heatmap rows)
-CUBOID_ORDER = ["compact", "small", "normal", "square", "tall", "wide", "coplanar"]
+CUBOID_ORDER = ["coplanar", "wide", "compact", "tall", "square", "small", "normal"]
 
 
 def _lam_to_name(lam_val: float) -> str:
@@ -174,9 +174,9 @@ def parse_all(folder: Path = RESULTS_COVERAGE_DIR) -> pd.DataFrame:
 # Heatmap: rows = cuboid (reversed), cols = N, one panel per lambda type
 # ----------------------------
 
-BRACKETS       = [0, 0.1, 1, 3, 10, float("inf")]
-BRACKET_LABELS = ["0–0.1", "0.1–1", "1–3", "3–10", "10+"]
-BRACKET_COLORS = ["#1a9641", "#a6d96a", "#ffffbf", "#fdae61", "#d7191c"]
+BRACKETS       = [0, 0.2, 0.5, 1, 3, 10, float("inf")]
+BRACKET_LABELS = ["0–0.2", "0.2–0.5", "0.5–1", "1–3", "3–10", "10+"]
+BRACKET_COLORS = ["#1a9641", "#74c476", "#a6d96a", "#ffffbf", "#fdae61", "#f46d43", "#d7191c"]
 
 EXPECTED_N = [3, 5, 6, 9, 10, 12, 15, 18, 24, 36, 60, 90, 180, 360]
 EXPECTED_K = [3]
@@ -213,7 +213,7 @@ def plot_heatmap(df: pd.DataFrame, out_path: Path) -> None:
     )
 
     patches = [mpatches.Patch(color=BRACKET_COLORS[i], label=BRACKET_LABELS[i])
-               for i in range(len(BRACKET_LABELS))]
+                for i in range(len(BRACKET_LABELS))]
 
     for panel_i, lam in enumerate(lambdas):
         ax  = axes[panel_i][0]
@@ -221,15 +221,15 @@ def plot_heatmap(df: pd.DataFrame, out_path: Path) -> None:
 
         pivot_sum = (
             sub.groupby(["cuboid", "N"])["sum"]
-               .mean()
-               .unstack("N")
-               .reindex(index=cuboids, columns=n_cols)
+                .mean()
+                .unstack("N")
+                .reindex(index=cuboids, columns=n_cols)
         )
         pivot_iters = (
             sub.groupby(["cuboid", "N"])["total_iters"]
-               .mean()
-               .unstack("N")
-               .reindex(index=cuboids, columns=n_cols)
+                .mean()
+                .unstack("N")
+                .reindex(index=cuboids, columns=n_cols)
         )
 
         bracket_grid = pivot_sum.map(to_bracket).values.astype(float)
@@ -239,8 +239,8 @@ def plot_heatmap(df: pd.DataFrame, out_path: Path) -> None:
         ax.set_xticklabels(n_cols, rotation=45, ha="right", fontsize=7)
         ax.set_yticks(range(len(cuboids)))
         ax.set_yticklabels(cuboids, fontsize=8)
-        ax.set_ylabel("Cuboid", fontsize=9)
-        ax.set_title(f"lambda = {lam}", fontsize=10, fontweight="bold")
+        ax.set_ylabel("Phantom", fontsize=9)
+        ax.set_title(f"Method: Gauss Newton without Levenberg-Marquardt", fontsize=10, fontweight="bold")
 
         for ri, cub in enumerate(cuboids):
             for ci, n in enumerate(n_cols):
@@ -254,11 +254,11 @@ def plot_heatmap(df: pd.DataFrame, out_path: Path) -> None:
                             fontsize=6, color=txt_color, linespacing=1.4)
 
         if panel_i == len(lambdas) - 1:
-            ax.set_xlabel("N (number of angles)", fontsize=9)
+            ax.set_xlabel(r"Number of Projections ($N$)", fontsize=9)
 
-    fig.legend(handles=patches, title="mean |sum|", bbox_to_anchor=(1.01, 0.98),
-               loc="upper left", fontsize=8, title_fontsize=8, framealpha=0.9)
-    fig.suptitle("Mean |sum of diff| — cuboid vs N  (averaged over scenarios)", fontsize=12, y=1.01)
+    fig.legend(handles=patches, title="MAE", bbox_to_anchor=(1.01, 0.98),
+                loc="upper left", fontsize=8, title_fontsize=8, framealpha=0.9)
+    fig.suptitle(r"MAE — Spread of 3 beaded phantom vs No of Projections ($N$) (Averaged over 5 scenarios)", fontsize=12, y=1.01)
     plt.tight_layout()
     fig.savefig(out_path, dpi=150, bbox_inches="tight")
     plt.close(fig)

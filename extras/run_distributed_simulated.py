@@ -44,20 +44,20 @@ gpu_usage_cmd = "nvidia-smi --query-gpu=utilization.gpu --format=csv,nounits,noh
 cpu_usage_cmd = "mpstat -P ALL 1 1 | grep \"all\" | awk '{print $NF}'"
 
 CUBOID_SIZES = ["compact", "small", "square", "normal", "tall", "wide", "coplanar"]
-CUBOID_SIZES = ["normal"]
+CUBOID_SIZES = ["small"]
 
 # ANGLE_FACTORS = [3, 4, 5, 6, 8, 9, 10, 12, 15, 18, 20, 24, 30, 36, 40, 45, 60, 72, 90, 120, 180, 360]
 ANGLE_FACTORS = [3, 5, 6, 9, 10, 12, 15, 18, 24, 36, 60, 90, 180, 360]
-# ANGLE_FACTORS = [3]
+ANGLE_FACTORS = [6]
 
-BEAD_LIST = [1, 2, 3, 4, 5, 6, 7]
-# BEAD_LIST = [3]
+# BEAD_LIST = [1, 2, 3, 4, 5, 6, 7]
+BEAD_LIST = [3]
 
 SCENARIO = list(range(0, 5))
-# SCENARIO = [1, 2]
+SCENARIO = [1]
 
 # LAMBDA_VALUES = ["GN", "LM_low", "LM_normal" "LM_high"]
-LAMBDA_VALUES = ["LM_normal"]
+LAMBDA_VALUES = ["LM_low"]
 
 # Initialize SSH client
 ssh = paramiko.SSHClient()
@@ -78,17 +78,17 @@ while True:
             if hostname.split(".")[0].upper() == host.upper():
                 print(f"Skipping current host: {host}")
                 continue
-            overflow = counter // len(SCENARIO) // len(ANGLE_FACTORS) // len(BEAD_LIST) // len(CUBOID_SIZES) // len(LAMBDA_VALUES)
+            overflow = counter // len(SCENARIO) // len(CUBOID_SIZES) // len(LAMBDA_VALUES) // len(ANGLE_FACTORS) // len(BEAD_LIST)
             if overflow:
                 print("overflow")
                 print("Total hosts: ", counter)
                 raise SystemExit(0)
 
             s       = SCENARIO[     counter % len(SCENARIO)]
-            a       = ANGLE_FACTORS[counter // len(SCENARIO) % len(ANGLE_FACTORS)]
-            k       = BEAD_LIST[    counter // len(SCENARIO) // len(ANGLE_FACTORS) % len(BEAD_LIST)]
-            cuboid  = CUBOID_SIZES[ counter // len(SCENARIO) // len(ANGLE_FACTORS) // len(BEAD_LIST) % len(CUBOID_SIZES)]
-            lam     = LAMBDA_VALUES[counter // len(SCENARIO) // len(ANGLE_FACTORS) // len(BEAD_LIST) // len(CUBOID_SIZES) % len(LAMBDA_VALUES)]
+            cuboid  = CUBOID_SIZES[ counter // len(SCENARIO) % len(CUBOID_SIZES)]
+            lam     = LAMBDA_VALUES[counter // len(SCENARIO) // len(CUBOID_SIZES) % len(LAMBDA_VALUES)]
+            a       = ANGLE_FACTORS[counter // len(SCENARIO) // len(CUBOID_SIZES) // len(LAMBDA_VALUES) % len(ANGLE_FACTORS)]
+            k       = BEAD_LIST[    counter // len(SCENARIO) // len(CUBOID_SIZES) // len(LAMBDA_VALUES) // len(ANGLE_FACTORS) % len(BEAD_LIST)]
 
             run_rl =  f"nohup {python_interpreter} -u {run_script} -a {a} -s G{s} -k {k} -c {cuboid} -l {lam} > {log_folder}/run{counter:02d}_{host}.log 2>&1 &"
             print(f"----\nConnecting to: {host}  (K={k} N={a} G{s} cuboid={cuboid} lambda={lam})")

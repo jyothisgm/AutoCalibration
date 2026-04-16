@@ -275,7 +275,11 @@ def lm_solve_image_based(real_df, angles_deg, cfg, n_iters=10, lam=1e-2, fix_sou
         # ---- Gauss Newton STEP ----
         A = J.T @ J
         g = J.T @ r1
-        dtheta = -np.linalg.solve(A + lam * np.eye(A.shape[0]), g)
+        try:
+            dtheta = -np.linalg.solve(A + lam * np.eye(A.shape[0]), g)
+        except np.linalg.LinAlgError:
+            print(f"  [warn] singular matrix at iter {it}, falling back to lstsq")
+            dtheta, _, _, _ = np.linalg.lstsq(A + lam * np.eye(A.shape[0]), -g, rcond=None)
         dtheta_full = np.zeros_like(theta)
         dtheta_full[active_mask] = dtheta
         new_theta = theta + dtheta_full

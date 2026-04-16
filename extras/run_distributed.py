@@ -42,7 +42,7 @@ check_gn_running = "pgrep -f gauss_newton.py"
 gpu_usage_cmd = "nvidia-smi --query-gpu=utilization.gpu --format=csv,nounits,noheader"
 cpu_usage_cmd = "mpstat -P ALL 1 1 | grep \"all\" | awk '{print $NF}'"
 
-ANGLE_FACTORS = [3, 4, 5, 6, 8, 9, 10, 12, 15, 18, 20, 24, 30, 36, 40, 45, 60, 72, 90, 120, 180, 360]
+ANGLE_FACTORS = [3, 5, 6, 9, 10, 12, 15, 18, 24, 36, 60, 90, 180, 360]
 # BEAD_LIST = [5]
 # BEAD_LIST = [2]
 # ANGLE_FACTORS = [360]
@@ -61,7 +61,7 @@ while True:
         try:
             # Connect to the SSH server
             host = f"{host_start}{i:02}"
-            if i in [7, 29]:
+            if i in []:
                 print(f"Skipping: {host}")
                 continue
             if hostname.split(".")[0].upper() == host.upper():

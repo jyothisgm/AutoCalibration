@@ -6,7 +6,7 @@ import pandas as pd
 
 THETA_NAMES = ["dSx", "dSy", "dOx", "dOy", "dOz", "dDx", "dDy", "dDz", "alpha", "offset_x", "offset_z"]
 
-RESULTS_LAMBDA_DIR = Path(__file__).resolve().parent.parent / "results" / "archive" / "lambda"
+RESULTS_LAMBDA_DIR = Path(__file__).resolve().parent.parent / "logs_sim" / "hp_test_2"
 
 # Must match gauss_newton.py LAMBDA_VALUES
 LAMBDA_VALUES = [
@@ -18,21 +18,21 @@ LAMBDA_VALUES = [
 # Ordered for heatmap rows
 LAMBDA_ORDER = [lv["name"] for lv in LAMBDA_VALUES]
 
-# Build lookup: round-trip via string repr to match float formatting robustly
-_LAM_MAP: dict[str, str] = {}
-for _lv in LAMBDA_VALUES:
-    _key = f"{_lv['lam']:.3e}"
-    _LAM_MAP[_key] = _lv["name"]
+LAMBDA_DISPLAY = {
+    "GN":        r"$0\ \mathrm{(GN)}$",
+    "LM_low":    r"$10^{-4}$",
+    "LM_normal": r"$10^{-2}$",
+    "LM_high":   r"$1$",
+}
+
+_LAM_MAP: dict[str, str] = {f"{lv['lam']:.3e}": lv["name"] for lv in LAMBDA_VALUES}
 
 
 def _lam_to_name(lam_val: float) -> str:
-    """Map a lambda float (from iter 00) to its LAMBDA_VALUES name."""
     key = f"{lam_val:.3e}"
     if key in _LAM_MAP:
         return _LAM_MAP[key]
-    # Fallback: closest match
-    best = min(LAMBDA_VALUES, key=lambda lv: abs(lv["lam"] - lam_val))
-    return best["name"]
+    return min(LAMBDA_VALUES, key=lambda lv: abs(lv["lam"] - lam_val))["name"]
 
 
 # ----------------------------
@@ -161,6 +161,10 @@ def parse_all(folder: Path = RESULTS_LAMBDA_DIR) -> pd.DataFrame:
     all_rows = [v for _, v in best.values()]
     df = pd.DataFrame(all_rows)
 
+    # Drop incomplete runs (crashed before any iter lines)
+    if "sum" in df.columns:
+        df = df[df["sum"].notna()].reset_index(drop=True)
+
     if df.empty:
         return df
 
@@ -193,9 +197,9 @@ def parse_all(folder: Path = RESULTS_LAMBDA_DIR) -> pd.DataFrame:
 # Heatmap
 # ----------------------------
 
-BRACKETS       = [0, 0.1, 1, 3, 10, float("inf")]
-BRACKET_LABELS = ["0–0.1", "0.1–1", "1–3", "3–10", "10+"]
-BRACKET_COLORS = ["#1a9641", "#a6d96a", "#ffffbf", "#fdae61", "#d7191c"]
+BRACKETS       = [0, 0.2, 0.5, 1, 3, 10, float("inf")]
+BRACKET_LABELS = ["0–0.2", "0.2–0.5", "0.5–1", "1–3", "3–10", "10+"]
+BRACKET_COLORS = ["#1a9641", "#74c476", "#a6d96a", "#ffffbf", "#fdae61", "#f46d43", "#d7191c"]
 
 EXPECTED_N = [3, 5, 6, 9, 10, 12, 15, 18, 24, 36, 60, 90, 180, 360]
 EXPECTED_K = [3]
@@ -228,16 +232,16 @@ def plot_heatmap(df: pd.DataFrame, out_path: Path) -> None:
 
     pivot_sum = (
         df.groupby(["lambda", "N"])["sum"]
-          .mean()
-          .unstack("N")
-          .reindex(index=lambdas, columns=n_cols)
+            .mean()
+            .unstack("N")
+            .reindex(index=lambdas, columns=n_cols)
     )
 
     pivot_iters = (
         df.groupby(["lambda", "N"])["total_iters"]
-          .mean()
-          .unstack("N")
-          .reindex(index=lambdas, columns=n_cols)
+            .mean()
+            .unstack("N")
+            .reindex(index=lambdas, columns=n_cols)
     )
 
     bracket_grid = pivot_sum.map(to_bracket).values.astype(float)
@@ -248,9 +252,9 @@ def plot_heatmap(df: pd.DataFrame, out_path: Path) -> None:
     ax.set_xticks(range(len(n_cols)))
     ax.set_xticklabels(n_cols, rotation=45, ha="right", fontsize=8)
     ax.set_yticks(range(len(lambdas)))
-    ax.set_yticklabels(lambdas, fontsize=9)
-    ax.set_xlabel("N (number of angles)", fontsize=10)
-    ax.set_ylabel("Lambda type", fontsize=10)
+    ax.set_yticklabels([LAMBDA_DISPLAY.get(l, l) for l in lambdas], fontsize=9)
+    ax.set_xlabel(r"Number of Projections ($N$)", fontsize=10)
+    ax.set_ylabel(r"LM Damping Value ($\lambda$)", fontsize=10)
 
     for ri, lam in enumerate(lambdas):
         for ci, n in enumerate(n_cols):
@@ -264,11 +268,11 @@ def plot_heatmap(df: pd.DataFrame, out_path: Path) -> None:
                         fontsize=6.5, color=txt_color, linespacing=1.4)
 
     patches = [mpatches.Patch(color=BRACKET_COLORS[i], label=BRACKET_LABELS[i])
-               for i in range(len(BRACKET_LABELS))]
-    ax.legend(handles=patches, title="mean |sum|", bbox_to_anchor=(1.01, 1),
-              loc="upper left", fontsize=8, title_fontsize=8, framealpha=0.9)
+                for i in range(len(BRACKET_LABELS))]
+    ax.legend(handles=patches, title="MAE", bbox_to_anchor=(1.01, 1),
+                loc="upper left", fontsize=8, title_fontsize=8, framealpha=0.9)
 
-    ax.set_title("Mean |sum of diff| by lambda type vs N  (averaged over scenarios)", fontsize=11)
+    ax.set_title(r"MAE on Levenberg-Marquardt Damping Parameter ($\lambda$) vs No of Projections ($N$) averaged over 5 scenarios", fontsize=11)
     plt.tight_layout()
     fig.savefig(out_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
@@ -289,15 +293,15 @@ def missing_combinations(df: pd.DataFrame) -> pd.DataFrame:
     present = df[["lambda", "K", "N", "scenario"]].drop_duplicates()
     merged = full.merge(present, on=["lambda", "K", "N", "scenario"], how="left", indicator=True)
     missing = (merged[merged["_merge"] == "left_only"]
-               .drop(columns="_merge")
-               .sort_values(["lambda", "K", "N", "scenario"])
-               .reset_index(drop=True))
+                .drop(columns="_merge")
+                .sort_values(["lambda", "K", "N", "scenario"])
+                .reset_index(drop=True))
     return missing
 
 
 if __name__ == "__main__":
     df = parse_all()
-    print(f"Parsed {len(df)} rows from {df['lambda'].nunique() if not df.empty else 0} lambda types")
+    print(f"Parsed {len(df)} rows  |  lambda types: {sorted(df['lambda'].unique()) if not df.empty else []}")
 
     if not df.empty:
         print(df[["lambda", "cuboid", "K", "N", "M", "scenario", "sum", "total_iters"]].to_string(index=False))

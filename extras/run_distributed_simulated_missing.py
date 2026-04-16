@@ -20,10 +20,11 @@ base_log_folder = folder_path + "logs_sim_missing"
 run_script     = folder_path + "gauss_newton.py"
 python_interpreter = folder_path + ".venv/bin/python"
 
-missing_csv = Path(folder_path) / "simulated/theta_log_missing.csv"
+missing_csv = Path(folder_path) / "results/cuboid/coverage_missing_combinations.csv"
 
 get_hname_cmd   = "hostname"
 python_command  = f"{python_interpreter} {remote_script}"
+check_gnr_running = "pgrep -f gauss_newton_real.py"
 check_gn_running = "pgrep -f gauss_newton.py"
 gpu_usage_cmd   = "nvidia-smi --query-gpu=utilization.gpu --format=csv,nounits,noheader"
 cpu_usage_cmd   = "mpstat -P ALL 1 1 | grep \"all\" | awk '{print $NF}'"
@@ -149,6 +150,15 @@ while True:
             existing_pids = stdout.read().decode().strip()
             if existing_pids:
                 print(f"  gauss_newton.py already running (PID {existing_pids}) — skipping")
+                ssh.close()
+                continue
+
+            # Check if gauss_newton_real.py already running
+            stdin, stdout, stderr = ssh.exec_command(check_gnr_running)
+            stdin.close()
+            existing_pids = stdout.read().decode().strip()
+            if existing_pids:
+                print(f"  gauss_newton_real.py already running (PID {existing_pids}) — skipping")
                 ssh.close()
                 continue
 

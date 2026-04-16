@@ -252,13 +252,35 @@ def parse_log_folder(folder: str | Path, pattern: str = "*.log") -> pd.DataFrame
     return df[cols]
 
 
+# ----------------------------
+# Heatmap
+# ----------------------------
+
+BRACKETS       = [0, 0.2, 0.5, 1, 3, 10, float("inf")]
+BRACKET_LABELS = ["0–0.2", "0.2–0.5", "0.5–1", "1–3", "3–10", "10+"]
+BRACKET_COLORS = ["#1a9641", "#74c476", "#a6d96a", "#ffffbf", "#fdae61", "#f46d43", "#d7191c"]
+
+
+def _scan_group(scenario: str) -> str:
+    """Return the baseline group for a scenario name."""
+    n = get_scenario_number(scenario)
+    if n == 1:
+        return "scan1"
+    elif 2 <= n <= 6:
+        return "scan2_6"
+    else:
+        return "scan7_11"
+
+
 def plot_scan_angle_heatmap(
     df: pd.DataFrame,
     out_path: Path,
-    metric: str = "cost_final",
+    metric: str = "final_theta_abs_sum",
     baseline_used: int = 360,
 ) -> None:
     import matplotlib.pyplot as plt
+    import matplotlib.colors as mcolors
+    import matplotlib.patches as mpatches
 
     if df.empty:
         print("Heatmap skipped: empty dataframe")
@@ -270,19 +292,37 @@ def plot_scan_angle_heatmap(
         print("Heatmap skipped: requires 'scenario' and 'used' columns")
         return
 
-    # Baseline per scan from Used=baseline_used rows
-    base = (
-        df[df["used"] == baseline_used]
-        .groupby("scenario")[metric]
-        .mean()
+    def to_bracket(val):
+        if pd.isna(val):
+            return float("nan")
+        for i in range(len(BRACKETS) - 1):
+            if BRACKETS[i] <= abs(val) < BRACKETS[i + 1]:
+                return i
+        return len(BRACKETS) - 2
+
+    cmap = mcolors.ListedColormap(BRACKET_COLORS)
+    norm = mcolors.BoundaryNorm(
+        boundaries=[-0.5 + i for i in range(len(BRACKET_COLORS) + 1)],
+        ncolors=len(BRACKET_COLORS),
     )
 
-    grouped = (
-        df.groupby(["scenario", "used"])[metric]
-        .mean()
-        .reset_index()
-    )
-    grouped["baseline"] = grouped["scenario"].map(base)
+    # Compute grouped baselines at baseline_used projections
+    df360 = df[df["used"] == baseline_used].copy()
+    df360["_group"] = df360["scenario"].apply(_scan_group)
+    group_baseline = df360.groupby("_group")[metric].mean()
+
+    # Per-scenario baseline: Scan1 = its own 360 value; Scan2-6 = group mean; Scan7-11 = group mean
+    scen_means_360 = df360.groupby("scenario")[metric].mean()
+
+    def get_baseline(scenario):
+        g = _scan_group(scenario)
+        if g == "scan1":
+            return scen_means_360.get(scenario, float("nan"))
+        return group_baseline.get(g, float("nan"))
+
+    # Mean metric per (scenario, used)
+    grouped = df.groupby(["scenario", "used"])[metric].mean().reset_index()
+    grouped["baseline"] = grouped["scenario"].apply(get_baseline)
     grouped["delta"] = grouped[metric] - grouped["baseline"]
 
     pivot = grouped.pivot(index="scenario", columns="used", values="delta")
@@ -291,27 +331,38 @@ def plot_scan_angle_heatmap(
     angles = sorted(pivot.columns.tolist())
     pivot = pivot.reindex(index=scenarios, columns=angles)
 
+    bracket_grid = pivot.map(to_bracket).values.astype(float)
+
     fig, ax = plt.subplots(
         figsize=(max(9, len(angles) * 0.9 + 2), max(3, len(scenarios) * 0.6 + 2))
     )
-    im = ax.imshow(pivot.values, aspect="auto", cmap="viridis")
+    ax.imshow(bracket_grid, aspect="auto", cmap=cmap, norm=norm)
 
     ax.set_xticks(range(len(angles)))
     ax.set_xticklabels(angles, rotation=45, ha="right", fontsize=8)
     ax.set_yticks(range(len(scenarios)))
     ax.set_yticklabels(scenarios, fontsize=8)
-    ax.set_xlabel("N (number of angles used)", fontsize=10)
+    ax.set_xlabel("N (number of projections used)", fontsize=10)
     ax.set_ylabel("Scan", fontsize=10)
-    ax.set_title(f"{metric} delta vs {baseline_used} baseline (positive = worse)", fontsize=11)
+    ax.set_title(
+        f"MAE delta vs {baseline_used}-projection baseline\n"
+        r"(Scan 1: own baseline; Scans 2–6 \& 7–11: group mean baseline)",
+        fontsize=11,
+    )
 
     for ri, scen in enumerate(scenarios):
         for ci, n in enumerate(angles):
-            val = pivot.loc[scen, n]
+            val = pivot.loc[scen, n] if (scen in pivot.index and n in pivot.columns) else float("nan")
             if not pd.isna(val):
-                ax.text(ci, ri, f"{val:.3g}", ha="center", va="center", fontsize=6, color="white" if val > 0 else "black")
+                b_idx = int(to_bracket(val))
+                txt_color = "white" if b_idx in (0, 6) else "black"
+                ax.text(ci, ri, f"{val:.3f}", ha="center", va="center", fontsize=6.5, color=txt_color)
 
-    cbar = fig.colorbar(im, ax=ax)
-    cbar.set_label(f"{metric} - baseline({baseline_used})", fontsize=9)
+    patches = [mpatches.Patch(color=BRACKET_COLORS[i], label=BRACKET_LABELS[i])
+               for i in range(len(BRACKET_LABELS))]
+    ax.legend(handles=patches, title="|delta|", bbox_to_anchor=(1.01, 1),
+              loc="upper left", fontsize=8, title_fontsize=8, framealpha=0.9)
+
     plt.tight_layout()
     fig.savefig(out_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
@@ -319,7 +370,8 @@ def plot_scan_angle_heatmap(
 
 
 if __name__ == "__main__":
-    folder = Path("/vol/home/s3777103/Documents/workspace/Thesis/AutoCalibration/logs_sim/hp_test_8")
+    folder = Path("/vol/home/s3777103/Documents/workspace/Thesis/AutoCalibration/logs/hp_test_4")
+    folder = Path("/vol/home/s3777103/Documents/workspace/Thesis/AutoCalibration/results/real")
     # for folder in sorted(p for p in parent.iterdir() if p.is_dir()):
     df = parse_log_folder(folder, pattern="*.log")
 
@@ -380,9 +432,67 @@ if __name__ == "__main__":
     #         ignore_index=True
     #     )
 
+    # ----------------------------
+    # Delta summary rows (mean & SD per scan group)
+    # ----------------------------
+    metric = "final_theta_abs_sum"
+    if metric in df.columns and "scenario" in df.columns and "used" in df.columns:
+        df360 = df[df["used"] == 360].copy()
+        df360["_group"] = df360["scenario"].apply(_scan_group)
+        group_baseline = df360.groupby("_group")[metric].mean()
+        scen_means_360 = df360.groupby("scenario")[metric].mean()
+
+        def get_baseline(scenario):
+            g = _scan_group(scenario)
+            if g == "scan1":
+                return scen_means_360.get(scenario, float("nan"))
+            return group_baseline.get(g, float("nan"))
+
+        df["_delta"] = df[metric] - df["scenario"].apply(get_baseline)
+        df["_group"] = df["scenario"].apply(_scan_group)
+
+        group_labels = {
+            "scan1":    "MEAN/SD Scan 1",
+            "scan2_6":  "MEAN/SD Scan 2-6",
+            "scan7_11": "MEAN/SD Scan 7-11",
+        }
+        d_cols = [c for c in [
+            "dSx", "dSy", "dSz", "dOx", "dOy", "dOz",
+            "offset_x", "offset_z", "dDx", "dDy", "dDz", "stage_rotY_deg",
+        ] if c in df.columns]
+
+        # restrict theta cols to used=360 rows only
+        df360_theta = df360.copy()
+        df360_theta["_group"] = df360_theta["scenario"].apply(_scan_group)
+
+        summary_rows = []
+        for gkey, glabel in group_labels.items():
+            mask_all  = df["_group"] == gkey
+            mask_360  = df360_theta["_group"] == gkey
+
+            mean_row = {"file": f"MEAN {glabel}"}
+            std_row  = {"file": f"SD   {glabel}"}
+
+            # delta of final_theta_abs_sum (all N)
+            delta_vals = df.loc[mask_all, "_delta"].dropna()
+            mean_row[metric] = delta_vals.mean()
+            std_row[metric]  = delta_vals.std()
+
+            # theta component cols at used=360
+            for c in d_cols:
+                vals = pd.to_numeric(df360_theta.loc[mask_360, c], errors="coerce").dropna()
+                mean_row[c] = vals.mean()
+                std_row[c]  = vals.std()
+
+            summary_rows.append(mean_row)
+            summary_rows.append(std_row)
+
+        df = df.drop(columns=["_delta", "_group"])
+        df = pd.concat([df, pd.DataFrame(summary_rows)], ignore_index=True)
+
     out_csv = Path(folder) / "calibration_log_summary.csv"
     df.to_csv(out_csv, index=False)
     print("saved:", out_csv)
 
-    out_heatmap = Path(folder) / "real_cal_heatmap.png"
+    out_heatmap = Path(folder) / "calibration_heatmap.png"
     plot_scan_angle_heatmap(df, out_heatmap, metric="final_theta_abs_sum", baseline_used=360)
