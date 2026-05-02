@@ -30,7 +30,7 @@ remote_script = folder_path + "extras/test.py"
 base_log_folder = folder_path + "logs_sim"
 log_folder, trial = create_incremental_folder(base_log_folder)
 
-run_script = folder_path + "gauss_newton.py"
+run_script = folder_path + "gauss_newton_geom.py"
 python_interpreter = folder_path + ".venv/bin/python"
 
 get_hname_cmd = "hostname"  # Get Hostname Command
@@ -38,26 +38,26 @@ python_command = f"{python_interpreter} {remote_script}"   # Test Python Command
 kill_python = "pkill -f python"
 
 check_gnr_running = "pgrep -f gauss_newton_real.py"
-check_gn_running = "pgrep -f gauss_newton.py"
+check_gn_running = "pgrep -f gauss_newton_geom.py"
 
 gpu_usage_cmd = "nvidia-smi --query-gpu=utilization.gpu --format=csv,nounits,noheader"
 cpu_usage_cmd = "mpstat -P ALL 1 1 | grep \"all\" | awk '{print $NF}'"
 
 CUBOID_SIZES = ["compact", "small", "square", "normal", "tall", "wide", "coplanar"]
-CUBOID_SIZES = ["small"]
+CUBOID_SIZES = ["normal"]
 
 # ANGLE_FACTORS = [3, 4, 5, 6, 8, 9, 10, 12, 15, 18, 20, 24, 30, 36, 40, 45, 60, 72, 90, 120, 180, 360]
-ANGLE_FACTORS = [3, 5, 6, 9, 10, 12, 15, 18, 24, 36, 60, 90, 180, 360]
-ANGLE_FACTORS = [6]
+ANGLE_FACTORS = [3, 5, 6, 9, 10, 12, 15, 18, 24, 36, 60]
+# ANGLE_FACTORS = [3, 12, 60, 180]
 
 # BEAD_LIST = [1, 2, 3, 4, 5, 6, 7]
 BEAD_LIST = [3]
 
-SCENARIO = list(range(0, 5))
+# SCENARIO = list(range(0, 5))
 SCENARIO = [1]
 
 # LAMBDA_VALUES = ["GN", "LM_low", "LM_normal" "LM_high"]
-LAMBDA_VALUES = ["LM_low"]
+LAMBDA_VALUES = ["LM_normal"]
 
 # Initialize SSH client
 ssh = paramiko.SSHClient()
@@ -138,7 +138,7 @@ while True:
             gpu_usage = float(out_gpu.strip())
             print(f"GPU Usage on {host} : {gpu_usage} %")
 
-            if len(active_users) > 2 or gpu_usage > 20 or idle_cpu < 80:
+            if gpu_usage > 40 or idle_cpu < 60:
                 print(out, end='')
                 continue
             if stderr.read().decode():

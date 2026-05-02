@@ -371,7 +371,7 @@ def plot_scan_angle_heatmap(
 
 if __name__ == "__main__":
     folder = Path("/vol/home/s3777103/Documents/workspace/Thesis/AutoCalibration/logs/hp_test_4")
-    folder = Path("/vol/home/s3777103/Documents/workspace/Thesis/AutoCalibration/results/real")
+    folder = Path("/vol/home/s3777103/Documents/workspace/Thesis/AutoCalibration/logs_sim/hp_test_4")
     # for folder in sorted(p for p in parent.iterdir() if p.is_dir()):
     df = parse_log_folder(folder, pattern="*.log")
 

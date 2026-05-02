@@ -30,24 +30,23 @@ remote_script = folder_path + "extras/test.py"
 base_log_folder = folder_path + "logs"
 log_folder, trial = create_incremental_folder(base_log_folder)
 
-run_script = folder_path + "gauss_newton_real.py"
+run_script = folder_path + "gauss_newton_real_inmem.py"
 python_interpreter = folder_path + ".venv/bin/python"
 
 get_hname_cmd = "hostname"  # Get Hostname Command
 python_command = f"{python_interpreter} {remote_script}"   # Test Python Command
 kill_python = "pkill -f python"
-check_gnr_running = "pgrep -f gauss_newton_real.py"
+check_gnr_running = "pgrep -f gauss_newton_real_inmem.py"
 check_gn_running = "pgrep -f gauss_newton.py"
 
 gpu_usage_cmd = "nvidia-smi --query-gpu=utilization.gpu --format=csv,nounits,noheader"
 cpu_usage_cmd = "mpstat -P ALL 1 1 | grep \"all\" | awk '{print $NF}'"
 
-ANGLE_FACTORS = [3, 5, 6, 9, 10, 12, 15, 18, 24, 36, 60, 90, 180, 360]
-# BEAD_LIST = [5]
-# BEAD_LIST = [2]
-# ANGLE_FACTORS = [360]
-# SCENARIO = [2]
-SCENARIO = list(range(1, 12))
+ANGLE_FACTORS = [3, 5, 6, 9, 10, 12, 15, 18, 24, 36, 60]
+GROUPS = [
+    "Scan2,Scan3,Scan4,Scan5,Scan6",
+    "Scan7,Scan8,Scan9,Scan10,Scan11",
+]
 # Initialize SSH client
 ssh = paramiko.SSHClient()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())  # Auto-accept unknown host keys
@@ -67,16 +66,17 @@ while True:
             if hostname.split(".")[0].upper() == host.upper():
                 print(f"Skipping current host: {host}")
                 continue
-            overflow = counter // len(SCENARIO) // len(ANGLE_FACTORS)
+            overflow = counter // len(GROUPS) // len(ANGLE_FACTORS)
             if overflow:
                 print("overflow")
                 print("Total hosts: ", counter)
                 raise SystemExit(0)
 
-            s = SCENARIO[counter % len(SCENARIO)]
-            a = ANGLE_FACTORS[counter // len(SCENARIO) % len(ANGLE_FACTORS)]
-            
-            run_rl =  f"nohup {python_interpreter} -u {run_script} -a {a} -s Scan{s} > {log_folder}/run{counter:02d}_{host}.log 2>&1 &"
+            g = GROUPS[counter % len(GROUPS)]
+            a = ANGLE_FACTORS[counter // len(GROUPS) % len(ANGLE_FACTORS)]
+            group_tag = g.replace(",", "-")
+
+            run_rl = f"nohup {python_interpreter} -u {run_script} -a {a} -s \"{g}\" > {log_folder}/run{counter:02d}_{host}_{group_tag}_a{a}.log 2>&1 &"
             print(f"----\nConnecting to: {host}")
             ssh.connect(host, username=username, key_filename=key_path, timeout=10)
 
